@@ -80,11 +80,10 @@ class Pali_text:
                 href_name = "Sp_6"
             else:
                 href_name = "Sp_7"
-
-        if href_name:
-            href = Pali_text.static_url + href_name + "_.htm#" + sharp
         else:
-            href = Pali_text.static_url + self.name + "_.htm#" + sharp
+            href_name = self.name
+
+        href = Pali_text.static_url + href_name + "_.htm#" + sharp
 
         if self.name[:2] == "Ja":
             roman = ["I", "II", "III", "IV", "V", "VI"]

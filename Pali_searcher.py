@@ -44,11 +44,7 @@ class Pali_text:
         self.end_line = end_line
         self.text = text
 
-    def output(self):
-        result = ""
-        if self.name == "Ap":
-            self.text = re.sub(r"~", "", self.text)
-
+    def __link_url(self):
         sharp = ""
         if self.start_page <= 9:
             sharp = "00" + str(self.start_page)
@@ -56,10 +52,10 @@ class Pali_text:
             sharp = "0" + str(self.start_page)
         else:
             sharp = str(self.start_page)
-        
+
         href_name = ""
         if self.name[:2] == "J_":
-            pre = self.name[:2] 
+            pre = self.name[:2]
             aft = self.name[2:]
             roman = ["I", "II", "III", "IV", "V", "VI"]
             vol = roman.index(aft) + 1
@@ -83,7 +79,14 @@ class Pali_text:
         else:
             href_name = self.name
 
-        href = Pali_text.static_url + href_name + "_.htm#" + sharp
+        return Pali_text.static_url + href_name + "_.htm#" + sharp
+
+    def output(self):
+        result = ""
+        if self.name == "Ap":
+            self.text = re.sub(r"~", "", self.text)
+
+        href = self.__link_url()
 
         if self.name[:2] == "Ja":
             roman = ["I", "II", "III", "IV", "V", "VI"]

@@ -10,16 +10,22 @@ import webbrowser
 import threading
 import sys
 
+app_dir = os.path.abspath(os.path.dirname(sys.argv[0]))
+# + でパスを作成している箇所が多くあるため文字列末尾に '/' を追加している
+# TODO: os.path.join に置き換える
+static_path = os.path.join(app_dir, "static/")
+templates_path = os.path.join(app_dir, "templates")
+
+# print("app_dir: {}".format(app_dir))
+# print("static_path: {}".format(static_path))
+# print("templates_path: {}".format(templates_path))
+
 def resource_path(relative_path):
     if hasattr(sys, '_MEIPASS'):
         return os.path.join(sys._MEIPASS, relative_path)
     return os.path.join(os.path.abspath("."), relative_path)
 
-app = Flask(__name__, root_path = os.path.dirname(sys.argv[0]), static_folder = os.path.dirname(sys.argv[0]) + "/static/", template_folder= os.path.dirname(sys.argv[0]) + "/templates/")
-
-templates_path = resource_path("templates")
-#static_path = resource_path("static")
-static_path = os.path.dirname(sys.argv[0]) + "/static/"
+app = Flask(__name__, root_path = os.path.dirname(sys.argv[0]), static_folder = static_path, template_folder= templates_path)
 
 class Pali_text:
     __slots__ = ("name", "start_page", "end_page", "start_line", "end_line", "text")

@@ -25,7 +25,10 @@ def resource_path(relative_path):
         return os.path.join(sys._MEIPASS, relative_path)
     return os.path.join(os.path.abspath("."), relative_path)
 
-app = Flask(__name__, root_path = os.path.dirname(sys.argv[0]), static_folder = static_path, template_folder= templates_path)
+
+app = Flask(__name__, root_path=os.path.dirname(sys.argv[0]),
+            static_folder=static_path, template_folder=templates_path)
+
 
 class Pali_text:
     __slots__ = ("name", "start_page", "end_page", "start_line", "end_line", "text")

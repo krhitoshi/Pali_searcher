@@ -29,6 +29,10 @@ app = Flask(__name__, root_path = os.path.dirname(sys.argv[0]), static_folder = 
 
 class Pali_text:
     __slots__ = ("name", "start_page", "end_page", "start_line", "end_line", "text")
+
+    # 環境変数 STATIC_URL が設定されていればベースとなるURLを変更する
+    static_url = os.environ.get("STATIC_URL", "static/")
+
     def __init__(self, name, start_page, start_line, end_page, end_line, text):
         self.name = name
         self.start_page = start_page
@@ -75,9 +79,9 @@ class Pali_text:
                 href_name = "Sp_7"
 
         if href_name:
-            href = "static/" + href_name + "_.htm#" + sharp
+            href = Pali_text.static_url + href_name + "_.htm#" + sharp
         else:
-            href = "static/" + self.name + "_.htm#" + sharp
+            href = Pali_text.static_url + self.name + "_.htm#" + sharp
 
         if self.name[:2] == "Ja":
             roman = ["I", "II", "III", "IV", "V", "VI"]

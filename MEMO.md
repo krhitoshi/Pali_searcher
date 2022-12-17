@@ -4,6 +4,7 @@ source .venv/bin/activate
 pip install -r requirements.txt
 
 ./Pali_searcher.py
+STATIC_URL=https://www.example.com/static/ ./Pali_searcher.py
 
 deactivate
 

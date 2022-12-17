@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 # coding: utf-8
 from flask import Flask, make_response, request, render_template, session, send_from_directory
 from array import array

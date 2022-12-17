@@ -1,0 +1,5 @@
+.idea
+static/*.htm
+static/*.bin
+static/*.txt
+static/*.csv

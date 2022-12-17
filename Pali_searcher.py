@@ -10,7 +10,7 @@ import webbrowser
 import threading
 import sys
 
-app_dir = os.path.abspath(os.path.dirname(sys.argv[0]))
+app_dir = os.path.abspath(os.path.dirname(__file__))
 # + でパスを作成している箇所が多くあるため文字列末尾に '/' を追加している
 # TODO: os.path.join に置き換える
 static_path = os.path.join(app_dir, "static/")

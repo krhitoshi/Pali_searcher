@@ -411,6 +411,7 @@ def result_view():
             text_list.append(text)
 
     text_list.sort(key = lambda x: text_order.index(x))
+    # print("text_list: {}".format(text_list))
     
     for text in text_list:
         if text == "J":
@@ -508,6 +509,8 @@ def result_view():
             results += text_maker(searched, BR, text)
 #            results += [item.output() + "<BR>" for item in pre_result]
 
+    # print(results)
+
 # Send output-text to html 
     if results == []:
         return "No result"
@@ -521,6 +524,8 @@ def result_view():
             page_counter += 1
         elif i == 0:
             result_text += """<div class = "selection" id="page-1">"""
+            result_text += results[0].output() + "<BR>\n"
+
         if i >= 1 and results[i].text != results[i - 1].text:
             result_text += results[i].output() + "<BR>\n"
 #    return result_text

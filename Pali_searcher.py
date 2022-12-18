@@ -353,7 +353,7 @@ def th_searcher(text, searched):
 
 
 def search_keyword_jataka(keyword, BR):
-    result = []
+    results = []
     for num in range(1, 7):
         page = array("I");
         line_start = array("I");
@@ -398,14 +398,14 @@ def search_keyword_jataka(keyword, BR):
                                    page[start_index],
                                    line_start[start_index], page[end_index],
                                    line_start[end_index], searched_text)
-                result.append(new_set)
+                results.append(new_set)
             i += 1
 
-        return result
+        return results
 
 
 def search_keyword_suttanipata(keyword, BR):
-    result = []
+    results = []
     line_start = array("I");
     index = array("I");
     verse_start_point = array("I");
@@ -447,14 +447,14 @@ def search_keyword_suttanipata(keyword, BR):
             new_set = PaliText("Sn", page[start_index],
                                line_start[start_index], page[end_index],
                                line_start[end_index], searched_text)
-            result.append(new_set)
+            results.append(new_set)
         i += 1
     # ここから散文の方の検索；最後に全体をまとめてソートし、完成
     csvfile.close()
     pre_result = text_maker(keyword, BR, "Sn")
-    result += pre_result
-    result.sort(key=lambda x: (x.start_page, x.start_line))
-    return result
+    results += pre_result
+    results.sort(key=lambda x: (x.start_page, x.start_line))
+    return results
 
 
 def search_keyword(text_type, keyword, BR="0"):

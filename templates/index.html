@@ -17,7 +17,8 @@
     Please select texts:
     <div>
         <button id="check_all">Check All Texts</button>
-        <button id="clear_all">Clear All</button>
+        <button id="clear_all">Clear All</button><br>
+        <button id="check_all_suttas">Check All Sutta Texts</button>
     </div>
 
     <label><input type="checkbox" name="text" value="Vin"/>Vin<br></label>
@@ -84,6 +85,16 @@
         const checkboxes = textCheckBoxes();
         for (const i in checkboxes) {
             checkboxes[i].checked = false;
+        }
+        event.preventDefault();
+    });
+
+    const checkAllSuttasButton = document.getElementById('check_all_suttas');
+    checkAllSuttasButton.addEventListener('click', function (event) {
+        let checkboxes = Array.from(document.getElementsByClassName('Sutt'));
+        checkboxes = checkboxes.concat(Array.from(document.getElementsByClassName('Ku')));
+        for (const i in checkboxes) {
+            checkboxes[i].checked = true;
         }
         event.preventDefault();
     });

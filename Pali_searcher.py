@@ -536,17 +536,17 @@ def send_static(path):
 @app.route('/result', methods=["POST"])
 def result_view():
     results = []
-    searched = str(request.form["word"])
+    keyword = str(request.form["word"])
     item_number = int(request.form["item_max_number"])
 
-    if not searched:
+    if not keyword:
         return "No result"
 
     if str(request.form["KH"]) == "1":
-        searched = kh_changer(searched)
+        keyword = kh_changer(keyword)
 
     try:
-        re.compile(searched)
+        re.compile(keyword)
     except Exception:
         return "Regex Error!"
 
@@ -559,7 +559,7 @@ def result_view():
     searcher = PaliSearcher(target_text_groups)
 
     for text_type in searcher.target_text_vols():
-        results += search_keyword(text_type, searched, BR)
+        results += search_keyword(text_type, keyword, BR)
     # print(results)
 
     # Send output-text to html

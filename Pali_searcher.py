@@ -352,58 +352,61 @@ def th_searcher(text, searched):
     return result
 
 
-def search_keyword(text_type, keyword):
-    BR = str(request.form["BR"])
+def search_keyword_jataka(keyword, BR):
+    result = []
+    for num in range(1, 7):
+        page = array("I");
+        line_start = array("I");
+        index = array("I");
+        verse_start_point = array("I")
+        jataka_opener(num, index, line_start, page, verse_start_point)
+        roman_number = ["I", "II", "III", "IV", "V", "VI"]
+        csvfile = open(static_path + "J_{}.csv".format(num), "r",
+                       encoding="utf-8", newline="\n")
+        lines = csv.reader(csvfile, delimiter=",", skipinitialspace=True)
+        i = 0
+        start_index = 0
+        for line in lines:
+            if re.search(keyword, line[0]):
+                try:
+                    start = verse_start_point[i]
+                except IndexError:
+                    break
+                end = start + len(line[0])
+                start_index = page_line_search(start, index, start_index)
+                end_index = page_line_search(end, index, start_index)
+                searched_text = line[0]
+                new_text = ""
+                if BR == "1":
+                    edges = [index[k] - verse_start_point[i]
+                             for k in range(start_index, end_index + 1)
+                             if index[k] - verse_start_point[i] != 0]
+                    for j in range(len(searched_text)):
+                        if j in edges:
+                            new_text += ("<BR>" + searched_text[j])
+                        else:
+                            new_text += searched_text[j]
+                else:
+                    new_text = line[0]
+                searched_text = re.sub(r"(?<=\S)<BR>", "-<BR>", new_text)
+                searched_text = searched_text.replace("@", " . . . ")
+                spaned = re.compile(r"(" + keyword + ")", re.IGNORECASE)
+                searched_text = re.sub(spaned,
+                                       """<span style="color:red">""" + r"\1" + "</span>",
+                                       searched_text)
+                new_set = PaliText("J_{}".format(roman_number[num - 1]),
+                                   page[start_index],
+                                   line_start[start_index], page[end_index],
+                                   line_start[end_index], searched_text)
+                result.append(new_set)
+            i += 1
+
+        return result
+
+def search_keyword(text_type, keyword, BR):
     results = []
     if text_type == "J":
-        result = []
-        for num in range(1, 7):
-            page = array("I");
-            line_start = array("I");
-            index = array("I");
-            verse_start_point = array("I")
-            jataka_opener(num, index, line_start, page, verse_start_point)
-            roman_number = ["I", "II", "III", "IV", "V", "VI"]
-            csvfile = open(static_path + "J_{}.csv".format(num), "r",
-                           encoding="utf-8", newline="\n")
-            lines = csv.reader(csvfile, delimiter=",", skipinitialspace=True)
-            i = 0
-            start_index = 0
-            for line in lines:
-                if re.search(keyword, line[0]):
-                    try:
-                        start = verse_start_point[i]
-                    except IndexError:
-                        break
-                    end = start + len(line[0])
-                    start_index = page_line_search(start, index, start_index)
-                    end_index = page_line_search(end, index, start_index)
-                    searched_text = line[0]
-                    new_text = ""
-                    if BR == "1":
-                        edges = [index[k] - verse_start_point[i]
-                                 for k in range(start_index, end_index + 1)
-                                 if index[k] - verse_start_point[i] != 0]
-                        for j in range(len(searched_text)):
-                            if j in edges:
-                                new_text += ("<BR>" + searched_text[j])
-                            else:
-                                new_text += searched_text[j]
-                    else:
-                        new_text = line[0]
-                    searched_text = re.sub(r"(?<=\S)<BR>", "-<BR>", new_text)
-                    searched_text = searched_text.replace("@", " . . . ")
-                    spaned = re.compile(r"(" + keyword + ")", re.IGNORECASE)
-                    searched_text = re.sub(spaned,
-                                           """<span style="color:red">""" + r"\1" + "</span>",
-                                           searched_text)
-                    new_set = PaliText("J_{}".format(roman_number[num - 1]),
-                                       page[start_index],
-                                       line_start[start_index], page[end_index],
-                                       line_start[end_index], searched_text)
-                    result.append(new_set)
-                i += 1
-        results += result
+        results += search_keyword_jataka(keyword, BR)
     elif text_type == "Ap":
         results += text_maker(keyword, BR, text_type, break_point={"~"})
     #            results += [re.sub(r"~", "", item.output() + "<BR>") for item in pre_result]
@@ -494,7 +497,7 @@ def result_view():
         re.compile(searched)
     except Exception:
         return "Regex Error!"
-
+    BR = str(request.form["BR"])
     cheaklist = request.form.getlist("text")
 
     text_order = ["Vin_I", "Vin_II", "Vin_III", "Vin_IV", "Vin_V", 
@@ -531,7 +534,7 @@ def result_view():
     # print("text_list: {}".format(text_list))
     
     for text_type in text_list:
-        results += search_keyword(text_type, searched)
+        results += search_keyword(text_type, searched, BR)
     # print(results)
 
 # Send output-text to html 

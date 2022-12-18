@@ -14,9 +14,9 @@
     <input type="radio" name="BR" value="0" checked = "checked">Neglect line-changes<br><br>
     Please input maximum number of results shown at ones
     <input type="number" name="item_max_number" min="100" step="100" value="100", required><br><br>
-    Please select texts
-    <label><input type="checkbox" id="all_texts" />all texts</label><br><br>
+    Please select texts:
     <div>
+        <button id="check_all">Check All Texts</button>
         <button id="clear_all">Clear All</button>
     </div>
 
@@ -66,12 +66,13 @@
     <input type="submit" />
 </form>
 <script type="text/javascript">
-    var checkall = document.getElementById('all_texts');
-    checkall.addEventListener('click', function () {
-        var checkboxes = document.getElementsByName('text');
+    const checkAllButton = document.getElementById('check_all');
+    checkAllButton.addEventListener('click', function (event) {
+        const checkboxes = document.getElementsByName('text');
         for (i in checkboxes) {
-            checkboxes[i].checked = this.checked;
+            checkboxes[i].checked = true;
         }
+        event.preventDefault();
     });
 
     const clearAllButton = document.getElementById('clear_all');

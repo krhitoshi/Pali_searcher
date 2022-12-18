@@ -82,6 +82,7 @@ class PaliText:
 
         return PaliText.static_url + href_name + "_.htm#" + sharp
 
+    # 結果表示のためのテキスト形成
     def output(self):
         result = ""
         if self.name == "Ap":

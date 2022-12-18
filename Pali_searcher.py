@@ -299,9 +299,11 @@ def text_maker(word, BR="0", text_name="", break_point={".", ":", "?", "!", "|",
                 new_searched_text = re.sub(r"(?<=\S)<BR>", "-<BR>", new_searched_text)
                 searched_text = new_searched_text
 
+        # ハイライト処理など
         searched_text = searched_text.replace("@", " . . . ")
         spaned = re.compile(r"(" + word + ")", re.IGNORECASE)
-        searched_text = re.sub(spaned, """<span style="color:red">"""+ r"\1" +"</span>", searched_text)
+        searched_text = re.sub(spaned, """<span style="color:red">""" + r"\1" + "</span>", searched_text)
+
         start_page = page[start_index]
         start_line = line[start_index]
         end_page = page[end_index]

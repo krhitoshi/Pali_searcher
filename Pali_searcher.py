@@ -491,7 +491,7 @@ def send_static(path):
 
 @app.route('/result', methods=["POST"])
 def result_view():
-    results = []; text_list = []
+    results = []
     searched = str(request.form["word"])
     item_number = int(request.form["item_max_number"])
     if not searched:
@@ -503,7 +503,7 @@ def result_view():
     except Exception:
         return "Regex Error!"
     BR = str(request.form["BR"])
-    cheaklist = request.form.getlist("text")
+    text_group_list = request.form.getlist("text")
 
     text_order = ["Vin_I", "Vin_II", "Vin_III", "Vin_IV", "Vin_V", 
     "DN_I", "DN_II", "DN_III",
@@ -514,31 +514,31 @@ def result_view():
     "Dhs", "Vibh", "Dhātuk", "Pugg", "Kv", "Yam_I", "Yam_II", "Mil", "Vism", "Sp", "Ja_1", "Ja_2", "Ja_3", "Ja_4", "Ja_5", "Ja_6"]
     
     #テキストリストを開く
-    text_list = []
-    for text in cheaklist:
-        if text == "Vin":
-            text_list += ["Vin_I", "Vin_II", "Vin_III", "Vin_IV", "Vin_V"]
-        elif text == "DN":
-            text_list += ["DN_I", "DN_II", "DN_III"]
-        elif text == "MN":
-            text_list += ["MN_I", "MN_II", "MN_III"]
-        elif text == "SN":
-            text_list += ["SN_I", "SN_II", "SN_III", "SN_IV", "SN_V"]
-        elif text == "AN":
-            text_list += ["AN_I", "AN_II", "AN_III", "AN_IV", "AN_V"]
-        elif text == "Paṭis":
-            text_list += ["Paṭis_I", "Paṭis_II"]
-        elif text == "Yam":
-            text_list += ["Yam_I", "Yam_II"]
-        elif text == "Ja":
-            text_list += ["Ja_1", "Ja_2", "Ja_3", "Ja_4", "Ja_5", "Ja_6"]
+    target_text_list = []
+    for text_group in text_group_list:
+        if text_group == "Vin":
+            target_text_list += ["Vin_I", "Vin_II", "Vin_III", "Vin_IV", "Vin_V"]
+        elif text_group == "DN":
+            target_text_list += ["DN_I", "DN_II", "DN_III"]
+        elif text_group == "MN":
+            target_text_list += ["MN_I", "MN_II", "MN_III"]
+        elif text_group == "SN":
+            target_text_list += ["SN_I", "SN_II", "SN_III", "SN_IV", "SN_V"]
+        elif text_group == "AN":
+            target_text_list += ["AN_I", "AN_II", "AN_III", "AN_IV", "AN_V"]
+        elif text_group == "Paṭis":
+            target_text_list += ["Paṭis_I", "Paṭis_II"]
+        elif text_group == "Yam":
+            target_text_list += ["Yam_I", "Yam_II"]
+        elif text_group == "Ja":
+            target_text_list += ["Ja_1", "Ja_2", "Ja_3", "Ja_4", "Ja_5", "Ja_6"]
         else:
-            text_list.append(text)
+            target_text_list.append(text_group)
 
-    text_list.sort(key = lambda x: text_order.index(x))
+    target_text_list.sort(key = lambda x: text_order.index(x))
     # print("text_list: {}".format(text_list))
     
-    for text_type in text_list:
+    for text_type in target_text_list:
         results += search_keyword(text_type, searched, BR)
     # print(results)
 

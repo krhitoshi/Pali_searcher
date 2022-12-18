@@ -19,6 +19,7 @@
         <button id="check_all">Check All Texts</button>
         <button id="clear_all">Clear All</button><br>
         <button id="check_all_suttas">Check All Sutta Texts</button>
+        <button id="check_all_abhidhamma_texts">Check All Abhidhamma Texts</button>
     </div>
 
     <label><input type="checkbox" name="text" value="Vin"/>Vin<br></label>
@@ -93,6 +94,15 @@
     checkAllSuttasButton.addEventListener('click', function (event) {
         let checkboxes = Array.from(document.getElementsByClassName('Sutt'));
         checkboxes = checkboxes.concat(Array.from(document.getElementsByClassName('Ku')));
+        for (const i in checkboxes) {
+            checkboxes[i].checked = true;
+        }
+        event.preventDefault();
+    });
+
+    const checkAllAbhidhammaTextsButton = document.getElementById('check_all_abhidhamma_texts');
+    checkAllAbhidhammaTextsButton.addEventListener('click', function (event) {
+        const checkboxes = Array.from(document.getElementsByClassName('abhi'));
         for (const i in checkboxes) {
             checkboxes[i].checked = true;
         }

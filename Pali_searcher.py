@@ -31,7 +31,7 @@ app = Flask(__name__, root_path=os.path.dirname(sys.argv[0]),
             static_folder=static_path, template_folder=templates_path)
 
 
-class Pali_text:
+class PaliText:
     __slots__ = ("name", "start_page", "end_page", "start_line", "end_line", "text")
 
     # 環境変数 STATIC_URL が設定されていればベースとなるURLを変更する
@@ -80,7 +80,7 @@ class Pali_text:
         else:
             href_name = self.name
 
-        return Pali_text.static_url + href_name + "_.htm#" + sharp
+        return PaliText.static_url + href_name + "_.htm#" + sharp
 
     def output(self):
         result = ""
@@ -297,7 +297,7 @@ def text_maker(word, BR="0", text_name="", break_point={".", ":", "?", "!", "|",
         spaned = re.compile(r"(" + word + ")", re.IGNORECASE)
         searched_text = re.sub(spaned, """<span style="color:red">"""+ r"\1" +"</span>", searched_text)    
         result.append(
-                Pali_text(text_name, page[start_index], line[start_index], page[end_index], line[end_index], searched_text)
+                PaliText(text_name, page[start_index], line[start_index], page[end_index], line[end_index], searched_text)
             )
     return result
 
@@ -436,7 +436,7 @@ def result_view():
                         searched_text = searched_text.replace("@", " . . . ")
                         spaned = re.compile(r"(" + searched + ")", re.IGNORECASE)
                         searched_text = re.sub(spaned, """<span style="color:red">"""+ r"\1" +"</span>", searched_text)
-                        new_set = Pali_text("J_{}".format(roman_number[num-1]), page[start_index], line_start[start_index], page[end_index], line_start[end_index], searched_text)
+                        new_set = PaliText("J_{}".format(roman_number[num-1]), page[start_index], line_start[start_index], page[end_index], line_start[end_index], searched_text)
                         result.append(new_set)
                     i += 1
             results += result
@@ -477,7 +477,7 @@ def result_view():
                     searched_text = searched_text.replace("@", " . . . ")
                     spaned = re.compile(r"(" + searched + ")", re.IGNORECASE)
                     searched_text = re.sub(spaned, """<span style="color:red">"""+ r"\1" +"</span>", searched_text)
-                    new_set = Pali_text("Sn", page[start_index], line_start[start_index], page[end_index], line_start[end_index], searched_text)
+                    new_set = PaliText("Sn", page[start_index], line_start[start_index], page[end_index], line_start[end_index], searched_text)
                     result.append(new_set)
                 i += 1
             #ここから散文の方の検索；最後に全体をまとめてソートし、完成

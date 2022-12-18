@@ -463,7 +463,7 @@ def search_keyword(text_type, keyword, BR="0"):
         results += search_keyword_jataka(keyword, BR)
     elif text_type == "Ap":
         results += text_maker(keyword, BR, text_type, break_point={"~"})
-    #            results += [re.sub(r"~", "", item.output() + "<BR>") for item in pre_result]
+    # results += [re.sub(r"~", "", item.output() + "<BR>") for item in pre_result]
     elif text_type == "Sn":
         results += search_keyword_suttanipata(keyword, BR)
 
@@ -473,7 +473,7 @@ def search_keyword(text_type, keyword, BR="0"):
         results += th_searcher(text_type, keyword)
     else:
         results += text_maker(keyword, BR, text_type)
-    #            results += [item.output() + "<BR>" for item in pre_result]
+    # results += [item.output() + "<BR>" for item in pre_result]
     return results
 
 
@@ -494,14 +494,18 @@ def result_view():
     results = []
     searched = str(request.form["word"])
     item_number = int(request.form["item_max_number"])
+
     if not searched:
         return "No result"
+
     if str(request.form["KH"]) == "1":
         searched = kh_changer(searched)
+
     try:
         re.compile(searched)
     except Exception:
         return "Regex Error!"
+
     BR = str(request.form["BR"])
     text_group_list = request.form.getlist("text")
 
@@ -535,21 +539,20 @@ def result_view():
         else:
             target_text_list.append(text_group)
 
-    target_text_list.sort(key = lambda x: text_order.index(x))
-    # print("text_list: {}".format(text_list))
-    
+    target_text_list.sort(key=lambda x: text_order.index(x))
+
     for text_type in target_text_list:
         results += search_keyword(text_type, searched, BR)
     # print(results)
 
-# Send output-text to html 
+    # Send output-text to html
     if results == []:
         return "No result"
 
     result_text = ""
     page_counter = 1
     for i in range(len(results)):
-#pagination
+        # pagination
         if i % item_number == 0 and i != 0:
             result_text += """</div><div class = "selection" id="page-{}">""".format((i // item_number) + 1)
             page_counter += 1
@@ -559,7 +562,6 @@ def result_view():
 
         if i >= 1 and results[i].text != results[i - 1].text:
             result_text += results[i].output() + "<BR>\n"
-#    return result_text
     result_text += "</div>"
     return render_template('user.html', result=result_text, page_counter=page_counter)
 
@@ -575,5 +577,5 @@ if __name__ == "__main__":
         NotFound.mainpart()
         input("### Please input Enter key and close this window. When you execute this application again, you can get Pali_searcher on your blowser ###")
         exit()
-# To make the package: $ pyinstaller Pali_searcher.py -F --add-data "./templates/*:templates" --add-data "./static/*:static"
+    # To make the package: $ pyinstaller Pali_searcher.py -F --add-data "./templates/*:templates" --add-data "./static/*:static"
     # if debug = True, the webbrowser will open twice.

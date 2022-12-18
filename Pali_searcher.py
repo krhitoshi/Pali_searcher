@@ -273,7 +273,7 @@ def page_line_search(target, index, start_index):#start は、index[x] の x に
 
 
 def text_maker(word, BR="0", text_name="", break_point={".", ":", "?", "!", "|", "@", ". ", ","}):
-    result = []
+    results = []
     index = array("I"); page = array("I"); line = array("I")
     text = opener(text_name, index, page, line)
     start_index = 0
@@ -298,13 +298,18 @@ def text_maker(word, BR="0", text_name="", break_point={".", ":", "?", "!", "|",
                         new_searched_text += searched_text[j]
                 new_searched_text = re.sub(r"(?<=\S)<BR>", "-<BR>", new_searched_text)
                 searched_text = new_searched_text
+
         searched_text = searched_text.replace("@", " . . . ")
         spaned = re.compile(r"(" + word + ")", re.IGNORECASE)
-        searched_text = re.sub(spaned, """<span style="color:red">"""+ r"\1" +"</span>", searched_text)    
-        result.append(
-                PaliText(text_name, page[start_index], line[start_index], page[end_index], line[end_index], searched_text)
-            )
-    return result
+        searched_text = re.sub(spaned, """<span style="color:red">"""+ r"\1" +"</span>", searched_text)
+        start_page = page[start_index]
+        start_line = line[start_index]
+        end_page = page[end_index]
+        end_line = line[end_index]
+        result = PaliText(text_name, start_page, start_line, end_page, end_line,
+                          searched_text)
+        results.append(result)
+    return results
 
 
 def verse_text_searcher(text_name, searched):

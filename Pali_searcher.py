@@ -317,7 +317,7 @@ def page_line_search(target, index, start_index):#start は、index[x] の x に
             return i
 
 
-def text_maker(word, BR="0", text_name="", break_point={".", ":", "?", "!", "|", "@", ". ", ","}):
+def text_maker(word, br_flag=False, text_name="", break_point={".", ":", "?", "!", "|", "@", ". ", ","}):
     results = []
     index = array("I"); page = array("I"); line = array("I")
     text = opener(text_name, index, page, line)
@@ -331,7 +331,7 @@ def text_maker(word, BR="0", text_name="", break_point={".", ":", "?", "!", "|",
             end_index = page_line_search(sentence_end, index, start_index)
             # キーワードにマッチした sentence
             searched_text = text[sentence_start: sentence_end]
-            if BR == "1":
+            if br_flag:
                 new_searched_text = ""
                 edges = [index[k] - sentence_start 
                          for k in range(start_index, end_index+1) 
@@ -396,7 +396,7 @@ def th_searcher(text, searched):
     return result
 
 
-def search_keyword_jataka(keyword, BR):
+def search_keyword_jataka(keyword, br_flag):
     results = []
     for num in range(1, 7):
         page = array("I");
@@ -421,7 +421,7 @@ def search_keyword_jataka(keyword, BR):
                 end_index = page_line_search(end, index, start_index)
                 searched_text = line[0]
                 new_text = ""
-                if BR == "1":
+                if br_flag:
                     edges = [index[k] - verse_start_point[i]
                              for k in range(start_index, end_index + 1)
                              if index[k] - verse_start_point[i] != 0]
@@ -448,7 +448,7 @@ def search_keyword_jataka(keyword, BR):
         return results
 
 
-def search_keyword_suttanipata(keyword, BR):
+def search_keyword_suttanipata(keyword, br_flag):
     results = []
     line_start = array("I");
     index = array("I");
@@ -471,7 +471,7 @@ def search_keyword_suttanipata(keyword, BR):
             end_index = page_line_search(end, index, start_index)
             searched_text = line[0]
             new_text = ""
-            if BR == "1":
+            if br_flag:
                 edges = [index[k] - verse_start_point[i]
                          for k in range(start_index, end_index + 1)
                          if index[k] - verse_start_point[i] != 0]
@@ -495,28 +495,28 @@ def search_keyword_suttanipata(keyword, BR):
         i += 1
     # ここから散文の方の検索；最後に全体をまとめてソートし、完成
     csvfile.close()
-    pre_result = text_maker(keyword, BR, "Sn")
+    pre_result = text_maker(keyword, br_flag, "Sn")
     results += pre_result
     results.sort(key=lambda x: (x.start_page, x.start_line))
     return results
 
 
-def search_keyword(text_type, keyword, BR="0"):
+def search_keyword(text_type, keyword, br_flag=False):
     results = []
     if text_type == "J":
-        results += search_keyword_jataka(keyword, BR)
+        results += search_keyword_jataka(keyword, br_flag)
     elif text_type == "Ap":
-        results += text_maker(keyword, BR, text_type, break_point={"~"})
+        results += text_maker(keyword, br_flag, text_type, break_point={"~"})
     # results += [re.sub(r"~", "", item.output() + "<BR>") for item in pre_result]
     elif text_type == "Sn":
-        results += search_keyword_suttanipata(keyword, BR)
+        results += search_keyword_suttanipata(keyword, br_flag)
 
     elif text_type in {"Dhp", "Cp", "Bv", "Vm", "Pv"}:
         results += verse_text_searcher(text_type, keyword)
     elif text_type in {"Th", "Thi"}:
         results += th_searcher(text_type, keyword)
     else:
-        results += text_maker(keyword, BR, text_type)
+        results += text_maker(keyword, br_flag, text_type)
     # results += [item.output() + "<BR>" for item in pre_result]
     return results
 
@@ -550,16 +550,19 @@ def result_view():
     except Exception:
         return "Regex Error!"
 
-    # Show line-changes: "0"
-    # Neglect line-changes: "1"
-    BR = str(request.form["BR"])
+    # Show line-changes: "0", False
+    # Neglect line-changes: "1", True
+    if str(request.form["BR"]) == "1":
+        br_flag = True
+    else:
+        br_flag = False
 
     target_text_groups = request.form.getlist("text")
 
     searcher = PaliSearcher(target_text_groups)
 
     for text_type in searcher.target_text_vols():
-        results += search_keyword(text_type, keyword, BR)
+        results += search_keyword(text_type, keyword, br_flag)
     # print(results)
 
     # Send output-text to html

@@ -81,6 +81,11 @@
         }
     }
 
+    function checkAllByClassName(name) {
+        const checkboxes = document.getElementsByClassName(name);
+        checkAllBase(checkboxes);
+    }
+
     function textCheckBoxes() {
       return document.getElementsByName('text');
     }
@@ -99,23 +104,20 @@
 
     const checkAllSuttasButton = document.getElementById('check_all_suttas');
     checkAllSuttasButton.addEventListener('click', function (event) {
-        let checkboxes = Array.from(document.getElementsByClassName('Sutt'));
-        checkboxes = checkboxes.concat(Array.from(document.getElementsByClassName('Ku')));
-        checkAllBase(checkboxes);
+        checkAllByClassName("Sutt");
+        checkAllByClassName("Ku");
         event.preventDefault();
     });
 
     const checkAllAbhidhammaTextsButton = document.getElementById('check_all_abhidhamma_texts');
     checkAllAbhidhammaTextsButton.addEventListener('click', function (event) {
-        const checkboxes = document.getElementsByClassName('abhi');
-        checkAllBase(checkboxes);
+        checkAllByClassName("abhi");
         event.preventDefault();
     });
 
     const checkAllOtherTextsButton = document.getElementById('check_all_other_texts');
     checkAllOtherTextsButton.addEventListener('click', function (event) {
-        const checkboxes = document.getElementsByClassName('other');
-        checkAllBase(checkboxes);
+        checkAllByClassName("other");
         event.preventDefault();
     });
 

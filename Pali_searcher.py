@@ -32,6 +32,8 @@ app = Flask(__name__, root_path=os.path.dirname(sys.argv[0]),
 
 
 class PaliSearcher:
+    __slots__ = ("target_text_groups")
+
     text_vols = ["Vin_I", "Vin_II", "Vin_III", "Vin_IV", "Vin_V",
     "DN_I", "DN_II", "DN_III",
     "MN_I", "MN_II", "MN_III",
@@ -39,6 +41,38 @@ class PaliSearcher:
     "AN_I", "AN_II", "AN_III", "AN_IV", "AN_V",
     "Khp", "Dhp", "Ud", "It", "Sn", "Pv", "Vm", "Th", "Thi", "J", "Nidd_I", "Nidd_II", "Paṭis_I", "Paṭis_II", "Ap", "Bv", "Cp",
     "Dhs", "Vibh", "Dhātuk", "Pugg", "Kv", "Yam_I", "Yam_II", "Mil", "Vism", "Sp", "Ja_1", "Ja_2", "Ja_3", "Ja_4", "Ja_5", "Ja_6"]
+
+    def __init__(self, target_text_groups):
+        self.target_text_groups = target_text_groups
+
+    def target_text_vols(self):
+        result = []
+        for text_group in self.target_text_groups:
+            if text_group == "Vin":
+                result += ["Vin_I", "Vin_II", "Vin_III", "Vin_IV",
+                                     "Vin_V"]
+            elif text_group == "DN":
+                result += ["DN_I", "DN_II", "DN_III"]
+            elif text_group == "MN":
+                result += ["MN_I", "MN_II", "MN_III"]
+            elif text_group == "SN":
+                result += ["SN_I", "SN_II", "SN_III", "SN_IV", "SN_V"]
+            elif text_group == "AN":
+                result += ["AN_I", "AN_II", "AN_III", "AN_IV", "AN_V"]
+            elif text_group == "Paṭis":
+                result += ["Paṭis_I", "Paṭis_II"]
+            elif text_group == "Yam":
+                result += ["Yam_I", "Yam_II"]
+            elif text_group == "Ja":
+                result += ["Ja_1", "Ja_2", "Ja_3", "Ja_4", "Ja_5",
+                                     "Ja_6"]
+            else:
+                result.append(text_group)
+
+        # PaliSearcher.text_vols の順番でソートする
+        result.sort(key=lambda x: PaliSearcher.text_vols.index(x))
+
+        return result
 
 
 class PaliText:
@@ -520,34 +554,11 @@ def result_view():
     # Neglect line-changes: "1"
     BR = str(request.form["BR"])
 
-    text_group_list = request.form.getlist("text")
+    target_text_groups = request.form.getlist("text")
 
-    #テキストリストを開く
-    target_text_list = []
-    for text_group in text_group_list:
-        if text_group == "Vin":
-            target_text_list += ["Vin_I", "Vin_II", "Vin_III", "Vin_IV", "Vin_V"]
-        elif text_group == "DN":
-            target_text_list += ["DN_I", "DN_II", "DN_III"]
-        elif text_group == "MN":
-            target_text_list += ["MN_I", "MN_II", "MN_III"]
-        elif text_group == "SN":
-            target_text_list += ["SN_I", "SN_II", "SN_III", "SN_IV", "SN_V"]
-        elif text_group == "AN":
-            target_text_list += ["AN_I", "AN_II", "AN_III", "AN_IV", "AN_V"]
-        elif text_group == "Paṭis":
-            target_text_list += ["Paṭis_I", "Paṭis_II"]
-        elif text_group == "Yam":
-            target_text_list += ["Yam_I", "Yam_II"]
-        elif text_group == "Ja":
-            target_text_list += ["Ja_1", "Ja_2", "Ja_3", "Ja_4", "Ja_5", "Ja_6"]
-        else:
-            target_text_list.append(text_group)
+    searcher = PaliSearcher(target_text_groups)
 
-    # PaliSearcher.text_vols の順番でソートする
-    target_text_list.sort(key=lambda x: PaliSearcher.text_vols.index(x))
-
-    for text_type in target_text_list:
+    for text_type in searcher.target_text_vols():
         results += search_keyword(text_type, searched, BR)
     # print(results)
 

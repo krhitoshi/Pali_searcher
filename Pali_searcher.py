@@ -244,19 +244,18 @@ def pali_word_searcher(s, text_for_search):
     li = [i.start() for i in matchs]
     return li
 
-
+# text[n] が含まれる sentence の最初の文字のインデックスを返す
 def pali_pre_space(n, text, breakpoint={".", ":", "?", "!", "|", "@", ". ", ","}):#モノによっては breakpoint を適時変更してやる必要がある
     while n - 1 != 0 and not(text[n] in breakpoint):
         n = n - 1
     return n + 2 #コンマなどの後ろには基本半角スペースがあるため
 
-
+# text[n] が含まれる sentence の最後の文字のインデックスを返す
 def pali_pos_space(n, text, breakpoint={".", ":", "?", "!", "|", "@", ". ", ","}):
     while (n+1 != len(text) - 1) and not(text[n] in breakpoint):
         n = n + 1
     return n + 1
     #この上で、どこまで出力するのかを決定する。あんまり長いとよくないので、いい感じにしないといけない。
-
 
 def page_line_search(target, index, start_index):#start は、index[x] の x に相当する汎用インデックス番号を定める
     for i in range(start_index-1, len(index)):#このスタートは単純増加していく汎用インデックス番号
@@ -280,6 +279,7 @@ def text_maker(word, BR="0", text_name="", break_point={".", ":", "?", "!", "|",
             sentence_end = pali_pos_space(start_point, text, break_point)
             start_index = page_line_search(sentence_start, index, start_index)
             end_index = page_line_search(sentence_end, index, start_index)
+            # キーワードにマッチした sentence
             searched_text = text[sentence_start: sentence_end]
             if BR == "1":
                 new_searched_text = ""

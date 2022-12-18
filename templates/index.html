@@ -16,7 +16,9 @@
     <input type="number" name="item_max_number" min="100" step="100" value="100", required><br><br>
     Please select texts
     <label><input type="checkbox" id="all_texts" />all texts</label><br><br>
-
+    <div>
+        <button id="clear_all">Clear All</button>
+    </div>
 
     <label><input type="checkbox" name="text" value="Vin"/>Vin<br></label>
 
@@ -71,6 +73,16 @@
             checkboxes[i].checked = this.checked;
         }
     });
+
+    const clearAllButton = document.getElementById('clear_all');
+    clearAllButton.addEventListener('click', function (event) {
+        const checkboxes = document.getElementsByName('text');
+        for (i in checkboxes) {
+            checkboxes[i].checked = false;
+        }
+        event.preventDefault();
+    });
+
     var checkall1 = document.getElementById('sutta_all');
     checkall1.addEventListener('click', function () {
         var checkboxes = document.getElementsByClassName('Sutt');

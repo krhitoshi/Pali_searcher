@@ -117,6 +117,7 @@ class PaliVerse:
         self.text = text
         self.text_name = text_name
         self.text_id = text_id
+
     def output(self):
         if self.text == "Vm" or self.text == "Pv":
             self.text_id = self.text_number[:-4]
@@ -126,7 +127,7 @@ class PaliVerse:
         return """<a href = {} target="_blank">""".format(href) + "{}</a>: {}".format(self.text_number, self.text)
 
 
-def KH_changer(word):
+def kh_changer(word):
     Not_change_flag = 0
     KH_list =  ["A", "I", "U", "R" ,"L", "M", "G", "J", "T", "D", "N", "z", "S", "H"]
     NC_list = ["ā", "ī", "ū", "ṛ" ,"ḷ", "ṃ", "ṅ", "ñ", "ṭ", "ḍ", "ṇ", "ś", "ṣ", "ḥ"]
@@ -175,7 +176,7 @@ def opener(name, index, line, page):
     return text_for_search
 
 
-def Jataka_opener(number, index, line, page, start_point):
+def jataka_opener(number, index, line, page, start_point):
     name = "Ja_{}".format(number)
     index_bin = static_path + name + "_index_.bin"
     line_bin = static_path + name + "_line_.bin"
@@ -208,7 +209,7 @@ def Jataka_opener(number, index, line, page, start_point):
     f4.close()
 
 
-def Sn_opener(index, line, page, start_point):
+def sn_opener(index, line, page, start_point):
     index_bin = static_path + "Sn_index_.bin"
     line_bin = static_path + "Sn_line_.bin"
     page_bin = static_path + "Sn_page_.bin"
@@ -244,11 +245,13 @@ def pali_word_searcher(s, text_for_search):
     li = [i.start() for i in matchs]
     return li
 
+
 # text[n] が含まれる sentence の最初の文字のインデックスを返す
 def pali_pre_space(n, text, breakpoint={".", ":", "?", "!", "|", "@", ". ", ","}):#モノによっては breakpoint を適時変更してやる必要がある
     while n - 1 != 0 and not(text[n] in breakpoint):
         n = n - 1
     return n + 2 #コンマなどの後ろには基本半角スペースがあるため
+
 
 # text[n] が含まれる sentence の最後の文字のインデックスを返す
 def pali_pos_space(n, text, breakpoint={".", ":", "?", "!", "|", "@", ". ", ","}):
@@ -256,6 +259,7 @@ def pali_pos_space(n, text, breakpoint={".", ":", "?", "!", "|", "@", ". ", ","}
         n = n + 1
     return n + 1
     #この上で、どこまで出力するのかを決定する。あんまり長いとよくないので、いい感じにしないといけない。
+
 
 def page_line_search(target, index, start_index):#start は、index[x] の x に相当する汎用インデックス番号を定める
     for i in range(start_index-1, len(index)):#このスタートは単純増加していく汎用インデックス番号
@@ -317,7 +321,7 @@ def verse_text_searcher(text_name, searched):
     return result
 
 
-def Th_searcher(text, searched):
+def th_searcher(text, searched):
     if text == "Th":
         csvfile = open(static_path + "Thera_.csv", "r", encoding="utf-8", newline="\n")
     else:
@@ -359,7 +363,7 @@ def result_view():
     if not searched:
         return "No result"
     if str(request.form["KH"]) == "1":
-        searched = KH_changer(searched)
+        searched = kh_changer(searched)
     try:
         re.compile(searched)
     except Exception:
@@ -404,7 +408,7 @@ def result_view():
             result = []
             for num in range(1, 7):
                 page = array("I"); line_start = array("I"); index = array("I"); verse_start_point = array("I")
-                Jataka_opener(num, index, line_start, page, verse_start_point)
+                jataka_opener(num, index, line_start, page, verse_start_point)
                 roman_number = ["I", "II", "III", "IV", "V", "VI"]
                 csvfile = open( static_path + "J_{}.csv".format(num), "r", encoding = "utf-8", newline="\n")
                 lines = csv.reader(csvfile, delimiter=",", skipinitialspace=True)
@@ -446,7 +450,7 @@ def result_view():
         elif text == "Sn":
             result = []
             line_start = array("I"); index = array("I"); verse_start_point = array("I"); page = array("I")
-            Sn_opener(index, line_start, page, verse_start_point)
+            sn_opener(index, line_start, page, verse_start_point)
             csvfile = open( static_path + "Sn_verse.csv", "r", encoding = "utf-8", newline="\n")
             lines = csv.reader(csvfile, delimiter=",", skipinitialspace=True)
             i = 0
@@ -490,7 +494,7 @@ def result_view():
         elif text in {"Dhp", "Cp", "Bv", "Vm", "Pv"}:
             results += verse_text_searcher(text, searched)
         elif text in {"Th", "Thi"}:
-            results += Th_searcher(text, searched)
+            results += th_searcher(text, searched)
         else:
             results += text_maker(searched, BR, text)
 #            results += [item.output() + "<BR>" for item in pre_result]
@@ -498,6 +502,7 @@ def result_view():
 # Send output-text to html 
     if results == []:
         return "No result"
+
     result_text = ""
     page_counter = 1
     for i in range(len(results)):

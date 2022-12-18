@@ -506,7 +506,10 @@ def result_view():
     except Exception:
         return "Regex Error!"
 
+    # Show line-changes: "0"
+    # Neglect line-changes: "1"
     BR = str(request.form["BR"])
+
     text_group_list = request.form.getlist("text")
 
     text_order = ["Vin_I", "Vin_II", "Vin_III", "Vin_IV", "Vin_V", 

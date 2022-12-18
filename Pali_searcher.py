@@ -20,6 +20,7 @@ templates_path = os.path.join(app_dir, "templates")
 # print("static_path: {}".format(static_path))
 # print("templates_path: {}".format(templates_path))
 
+
 def resource_path(relative_path):
     if hasattr(sys, '_MEIPASS'):
         return os.path.join(sys._MEIPASS, relative_path)
@@ -108,6 +109,7 @@ class Pali_text:
             result = """<a href = {} target="_blank">""".format(href) +"{} {}.{}-{}.{}</a>: {}".format(self.name, self.start_page, self.start_line, self.end_page, self.end_line, self.text)
         return result
 
+
 class Pali_verse:
     def __init__(self, text_number, text, text_name, text_id = ""):
         self.name = self
@@ -122,6 +124,7 @@ class Pali_verse:
             self.text_id = self.text_number
             href = "static/" + self.text_name + "_.htm#" + self.text_id.replace(".", "_")
         return """<a href = {} target="_blank">""".format(href) + "{}</a>: {}".format(self.text_number, self.text)
+
 
 def KH_changer(word):
     Not_change_flag = 0
@@ -141,6 +144,7 @@ def KH_changer(word):
             else:
                 result_word += i
     return result_word
+
 
 def opener(name, index, line, page):     
     #この関数の前に、中身が空の page, line, index array を作る必要があり
@@ -169,6 +173,7 @@ def opener(name, index, line, page):
     data = open(static_path + name + "_.txt", "r", encoding="utf-8")
     text_for_search = data.read()
     return text_for_search
+
 
 def Jataka_opener(number, index, line, page, start_point):
     name = "Ja_{}".format(number)
@@ -202,6 +207,7 @@ def Jataka_opener(number, index, line, page, start_point):
         pass
     f4.close()
 
+
 def Sn_opener(index, line, page, start_point):
     index_bin = static_path + "Sn_index_.bin"
     line_bin = static_path + "Sn_line_.bin"
@@ -232,21 +238,25 @@ def Sn_opener(index, line, page, start_point):
         pass
     f4.close()
 
+
 def Pali_word_searcher(s, text_for_search):
     matchs = re.finditer(s, text_for_search, re.IGNORECASE)
     li = [i.start() for i in matchs]
     return li
+
 
 def Pali_pre_space(n, text, breakpoint={".", ":", "?", "!", "|", "@", ". ", ","}):#モノによっては breakpoint を適時変更してやる必要がある
     while n - 1 != 0 and not(text[n] in breakpoint):
         n = n - 1
     return n + 2 #コンマなどの後ろには基本半角スペースがあるため
 
+
 def Pali_pos_space(n, text, breakpoint={".", ":", "?", "!", "|", "@", ". ", ","}):
     while (n+1 != len(text) - 1) and not(text[n] in breakpoint):
         n = n + 1
     return n + 1
     #この上で、どこまで出力するのかを決定する。あんまり長いとよくないので、いい感じにしないといけない。
+
 
 def page_line_search(target, index, start_index):#start は、index[x] の x に相当する汎用インデックス番号を定める
     for i in range(start_index-1, len(index)):#このスタートは単純増加していく汎用インデックス番号
@@ -256,6 +266,7 @@ def page_line_search(target, index, start_index):#start は、index[x] の x に
             return i
         if (index[i] <= target) and (index[i+1] > target):
             return i
+
 
 def text_maker(word, BR="0", text_name="", break_point={".", ":", "?", "!", "|", "@", ". ", ","}):
     result = []
@@ -289,7 +300,8 @@ def text_maker(word, BR="0", text_name="", break_point={".", ":", "?", "!", "|",
                 Pali_text(text_name, page[start_index], line[start_index], page[end_index], line[end_index], searched_text)
             )
     return result
-    
+
+
 def verse_text_searcher(text_name, searched):
     spaned = re.compile(r"(" + searched + ")", re.IGNORECASE)
     csvfile = open( static_path + text_name + "_.csv", "r", encoding="utf-8", newline="\n")
@@ -303,6 +315,7 @@ def verse_text_searcher(text_name, searched):
             ]
     csvfile.close()
     return result
+
 
 def Th_searcher(text, searched):
     if text == "Th":
@@ -325,18 +338,17 @@ def Th_searcher(text, searched):
     csvfile.close()
     return result
 
-    
 
 @app.route('/')
 def form():
     return render_template('index.html')
+
 
 @app.route("/static/<string:path>")
 def send_static(path):
     target = static_path + path
     return send_from_directory(static_path, path)
 # This function is Mac only.
-
 
 
 @app.route('/result', methods=["POST"])
@@ -499,10 +511,10 @@ def result_view():
             result_text += results[i].output() + "<BR>\n"
 #    return result_text
     result_text += "</div>"
-    return render_template('user.html', result = result_text, page_counter = page_counter)
+    return render_template('user.html', result=result_text, page_counter=page_counter)
+
 
 if __name__ == "__main__":
-
     if len(os.listdir(static_path)) >= 259:
         url = "http://127.0.0.1:1125"
         threading.Timer(1.25, lambda: webbrowser.open(url)).start()

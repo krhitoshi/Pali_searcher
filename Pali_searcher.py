@@ -110,7 +110,7 @@ class PaliText:
         return result
 
 
-class Pali_verse:
+class PaliVerse:
     def __init__(self, text_number, text, text_name, text_id = ""):
         self.name = self
         self.text_number = text_number
@@ -239,19 +239,19 @@ def Sn_opener(index, line, page, start_point):
     f4.close()
 
 
-def Pali_word_searcher(s, text_for_search):
+def pali_word_searcher(s, text_for_search):
     matchs = re.finditer(s, text_for_search, re.IGNORECASE)
     li = [i.start() for i in matchs]
     return li
 
 
-def Pali_pre_space(n, text, breakpoint={".", ":", "?", "!", "|", "@", ". ", ","}):#モノによっては breakpoint を適時変更してやる必要がある
+def pali_pre_space(n, text, breakpoint={".", ":", "?", "!", "|", "@", ". ", ","}):#モノによっては breakpoint を適時変更してやる必要がある
     while n - 1 != 0 and not(text[n] in breakpoint):
         n = n - 1
     return n + 2 #コンマなどの後ろには基本半角スペースがあるため
 
 
-def Pali_pos_space(n, text, breakpoint={".", ":", "?", "!", "|", "@", ". ", ","}):
+def pali_pos_space(n, text, breakpoint={".", ":", "?", "!", "|", "@", ". ", ","}):
     while (n+1 != len(text) - 1) and not(text[n] in breakpoint):
         n = n + 1
     return n + 1
@@ -273,11 +273,11 @@ def text_maker(word, BR="0", text_name="", break_point={".", ":", "?", "!", "|",
     index = array("I"); page = array("I"); line = array("I")
     text = opener(text_name, index, page, line)
     start_index = 0
-    start_point_list = Pali_word_searcher(word, text)
+    start_point_list = pali_word_searcher(word, text)
     for start_point in start_point_list:
         if text_name:#あとで Apadanaの場合などに関して場合分けを考える
-            sentence_start = Pali_pre_space(start_point, text, break_point)
-            sentence_end = Pali_pos_space(start_point, text, break_point)
+            sentence_start = pali_pre_space(start_point, text, break_point)
+            sentence_end = pali_pos_space(start_point, text, break_point)
             start_index = page_line_search(sentence_start, index, start_index)
             end_index = page_line_search(sentence_end, index, start_index)
             searched_text = text[sentence_start: sentence_end]
@@ -307,7 +307,7 @@ def verse_text_searcher(text_name, searched):
     csvfile = open( static_path + text_name + "_.csv", "r", encoding="utf-8", newline="\n")
     lines = csv.reader(csvfile, delimiter=",", skipinitialspace=True)
     result = [
-        Pali_verse(line[0], 
+        PaliVerse(line[0], 
         re.sub(spaned, """<span style="color:red">"""+ r"\1" +"</span>", line[1].lstrip().rstrip()), 
         text_name)
         for line in lines 
@@ -327,7 +327,7 @@ def Th_searcher(text, searched):
 
     spaned = re.compile(r"(" + searched + ")", re.IGNORECASE)
     result = [
-        Pali_verse(
+        PaliVerse(
             re.sub(r"(^.*?\|\| )(Th.*?)( \|\|.*?$)", r"\2", line), 
             re.sub(spaned, """<span style="color:red">"""+ r"\1" + "</span>", line.lstrip().rstrip()), 
             text 

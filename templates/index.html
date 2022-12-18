@@ -66,10 +66,14 @@
     <input type="submit" />
 </form>
 <script type="text/javascript">
+    function textCheckBoxes() {
+      return document.getElementsByName('text');
+    }
+
     const checkAllButton = document.getElementById('check_all');
     checkAllButton.addEventListener('click', function (event) {
-        const checkboxes = document.getElementsByName('text');
-        for (i in checkboxes) {
+        const checkboxes = textCheckBoxes();
+        for (const i in checkboxes) {
             checkboxes[i].checked = true;
         }
         event.preventDefault();
@@ -77,8 +81,8 @@
 
     const clearAllButton = document.getElementById('clear_all');
     clearAllButton.addEventListener('click', function (event) {
-        const checkboxes = document.getElementsByName('text');
-        for (i in checkboxes) {
+        const checkboxes = textCheckBoxes();
+        for (const i in checkboxes) {
             checkboxes[i].checked = false;
         }
         event.preventDefault();
@@ -87,7 +91,7 @@
     var checkall1 = document.getElementById('sutta_all');
     checkall1.addEventListener('click', function () {
         var checkboxes = document.getElementsByClassName('Sutt');
-        for (i in checkboxes) {
+        for (i in textCheckBoxes()) {
             checkboxes[i].checked = this.checked;
         }
     });

@@ -457,7 +457,7 @@ def search_keyword_suttanipata(keyword, BR):
     return result
 
 
-def search_keyword(text_type, keyword, BR):
+def search_keyword(text_type, keyword, BR="0"):
     results = []
     if text_type == "J":
         results += search_keyword_jataka(keyword, BR)

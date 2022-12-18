@@ -31,6 +31,16 @@ app = Flask(__name__, root_path=os.path.dirname(sys.argv[0]),
             static_folder=static_path, template_folder=templates_path)
 
 
+class PaliSearcher:
+    text_vols = ["Vin_I", "Vin_II", "Vin_III", "Vin_IV", "Vin_V",
+    "DN_I", "DN_II", "DN_III",
+    "MN_I", "MN_II", "MN_III",
+    "SN_I", "SN_II", "SN_III", "SN_IV", "SN_V",
+    "AN_I", "AN_II", "AN_III", "AN_IV", "AN_V",
+    "Khp", "Dhp", "Ud", "It", "Sn", "Pv", "Vm", "Th", "Thi", "J", "Nidd_I", "Nidd_II", "Paṭis_I", "Paṭis_II", "Ap", "Bv", "Cp",
+    "Dhs", "Vibh", "Dhātuk", "Pugg", "Kv", "Yam_I", "Yam_II", "Mil", "Vism", "Sp", "Ja_1", "Ja_2", "Ja_3", "Ja_4", "Ja_5", "Ja_6"]
+
+
 class PaliText:
     __slots__ = ("name", "start_page", "end_page", "start_line", "end_line", "text")
 
@@ -512,14 +522,6 @@ def result_view():
 
     text_group_list = request.form.getlist("text")
 
-    text_order = ["Vin_I", "Vin_II", "Vin_III", "Vin_IV", "Vin_V", 
-    "DN_I", "DN_II", "DN_III",
-    "MN_I", "MN_II", "MN_III",
-    "SN_I", "SN_II", "SN_III", "SN_IV", "SN_V",
-    "AN_I", "AN_II", "AN_III", "AN_IV", "AN_V",
-    "Khp", "Dhp", "Ud", "It", "Sn", "Pv", "Vm", "Th", "Thi", "J", "Nidd_I", "Nidd_II", "Paṭis_I", "Paṭis_II", "Ap", "Bv", "Cp",
-    "Dhs", "Vibh", "Dhātuk", "Pugg", "Kv", "Yam_I", "Yam_II", "Mil", "Vism", "Sp", "Ja_1", "Ja_2", "Ja_3", "Ja_4", "Ja_5", "Ja_6"]
-    
     #テキストリストを開く
     target_text_list = []
     for text_group in text_group_list:
@@ -542,7 +544,8 @@ def result_view():
         else:
             target_text_list.append(text_group)
 
-    target_text_list.sort(key=lambda x: text_order.index(x))
+    # PaliSearcher.text_vols の順番でソートする
+    target_text_list.sort(key=lambda x: PaliSearcher.text_vols.index(x))
 
     for text_type in target_text_list:
         results += search_keyword(text_type, searched, BR)

@@ -578,10 +578,10 @@ def result_view():
             page_counter += 1
         elif i == 0:
             result_text += """<div class = "selection" id="page-1">"""
-            result_text += results[0].output() + "<BR>\n"
+            result_text += str(i+1) + ". " + results[0].output() + "<BR>\n"
 
         if i >= 1 and results[i].text != results[i - 1].text:
-            result_text += results[i].output() + "<BR>\n"
+            result_text += str(i+1) + ". " + results[i].output() + "<BR>\n"
     result_text += "</div>"
     return render_template('user.html', result=result_text, page_counter=page_counter)
 

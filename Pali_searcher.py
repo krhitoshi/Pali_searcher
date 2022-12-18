@@ -262,6 +262,7 @@ def pali_pos_space(n, text, breakpoint={".", ":", "?", "!", "|", "@", ". ", ","}
     #この上で、どこまで出力するのかを決定する。あんまり長いとよくないので、いい感じにしないといけない。
 
 
+# テキストインデックス(テキスト内の位置)から実際のPTS書籍におけるページ番号,行番号を取得するためのインデックスを取得する
 def page_line_search(target, index, start_index):#start は、index[x] の x に相当する汎用インデックス番号を定める
     for i in range(start_index-1, len(index)):#このスタートは単純増加していく汎用インデックス番号
         try:

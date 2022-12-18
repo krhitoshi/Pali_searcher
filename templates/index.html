@@ -119,22 +119,25 @@
         event.preventDefault();
     });
 
-    var checkall1 = document.getElementById('sutta_all');
+    const checkall1 = document.getElementById('sutta_all');
     checkall1.addEventListener('click', function () {
         const checkboxes = document.getElementsByClassName('Sutt');
         checkAllBase(checkboxes);
     });
-    var checkall2 = document.getElementById('ku_all');
+
+    const checkall2 = document.getElementById('ku_all');
     checkall2.addEventListener('click', function () {
         const checkboxes = document.getElementsByClassName('Ku');
         checkAllBase(checkboxes);
     });
-    var checkall3 = document.getElementById('abhi_all');
+
+    const checkall3 = document.getElementById('abhi_all');
     checkall3.addEventListener('click', function () {
         const checkboxes = document.getElementsByClassName('abhi');
         checkAllBase(checkboxes);
     });
-    var checkall4 = document.getElementById('other_all');
+
+    const checkall4 = document.getElementById('other_all');
     checkall4.addEventListener('click', function () {
         const checkboxes = document.getElementsByClassName('other');
         checkAllBase(checkboxes);

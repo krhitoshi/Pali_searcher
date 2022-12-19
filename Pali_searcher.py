@@ -77,7 +77,7 @@ class PaliSearcher:
             line_start = array("I");
             index = array("I");
             verse_start_point = array("I")
-            jataka_opener(num, index, line_start, page, verse_start_point)
+            self.jataka_bin_loader(num, index, line_start, page, verse_start_point)
             roman_number = ["I", "II", "III", "IV", "V", "VI"]
             csvfile = open(static_path + "J_{}.csv".format(num), "r",
                            encoding="utf-8", newline="\n")
@@ -127,9 +127,10 @@ class PaliSearcher:
         index = array("I");
         verse_start_point = array("I");
         page = array("I")
-        sn_opener(index, line_start, page, verse_start_point)
+        self.suttanipata_bin_loader(index, line_start, page, verse_start_point)
         csvfile = open(static_path + "Sn_verse.csv", "r", encoding="utf-8",
                        newline="\n")
+        lines = csv.reader(csvfile, delimiter=",", skipinitialspace=True)
         lines = csv.reader(csvfile, delimiter=",", skipinitialspace=True)
         i = 0
         start_index = 0
@@ -172,6 +173,76 @@ class PaliSearcher:
         results += pre_result
         results.sort(key=lambda x: (x.start_page, x.start_line))
         return results
+
+    def jataka_bin_loader(self, number, index, line, page, start_point):
+        name = "Ja_{}".format(number)
+        index_bin = static_path + name + "_index_.bin"
+        line_bin = static_path + name + "_line_.bin"
+        page_bin = static_path + name + "_page_.bin"
+        start_bin = static_path + "J_" + str(number) + "_start_point_.bin"
+        # I made mistake when I named these bin files; I try to re-name here.
+
+        f1 = open(index_bin, "rb")
+        try:
+            index.fromfile(f1, 10 ** 6)
+        except EOFError:
+            pass
+        f1.close()
+
+        f2 = open(line_bin, "rb")
+        try:
+            line.fromfile(f2, 10 ** 6)
+        except EOFError:
+            pass
+        f2.close()
+
+        f3 = open(page_bin, "rb")
+        try:
+            page.fromfile(f3, 10 ** 6)
+        except EOFError:
+            pass
+        f3.close()
+
+        f4 = open(start_bin, "rb")
+        try:
+            start_point.fromfile(f4, 1000)
+        except EOFError:
+            pass
+        f4.close()
+
+    def suttanipata_bin_loader(self, index, line, page, start_point):
+        index_bin = static_path + "Sn_index_.bin"
+        line_bin = static_path + "Sn_line_.bin"
+        page_bin = static_path + "Sn_page_.bin"
+        start_bin = static_path + "Sn_verse_start_point.bin"
+
+        f1 = open(index_bin, "rb")
+        try:
+            index.fromfile(f1, 10 ** 6)
+        except EOFError:
+            pass
+        f1.close()
+
+        f2 = open(line_bin, "rb")
+        try:
+            line.fromfile(f2, 10 ** 6)
+        except EOFError:
+            pass
+        f2.close()
+
+        f3 = open(page_bin, "rb")
+        try:
+            page.fromfile(f3, 10 ** 6)
+        except EOFError:
+            pass
+        f3.close()
+
+        f4 = open(start_bin, "rb")
+        try:
+            start_point.fromfile(f4, 1000)
+        except EOFError:
+            pass
+        f4.close()
 
     def target_text_vols(self):
         result = []
@@ -347,70 +418,6 @@ def opener(name, index, line, page):
     data = open(static_path + name + "_.txt", "r", encoding="utf-8")
     text_for_search = data.read()
     return text_for_search
-
-
-def jataka_opener(number, index, line, page, start_point):
-    name = "Ja_{}".format(number)
-    index_bin = static_path + name + "_index_.bin"
-    line_bin = static_path + name + "_line_.bin"
-    page_bin = static_path + name + "_page_.bin"
-    start_bin = static_path + "J_" + str(number) + "_start_point_.bin"
-    # I made mistake when I named these bin files; I try to re-name here. 
-    f1 = open(index_bin, "rb")
-    try:
-        index.fromfile(f1, 10**6)
-    except EOFError:
-        pass
-    f1.close()
-    f2 = open(line_bin, "rb")
-    try:
-        line.fromfile(f2, 10**6)
-    except EOFError:
-        pass
-    f2.close()
-    f3 = open(page_bin, "rb")
-    try:
-        page.fromfile(f3, 10**6)
-    except EOFError:
-        pass
-    f3.close()
-    f4 = open(start_bin, "rb")
-    try:
-        start_point.fromfile(f4, 1000)
-    except EOFError:
-        pass
-    f4.close()
-
-
-def sn_opener(index, line, page, start_point):
-    index_bin = static_path + "Sn_index_.bin"
-    line_bin = static_path + "Sn_line_.bin"
-    page_bin = static_path + "Sn_page_.bin"
-    start_bin = static_path + "Sn_verse_start_point.bin"
-    f1 = open(index_bin, "rb")
-    try:
-        index.fromfile(f1, 10**6)
-    except EOFError:
-        pass
-    f1.close()
-    f2 = open(line_bin, "rb")
-    try:
-        line.fromfile(f2, 10**6)
-    except EOFError:
-        pass
-    f2.close()
-    f3 = open(page_bin, "rb")
-    try:
-        page.fromfile(f3, 10**6)
-    except EOFError:
-        pass
-    f3.close()
-    f4 = open(start_bin, "rb")
-    try:
-        start_point.fromfile(f4, 1000)
-    except EOFError:
-        pass
-    f4.close()
 
 
 def pali_word_searcher(s, text_for_search):

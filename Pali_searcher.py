@@ -90,7 +90,8 @@ class PaliSearcher:
             line_start = array("I");
             index = array("I");
             verse_start_point = array("I")
-            self.jataka_bin_loader(num, index, line_start, page, verse_start_point)
+            self.load_jataka_bin_files(num, index, line_start, page,
+                                       verse_start_point)
             roman_number = ["I", "II", "III", "IV", "V", "VI"]
             path = self.__static_dir_file_path("J_{}.csv".format(num))
             csvfile = open(path, "r", encoding="utf-8", newline="\n")
@@ -141,7 +142,8 @@ class PaliSearcher:
         verse_start_point = array("I");
         page = array("I")
         path = self.__static_dir_file_path("Sn_verse.csv")
-        self.suttanipata_bin_loader(index, line_start, page, verse_start_point)
+        self.load_suttanipata_bin_files(index, line_start, page,
+                                        verse_start_point)
         csvfile = open(path, "r", encoding="utf-8",
                        newline="\n")
         lines = csv.reader(csvfile, delimiter=",", skipinitialspace=True)
@@ -188,7 +190,7 @@ class PaliSearcher:
         results.sort(key=lambda x: (x.start_page, x.start_line))
         return results
 
-    def jataka_bin_loader(self, number, index, line, page, start_point):
+    def load_jataka_bin_files(self, number, index, line, page, start_point):
         name = "Ja_{}".format(number)
         self.__load_bin(name + "_index_.bin", index)
         self.__load_bin(name + "_line_.bin", line)
@@ -196,7 +198,7 @@ class PaliSearcher:
         self.__load_bin("J_" + str(number) + "_start_point_.bin", start_point)
         # I made mistake when I named these bin files; I try to re-name here.
 
-    def suttanipata_bin_loader(self, index, line, page, start_point):
+    def load_suttanipata_bin_files(self, index, line, page, start_point):
         self.__load_bin("Sn_index_.bin", index)
         self.__load_bin("Sn_line_.bin", line)
         self.__load_bin("Sn_page_.bin", page)
@@ -237,8 +239,8 @@ class PaliSearcher:
         index = array("I");
         page = array("I");
         line = array("I")
-        text = self.text_vol_loader(text_name)
-        self.bin_loader(text_name, index, page, line)
+        text = self.load_text_vol(text_name)
+        self.load_bin_files(text_name, index, page, line)
         start_index = 0
         start_point_list = pali_word_searcher(word, text)
         for start_point in start_point_list:
@@ -281,13 +283,13 @@ class PaliSearcher:
             results.append(result)
         return results
 
-    def text_vol_loader(self, text_vol):
+    def load_text_vol(self, text_vol):
         file = self.__static_dir_file_path(text_vol + "_.txt")
         data = open(file, "r", encoding="utf-8")
         text_for_search = data.read()
         return text_for_search
 
-    def bin_loader(self, name, index, page, line):
+    def load_bin_files(self, name, index, page, line):
         # この関数の前に、中身が空の page, line, index array を作る必要があり
         self.__load_bin(name + "_index_.bin", index)
         self.__load_bin(name + "_page_.bin", page)

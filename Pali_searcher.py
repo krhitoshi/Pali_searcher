@@ -268,8 +268,8 @@ class PaliSearcher:
     def search_text_vol_base(self, word, br_flag=False, text_vol="",
                    break_point={".", ":", "?", "!", "|", "@", ". ", ","}):
         results = []
-        index = array("I");
-        page = array("I");
+        index = array("I")
+        page = array("I")
         line = array("I")
         text = self.load_text_vol(text_vol)
         self.load_bin_files(text_vol, index, page, line)

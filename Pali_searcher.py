@@ -54,7 +54,7 @@ class PaliSearcher:
     def search_text_vol(self, text_vol, keyword, br_flag):
         results = []
         if text_vol == "J":
-            results += search_keyword_jataka(keyword, br_flag)
+            results += self.search_jataka(keyword, br_flag)
         elif text_vol == "Ap":
             results += text_maker(keyword, br_flag, text_vol, break_point={"~"})
         # results += [re.sub(r"~", "", item.output() + "<BR>") for item in pre_result]
@@ -69,6 +69,57 @@ class PaliSearcher:
             results += text_maker(keyword, br_flag, text_vol)
         # results += [item.output() + "<BR>" for item in pre_result]
         return results
+
+    def search_jataka(self, keyword, br_flag):
+        results = []
+        for num in range(1, 7):
+            page = array("I");
+            line_start = array("I");
+            index = array("I");
+            verse_start_point = array("I")
+            jataka_opener(num, index, line_start, page, verse_start_point)
+            roman_number = ["I", "II", "III", "IV", "V", "VI"]
+            csvfile = open(static_path + "J_{}.csv".format(num), "r",
+                           encoding="utf-8", newline="\n")
+            lines = csv.reader(csvfile, delimiter=",", skipinitialspace=True)
+            i = 0
+            start_index = 0
+            for line in lines:
+                if re.search(keyword, line[0]):
+                    try:
+                        start = verse_start_point[i]
+                    except IndexError:
+                        break
+                    end = start + len(line[0])
+                    start_index = page_line_search(start, index, start_index)
+                    end_index = page_line_search(end, index, start_index)
+                    searched_text = line[0]
+                    new_text = ""
+                    if br_flag:
+                        edges = [index[k] - verse_start_point[i]
+                                 for k in range(start_index, end_index + 1)
+                                 if index[k] - verse_start_point[i] != 0]
+                        for j in range(len(searched_text)):
+                            if j in edges:
+                                new_text += ("<BR>" + searched_text[j])
+                            else:
+                                new_text += searched_text[j]
+                    else:
+                        new_text = line[0]
+                    searched_text = re.sub(r"(?<=\S)<BR>", "-<BR>", new_text)
+                    searched_text = searched_text.replace("@", " . . . ")
+                    spaned = re.compile(r"(" + keyword + ")", re.IGNORECASE)
+                    searched_text = re.sub(spaned,
+                                           """<span style="color:red">""" + r"\1" + "</span>",
+                                           searched_text)
+                    new_set = PaliText("J_{}".format(roman_number[num - 1]),
+                                       page[start_index],
+                                       line_start[start_index], page[end_index],
+                                       line_start[end_index], searched_text)
+                    results.append(new_set)
+                i += 1
+
+            return results
 
     def target_text_vols(self):
         result = []
@@ -419,58 +470,6 @@ def th_searcher(text, searched):
         ]
     csvfile.close()
     return result
-
-
-def search_keyword_jataka(keyword, br_flag):
-    results = []
-    for num in range(1, 7):
-        page = array("I");
-        line_start = array("I");
-        index = array("I");
-        verse_start_point = array("I")
-        jataka_opener(num, index, line_start, page, verse_start_point)
-        roman_number = ["I", "II", "III", "IV", "V", "VI"]
-        csvfile = open(static_path + "J_{}.csv".format(num), "r",
-                       encoding="utf-8", newline="\n")
-        lines = csv.reader(csvfile, delimiter=",", skipinitialspace=True)
-        i = 0
-        start_index = 0
-        for line in lines:
-            if re.search(keyword, line[0]):
-                try:
-                    start = verse_start_point[i]
-                except IndexError:
-                    break
-                end = start + len(line[0])
-                start_index = page_line_search(start, index, start_index)
-                end_index = page_line_search(end, index, start_index)
-                searched_text = line[0]
-                new_text = ""
-                if br_flag:
-                    edges = [index[k] - verse_start_point[i]
-                             for k in range(start_index, end_index + 1)
-                             if index[k] - verse_start_point[i] != 0]
-                    for j in range(len(searched_text)):
-                        if j in edges:
-                            new_text += ("<BR>" + searched_text[j])
-                        else:
-                            new_text += searched_text[j]
-                else:
-                    new_text = line[0]
-                searched_text = re.sub(r"(?<=\S)<BR>", "-<BR>", new_text)
-                searched_text = searched_text.replace("@", " . . . ")
-                spaned = re.compile(r"(" + keyword + ")", re.IGNORECASE)
-                searched_text = re.sub(spaned,
-                                       """<span style="color:red">""" + r"\1" + "</span>",
-                                       searched_text)
-                new_set = PaliText("J_{}".format(roman_number[num - 1]),
-                                   page[start_index],
-                                   line_start[start_index], page[end_index],
-                                   line_start[end_index], searched_text)
-                results.append(new_set)
-            i += 1
-
-        return results
 
 
 def search_keyword_suttanipata(keyword, br_flag):

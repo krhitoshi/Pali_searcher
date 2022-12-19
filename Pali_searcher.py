@@ -233,6 +233,8 @@ class PaliSearcher:
 
         return result
 
+    # パーリテキストデータからキーワードを検索してマッチした文字列について
+    # 最初の文字の位置のリストを返す
     def search_pali_text(self, keyword, text_data):
         matches = re.finditer(keyword, text_data, re.IGNORECASE)
         li = [i.start() for i in matches]

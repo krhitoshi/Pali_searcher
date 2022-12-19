@@ -290,6 +290,7 @@ class PaliSearcher:
                 # キーワードにマッチした sentence
                 sentence = text_vol_data[sentence_start: sentence_end]
 
+                # 行をまたいでいる部分の処理
                 if br_flag:
                     new_sentence = ""
                     edges = [index[k] - sentence_start

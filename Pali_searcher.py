@@ -56,7 +56,7 @@ class PaliSearcher:
         if text_vol == "J":
             results += self.search_jataka(keyword, br_flag)
         elif text_vol == "Ap":
-            results += text_maker(keyword, br_flag, text_vol, break_point={"~"})
+            results += self.text_maker(keyword, br_flag, text_vol, break_point={"~"})
         # results += [re.sub(r"~", "", item.output() + "<BR>") for item in pre_result]
         elif text_vol == "Sn":
             results += self.search_suttanipata(keyword, br_flag)
@@ -66,7 +66,7 @@ class PaliSearcher:
         elif text_vol in {"Th", "Thi"}:
             results += th_searcher(text_vol, keyword)
         else:
-            results += text_maker(keyword, br_flag, text_vol)
+            results += self.text_maker(keyword, br_flag, text_vol)
         # results += [item.output() + "<BR>" for item in pre_result]
         return results
 
@@ -169,7 +169,7 @@ class PaliSearcher:
             i += 1
         # ここから散文の方の検索；最後に全体をまとめてソートし、完成
         csvfile.close()
-        pre_result = text_maker(keyword, br_flag, "Sn")
+        pre_result = self.text_maker(keyword, br_flag, "Sn")
         results += pre_result
         results.sort(key=lambda x: (x.start_page, x.start_line))
         return results
@@ -272,6 +272,55 @@ class PaliSearcher:
         result.sort(key=lambda x: PaliSearcher.text_vols.index(x))
 
         return result
+
+    def text_maker(self, word, br_flag=False, text_name="",
+                   break_point={".", ":", "?", "!", "|", "@", ". ", ","}):
+        results = []
+        index = array("I");
+        page = array("I");
+        line = array("I")
+        text = opener(text_name, index, page, line)
+        start_index = 0
+        start_point_list = pali_word_searcher(word, text)
+        for start_point in start_point_list:
+            if text_name:  # あとで Apadanaの場合などに関して場合分けを考える
+                sentence_start = pali_pre_space(start_point, text, break_point)
+                sentence_end = pali_pos_space(start_point, text, break_point)
+                start_index = page_line_search(sentence_start, index,
+                                               start_index)
+                end_index = page_line_search(sentence_end, index, start_index)
+                # キーワードにマッチした sentence
+                searched_text = text[sentence_start: sentence_end]
+                if br_flag:
+                    new_searched_text = ""
+                    edges = [index[k] - sentence_start
+                             for k in range(start_index, end_index + 1)
+                             if index[k] - sentence_start != 0]
+                    for j in range(len(searched_text)):
+                        if j in edges:
+                            new_searched_text += ("<BR>" + searched_text[j])
+                        else:
+                            new_searched_text += searched_text[j]
+                    new_searched_text = re.sub(r"(?<=\S)<BR>", "-<BR>",
+                                               new_searched_text)
+                    searched_text = new_searched_text
+
+            # ハイライト処理など
+            searched_text = searched_text.replace("@", " . . . ")
+            spaned = re.compile(r"(" + word + ")", re.IGNORECASE)
+            searched_text = re.sub(spaned,
+                                   """<span style="color:red">""" + r"\1" + "</span>",
+                                   searched_text)
+
+            start_page = page[start_index]
+            start_line = line[start_index]
+            end_page = page[end_index]
+            end_line = line[end_index]
+            result = PaliText(text_name, start_page, start_line, end_page,
+                              end_line,
+                              searched_text)
+            results.append(result)
+        return results
 
 
 class PaliText:
@@ -450,48 +499,6 @@ def page_line_search(target, index, start_index):#start は、index[x] の x に
             return i
         if (index[i] <= target) and (index[i+1] > target):
             return i
-
-
-def text_maker(word, br_flag=False, text_name="", break_point={".", ":", "?", "!", "|", "@", ". ", ","}):
-    results = []
-    index = array("I"); page = array("I"); line = array("I")
-    text = opener(text_name, index, page, line)
-    start_index = 0
-    start_point_list = pali_word_searcher(word, text)
-    for start_point in start_point_list:
-        if text_name:#あとで Apadanaの場合などに関して場合分けを考える
-            sentence_start = pali_pre_space(start_point, text, break_point)
-            sentence_end = pali_pos_space(start_point, text, break_point)
-            start_index = page_line_search(sentence_start, index, start_index)
-            end_index = page_line_search(sentence_end, index, start_index)
-            # キーワードにマッチした sentence
-            searched_text = text[sentence_start: sentence_end]
-            if br_flag:
-                new_searched_text = ""
-                edges = [index[k] - sentence_start 
-                         for k in range(start_index, end_index+1) 
-                         if index[k] - sentence_start != 0]
-                for j in range(len(searched_text)):
-                    if j in edges:
-                        new_searched_text +=  ("<BR>" + searched_text[j])
-                    else:
-                        new_searched_text += searched_text[j]
-                new_searched_text = re.sub(r"(?<=\S)<BR>", "-<BR>", new_searched_text)
-                searched_text = new_searched_text
-
-        # ハイライト処理など
-        searched_text = searched_text.replace("@", " . . . ")
-        spaned = re.compile(r"(" + word + ")", re.IGNORECASE)
-        searched_text = re.sub(spaned, """<span style="color:red">""" + r"\1" + "</span>", searched_text)
-
-        start_page = page[start_index]
-        start_line = line[start_index]
-        end_page = page[end_index]
-        end_line = line[end_index]
-        result = PaliText(text_name, start_page, start_line, end_page, end_line,
-                          searched_text)
-        results.append(result)
-    return results
 
 
 def verse_text_searcher(text_name, searched):

@@ -279,7 +279,7 @@ class PaliSearcher:
         index = array("I");
         page = array("I");
         line = array("I")
-        text = opener(text_name, index, page, line)
+        text = self.bin_loader(text_name, index, page, line)
         start_index = 0
         start_point_list = pali_word_searcher(word, text)
         for start_point in start_point_list:
@@ -321,6 +321,38 @@ class PaliSearcher:
                               searched_text)
             results.append(result)
         return results
+
+    def bin_loader(self, name, index, line, page):
+        # この関数の前に、中身が空の page, line, index array を作る必要があり
+        index_bin = static_path + name + "_index_.bin"
+        line_bin = static_path + name + "_page_.bin"
+        page_bin = static_path + name + "_line_.bin"
+        # I made mistake when I named these bin files; I try to re-name here.
+
+        f1 = open(index_bin, "rb")
+        try:
+            index.fromfile(f1, 10 ** 6)
+        except EOFError:
+            pass
+        f1.close()
+
+        f2 = open(line_bin, "rb")
+        try:
+            line.fromfile(f2, 10 ** 6)
+        except EOFError:
+            pass
+        f2.close()
+
+        f3 = open(page_bin, "rb")
+        try:
+            page.fromfile(f3, 10 ** 6)
+        except EOFError:
+            pass
+        f3.close()
+
+        data = open(static_path + name + "_.txt", "r", encoding="utf-8")
+        text_for_search = data.read()
+        return text_for_search
 
 
 class PaliText:
@@ -438,35 +470,6 @@ def kh_changer(word):
             else:
                 result_word += i
     return result_word
-
-
-def opener(name, index, line, page):     
-    #この関数の前に、中身が空の page, line, index array を作る必要があり
-    index_bin = static_path + name + "_index_.bin"
-    line_bin = static_path + name + "_page_.bin"
-    page_bin = static_path + name + "_line_.bin"
-    # I made mistake when I named these bin files; I try to re-name here. 
-    f1 = open(index_bin, "rb")
-    try:
-        index.fromfile(f1, 10**6)
-    except EOFError:
-        pass
-    f1.close()
-    f2 = open(line_bin, "rb")
-    try:
-        line.fromfile(f2, 10**6)
-    except EOFError:
-        pass
-    f2.close()
-    f3 = open(page_bin, "rb")
-    try:
-        page.fromfile(f3, 10**6)
-    except EOFError:
-        pass
-    f3.close()
-    data = open(static_path + name + "_.txt", "r", encoding="utf-8")
-    text_for_search = data.read()
-    return text_for_search
 
 
 def pali_word_searcher(s, text_for_search):

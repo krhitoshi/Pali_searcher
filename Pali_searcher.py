@@ -46,6 +46,9 @@ class PaliSearcher:
         self.static_dir_path = static_dir_path
         self.target_text_groups = target_text_groups
 
+    def __static_dir_file_path(self, path):
+        return os.path.join(self.static_dir_path, path)
+
     def search(self, keyword, br_flag=False):
         results = []
         for text_vol in self.target_text_vols():
@@ -80,8 +83,8 @@ class PaliSearcher:
             verse_start_point = array("I")
             self.jataka_bin_loader(num, index, line_start, page, verse_start_point)
             roman_number = ["I", "II", "III", "IV", "V", "VI"]
-            csvfile = open(static_path + "J_{}.csv".format(num), "r",
-                           encoding="utf-8", newline="\n")
+            path = self.__static_dir_file_path("J_{}.csv".format(num))
+            csvfile = open(path, "r", encoding="utf-8", newline="\n")
             lines = csv.reader(csvfile, delimiter=",", skipinitialspace=True)
             i = 0
             start_index = 0
@@ -128,8 +131,9 @@ class PaliSearcher:
         index = array("I");
         verse_start_point = array("I");
         page = array("I")
+        path = self.__static_dir_file_path("Sn_verse.csv")
         self.suttanipata_bin_loader(index, line_start, page, verse_start_point)
-        csvfile = open(static_path + "Sn_verse.csv", "r", encoding="utf-8",
+        csvfile = open(path, "r", encoding="utf-8",
                        newline="\n")
         lines = csv.reader(csvfile, delimiter=",", skipinitialspace=True)
         lines = csv.reader(csvfile, delimiter=",", skipinitialspace=True)
@@ -177,10 +181,10 @@ class PaliSearcher:
 
     def jataka_bin_loader(self, number, index, line, page, start_point):
         name = "Ja_{}".format(number)
-        index_bin = static_path + name + "_index_.bin"
-        line_bin = static_path + name + "_line_.bin"
-        page_bin = static_path + name + "_page_.bin"
-        start_bin = static_path + "J_" + str(number) + "_start_point_.bin"
+        index_bin = self.__static_dir_file_path(name + "_index_.bin")
+        line_bin = self.__static_dir_file_path(name + "_line_.bin")
+        page_bin = self.__static_dir_file_path(name + "_page_.bin")
+        start_bin = self.__static_dir_file_path("J_" + str(number) + "_start_point_.bin")
         # I made mistake when I named these bin files; I try to re-name here.
 
         f1 = open(index_bin, "rb")
@@ -212,10 +216,10 @@ class PaliSearcher:
         f4.close()
 
     def suttanipata_bin_loader(self, index, line, page, start_point):
-        index_bin = static_path + "Sn_index_.bin"
-        line_bin = static_path + "Sn_line_.bin"
-        page_bin = static_path + "Sn_page_.bin"
-        start_bin = static_path + "Sn_verse_start_point.bin"
+        index_bin = self.__static_dir_file_path("Sn_index_.bin")
+        line_bin = self.__static_dir_file_path("Sn_line_.bin")
+        page_bin = self.__static_dir_file_path("Sn_page_.bin")
+        start_bin = self.__static_dir_file_path("Sn_verse_start_point.bin")
 
         f1 = open(index_bin, "rb")
         try:
@@ -325,16 +329,16 @@ class PaliSearcher:
         return results
 
     def text_vol_loader(self, text_vol):
-        file = os.path.join(self.static_dir_path, text_vol + "_.txt")
+        file = self.__static_dir_file_path(text_vol + "_.txt")
         data = open(file, "r", encoding="utf-8")
         text_for_search = data.read()
         return text_for_search
 
     def bin_loader(self, name, index, line, page):
         # この関数の前に、中身が空の page, line, index array を作る必要があり
-        index_bin = os.path.join(self.static_dir_path, name + "_index_.bin")
-        line_bin = os.path.join(self.static_dir_path, name + "_page_.bin")
-        page_bin = os.path.join(self.static_dir_path, name + "_line_.bin")
+        index_bin = self.__static_dir_file_path(name + "_index_.bin")
+        line_bin = self.__static_dir_file_path(name + "_page_.bin")
+        page_bin = self.__static_dir_file_path(name + "_line_.bin")
         # I made mistake when I named these bin files; I try to re-name here.
 
         f1 = open(index_bin, "rb")

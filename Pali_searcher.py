@@ -147,7 +147,6 @@ class PaliSearcher:
         csvfile = open(path, "r", encoding="utf-8",
                        newline="\n")
         lines = csv.reader(csvfile, delimiter=",", skipinitialspace=True)
-        lines = csv.reader(csvfile, delimiter=",", skipinitialspace=True)
         i = 0
         start_index = 0
         for line in lines:

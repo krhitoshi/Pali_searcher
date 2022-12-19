@@ -59,7 +59,7 @@ class PaliSearcher:
             results += text_maker(keyword, br_flag, text_vol, break_point={"~"})
         # results += [re.sub(r"~", "", item.output() + "<BR>") for item in pre_result]
         elif text_vol == "Sn":
-            results += search_keyword_suttanipata(keyword, br_flag)
+            results += self.search_suttanipata(keyword, br_flag)
 
         elif text_vol in {"Dhp", "Cp", "Bv", "Vm", "Pv"}:
             results += verse_text_searcher(text_vol, keyword)
@@ -120,6 +120,58 @@ class PaliSearcher:
                 i += 1
 
             return results
+
+    def search_suttanipata(self, keyword, br_flag):
+        results = []
+        line_start = array("I");
+        index = array("I");
+        verse_start_point = array("I");
+        page = array("I")
+        sn_opener(index, line_start, page, verse_start_point)
+        csvfile = open(static_path + "Sn_verse.csv", "r", encoding="utf-8",
+                       newline="\n")
+        lines = csv.reader(csvfile, delimiter=",", skipinitialspace=True)
+        i = 0
+        start_index = 0
+        for line in lines:
+            if re.search(keyword, line[0]):
+                try:
+                    start = verse_start_point[i]
+                except IndexError:
+                    break
+                end = start + len(line[0])
+                start_index = page_line_search(start, index, start_index)
+                end_index = page_line_search(end, index, start_index)
+                searched_text = line[0]
+                new_text = ""
+                if br_flag:
+                    edges = [index[k] - verse_start_point[i]
+                             for k in range(start_index, end_index + 1)
+                             if index[k] - verse_start_point[i] != 0]
+                    for j in range(len(searched_text)):
+                        if j in edges:
+                            new_text += ("<BR>" + searched_text[j])
+                        else:
+                            new_text += searched_text[j]
+                else:
+                    new_text = line[0]
+                searched_text = re.sub(r"(?<=\S)<BR>", "-<BR>", new_text)
+                searched_text = searched_text.replace("@", " . . . ")
+                spaned = re.compile(r"(" + keyword + ")", re.IGNORECASE)
+                searched_text = re.sub(spaned,
+                                       """<span style="color:red">""" + r"\1" + "</span>",
+                                       searched_text)
+                new_set = PaliText("Sn", page[start_index],
+                                   line_start[start_index], page[end_index],
+                                   line_start[end_index], searched_text)
+                results.append(new_set)
+            i += 1
+        # ここから散文の方の検索；最後に全体をまとめてソートし、完成
+        csvfile.close()
+        pre_result = text_maker(keyword, br_flag, "Sn")
+        results += pre_result
+        results.sort(key=lambda x: (x.start_page, x.start_line))
+        return results
 
     def target_text_vols(self):
         result = []
@@ -470,60 +522,6 @@ def th_searcher(text, searched):
         ]
     csvfile.close()
     return result
-
-
-def search_keyword_suttanipata(keyword, br_flag):
-    results = []
-    line_start = array("I");
-    index = array("I");
-    verse_start_point = array("I");
-    page = array("I")
-    sn_opener(index, line_start, page, verse_start_point)
-    csvfile = open(static_path + "Sn_verse.csv", "r", encoding="utf-8",
-                   newline="\n")
-    lines = csv.reader(csvfile, delimiter=",", skipinitialspace=True)
-    i = 0
-    start_index = 0
-    for line in lines:
-        if re.search(keyword, line[0]):
-            try:
-                start = verse_start_point[i]
-            except IndexError:
-                break
-            end = start + len(line[0])
-            start_index = page_line_search(start, index, start_index)
-            end_index = page_line_search(end, index, start_index)
-            searched_text = line[0]
-            new_text = ""
-            if br_flag:
-                edges = [index[k] - verse_start_point[i]
-                         for k in range(start_index, end_index + 1)
-                         if index[k] - verse_start_point[i] != 0]
-                for j in range(len(searched_text)):
-                    if j in edges:
-                        new_text += ("<BR>" + searched_text[j])
-                    else:
-                        new_text += searched_text[j]
-            else:
-                new_text = line[0]
-            searched_text = re.sub(r"(?<=\S)<BR>", "-<BR>", new_text)
-            searched_text = searched_text.replace("@", " . . . ")
-            spaned = re.compile(r"(" + keyword + ")", re.IGNORECASE)
-            searched_text = re.sub(spaned,
-                                   """<span style="color:red">""" + r"\1" + "</span>",
-                                   searched_text)
-            new_set = PaliText("Sn", page[start_index],
-                               line_start[start_index], page[end_index],
-                               line_start[end_index], searched_text)
-            results.append(new_set)
-        i += 1
-    # ここから散文の方の検索；最後に全体をまとめてソートし、完成
-    csvfile.close()
-    pre_result = text_maker(keyword, br_flag, "Sn")
-    results += pre_result
-    results.sort(key=lambda x: (x.start_page, x.start_line))
-    return results
-
 
 @app.route('/')
 def form():

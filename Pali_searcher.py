@@ -233,9 +233,9 @@ class PaliSearcher:
 
         return result
 
-    def pali_word_searcher(self, s, text_for_search):
-        matchs = re.finditer(s, text_for_search, re.IGNORECASE)
-        li = [i.start() for i in matchs]
+    def search_pali_text(self, keyword, text_data):
+        matches = re.finditer(keyword, text_data, re.IGNORECASE)
+        li = [i.start() for i in matches]
         return li
 
     # text[n] が含まれる sentence の最初の文字のインデックスを返す
@@ -265,28 +265,28 @@ class PaliSearcher:
             if (index[i] <= target) and (index[i + 1] > target):
                 return i
 
-    def search_text_vol_base(self, word, br_flag=False, text_vol="",
+    def search_text_vol_base(self, keyword, br_flag=False, text_vol="",
                    break_point={".", ":", "?", "!", "|", "@", ". ", ","}):
         results = []
         index = array("I")
         page = array("I")
         line = array("I")
-        text = self.load_text_vol(text_vol)
+        text_data = self.load_text_vol(text_vol)
         self.load_bin_files(text_vol, index, page, line)
         start_index = 0
-        start_point_list = self.pali_word_searcher(word, text)
+        start_point_list = self.search_pali_text(keyword, text_data)
         for start_point in start_point_list:
             if text_vol:  # あとで Apadanaの場合などに関して場合分けを考える
-                sentence_start = self.pali_pre_space(start_point, text,
+                sentence_start = self.pali_pre_space(start_point, text_data,
                                                      break_point)
-                sentence_end = self.pali_pos_space(start_point, text,
+                sentence_end = self.pali_pos_space(start_point, text_data,
                                                    break_point)
                 start_index = self.page_line_search(sentence_start, index,
                                                     start_index)
                 end_index = self.page_line_search(sentence_end, index,
                                                   start_index)
                 # キーワードにマッチした sentence
-                searched_text = text[sentence_start: sentence_end]
+                searched_text = text_data[sentence_start: sentence_end]
                 if br_flag:
                     new_searched_text = ""
                     edges = [index[k] - sentence_start
@@ -303,7 +303,7 @@ class PaliSearcher:
 
             # ハイライト処理など
             searched_text = searched_text.replace("@", " . . . ")
-            spaned = re.compile(r"(" + word + ")", re.IGNORECASE)
+            spaned = re.compile(r"(" + keyword + ")", re.IGNORECASE)
             searched_text = re.sub(spaned,
                                    """<span style="color:red">""" + r"\1" + "</span>",
                                    searched_text)
@@ -320,9 +320,8 @@ class PaliSearcher:
 
     def load_text_vol(self, text_vol):
         file = self.__static_dir_file_path(text_vol + "_.txt")
-        data = open(file, "r", encoding="utf-8")
-        text_for_search = data.read()
-        return text_for_search
+        f = open(file, "r", encoding="utf-8")
+        return f.read()
 
     def load_bin_files(self, name, index, page, line):
         # この関数の前に、中身が空の page, line, index array を作る必要があり

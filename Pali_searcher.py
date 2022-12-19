@@ -343,11 +343,11 @@ class PaliSearcher:
         text_for_search = data.read()
         return text_for_search
 
-    def bin_loader(self, name, index, line, page):
+    def bin_loader(self, name, index, page, line):
         # この関数の前に、中身が空の page, line, index array を作る必要があり
         self.__load_bin(name + "_index_.bin", index)
-        self.__load_bin(name + "_page_.bin", line)
-        self.__load_bin(name + "_line_.bin", page)
+        self.__load_bin(name + "_page_.bin", page)
+        self.__load_bin(name + "_line_.bin", line)
         # I made mistake when I named these bin files; I try to re-name here.
         return
 

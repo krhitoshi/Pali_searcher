@@ -277,11 +277,14 @@ class PaliSearcher:
         start_point_list = self.pali_word_searcher(word, text)
         for start_point in start_point_list:
             if text_vol:  # あとで Apadanaの場合などに関して場合分けを考える
-                sentence_start = self.pali_pre_space(start_point, text, break_point)
-                sentence_end = self.pali_pos_space(start_point, text, break_point)
+                sentence_start = self.pali_pre_space(start_point, text,
+                                                     break_point)
+                sentence_end = self.pali_pos_space(start_point, text,
+                                                   break_point)
                 start_index = self.page_line_search(sentence_start, index,
-                                               start_index)
-                end_index = self.page_line_search(sentence_end, index, start_index)
+                                                    start_index)
+                end_index = self.page_line_search(sentence_end, index,
+                                                  start_index)
                 # キーワードにマッチした sentence
                 searched_text = text[sentence_start: sentence_end]
                 if br_flag:

@@ -69,7 +69,8 @@ class PaliSearcher:
         if text_vol == "J":
             results += self.search_jataka(keyword, br_flag)
         elif text_vol == "Ap":
-            results += self.text_maker(keyword, br_flag, text_vol, break_point={"~"})
+            results += self.search_text_vol_base(keyword, br_flag, text_vol,
+                                                 break_point={"~"})
         # results += [re.sub(r"~", "", item.output() + "<BR>") for item in pre_result]
         elif text_vol == "Sn":
             results += self.search_suttanipata(keyword, br_flag)
@@ -79,7 +80,7 @@ class PaliSearcher:
         elif text_vol in {"Th", "Thi"}:
             results += th_searcher(text_vol, keyword)
         else:
-            results += self.text_maker(keyword, br_flag, text_vol)
+            results += self.search_text_vol_base(keyword, br_flag, text_vol)
         # results += [item.output() + "<BR>" for item in pre_result]
         return results
 
@@ -184,7 +185,7 @@ class PaliSearcher:
             i += 1
         # ここから散文の方の検索；最後に全体をまとめてソートし、完成
         csvfile.close()
-        pre_result = self.text_maker(keyword, br_flag, "Sn")
+        pre_result = self.search_text_vol_base(keyword, br_flag, "Sn")
         results += pre_result
         results.sort(key=lambda x: (x.start_page, x.start_line))
         return results
@@ -232,7 +233,7 @@ class PaliSearcher:
 
         return result
 
-    def text_maker(self, word, br_flag=False, text_vol="",
+    def search_text_vol_base(self, word, br_flag=False, text_vol="",
                    break_point={".", ":", "?", "!", "|", "@", ". ", ","}):
         results = []
         index = array("I");

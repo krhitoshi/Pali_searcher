@@ -279,7 +279,8 @@ class PaliSearcher:
         index = array("I");
         page = array("I");
         line = array("I")
-        text = self.bin_loader(text_name, index, page, line)
+        text = self.text_vol_loader(text_name)
+        self.bin_loader(text_name, index, page, line)
         start_index = 0
         start_point_list = pali_word_searcher(word, text)
         for start_point in start_point_list:
@@ -322,11 +323,17 @@ class PaliSearcher:
             results.append(result)
         return results
 
+    def text_vol_loader(self, text_vol):
+        file = os.path.join(static_path, text_vol + "_.txt")
+        data = open(file, "r", encoding="utf-8")
+        text_for_search = data.read()
+        return text_for_search
+
     def bin_loader(self, name, index, line, page):
         # この関数の前に、中身が空の page, line, index array を作る必要があり
-        index_bin = static_path + name + "_index_.bin"
-        line_bin = static_path + name + "_page_.bin"
-        page_bin = static_path + name + "_line_.bin"
+        index_bin = os.path.join(static_path, name + "_index_.bin")
+        line_bin = os.path.join(static_path, name + "_page_.bin")
+        page_bin = os.path.join(static_path, name + "_line_.bin")
         # I made mistake when I named these bin files; I try to re-name here.
 
         f1 = open(index_bin, "rb")
@@ -349,10 +356,7 @@ class PaliSearcher:
         except EOFError:
             pass
         f3.close()
-
-        data = open(static_path + name + "_.txt", "r", encoding="utf-8")
-        text_for_search = data.read()
-        return text_for_search
+        return
 
 
 class PaliText:

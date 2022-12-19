@@ -573,15 +573,18 @@ def result_view():
     page_counter = 1
     for i in range(len(results)):
         # pagination
-        if i % item_number == 0 and i != 0:
+        if i == 0:
+            result_text += """<div class = "selection" id="page-1">"""
+        elif i % item_number == 0:
             result_text += """</div><div class = "selection" id="page-{}">""".format((i // item_number) + 1)
             page_counter += 1
-        elif i == 0:
-            result_text += """<div class = "selection" id="page-1">"""
-            result_text += str(i+1) + ". " + results[0].output() + "<BR>\n"
 
-        if i >= 1 and results[i].text != results[i - 1].text:
-            result_text += str(i+1) + ". " + results[i].output() + "<BR>\n"
+        # 一部の結果が表示されていなかったの表示するように修正した
+        # 元のコードでは一番目の結果が表示されていなかった (バグ?)
+        # if i >= 1 and results[i].text != results[i - 1].text:
+        # 元のコードでは sentence が前の結果と一致する場合は表示されていなかった
+        # (重複を避けるため?)
+        result_text += str(i+1) + ". " + results[i].output() + "<BR>\n"
     result_text += "</div>"
     return render_template('user.html', result=result_text, page_counter=page_counter)
 

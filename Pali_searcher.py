@@ -49,6 +49,15 @@ class PaliSearcher:
     def __static_dir_file_path(self, path):
         return os.path.join(self.static_dir_path, path)
 
+    def __load_bin(self, file_name, array_data):
+        path = self.__static_dir_file_path(file_name)
+        f = open(path, "rb")
+        try:
+            array_data.fromfile(f, 10 ** 6)
+        except EOFError:
+            pass
+        f.close()
+
     def search(self, keyword, br_flag=False):
         results = []
         for text_vol in self.target_text_vols():
@@ -336,31 +345,10 @@ class PaliSearcher:
 
     def bin_loader(self, name, index, line, page):
         # この関数の前に、中身が空の page, line, index array を作る必要があり
-        index_bin = self.__static_dir_file_path(name + "_index_.bin")
-        line_bin = self.__static_dir_file_path(name + "_page_.bin")
-        page_bin = self.__static_dir_file_path(name + "_line_.bin")
+        self.__load_bin(name + "_index_.bin", index)
+        self.__load_bin(name + "_page_.bin", line)
+        self.__load_bin(name + "_line_.bin", page)
         # I made mistake when I named these bin files; I try to re-name here.
-
-        f1 = open(index_bin, "rb")
-        try:
-            index.fromfile(f1, 10 ** 6)
-        except EOFError:
-            pass
-        f1.close()
-
-        f2 = open(line_bin, "rb")
-        try:
-            line.fromfile(f2, 10 ** 6)
-        except EOFError:
-            pass
-        f2.close()
-
-        f3 = open(page_bin, "rb")
-        try:
-            page.fromfile(f3, 10 ** 6)
-        except EOFError:
-            pass
-        f3.close()
         return
 
 

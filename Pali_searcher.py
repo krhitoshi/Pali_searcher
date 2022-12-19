@@ -32,7 +32,7 @@ app = Flask(__name__, root_path=os.path.dirname(sys.argv[0]),
 
 
 class PaliSearcher:
-    __slots__ = ("target_text_groups")
+    __slots__ = ("static_dir_path", "target_text_groups")
 
     text_vols = ["Vin_I", "Vin_II", "Vin_III", "Vin_IV", "Vin_V",
     "DN_I", "DN_II", "DN_III",
@@ -42,7 +42,8 @@ class PaliSearcher:
     "Khp", "Dhp", "Ud", "It", "Sn", "Pv", "Vm", "Th", "Thi", "J", "Nidd_I", "Nidd_II", "Paṭis_I", "Paṭis_II", "Ap", "Bv", "Cp",
     "Dhs", "Vibh", "Dhātuk", "Pugg", "Kv", "Yam_I", "Yam_II", "Mil", "Vism", "Sp", "Ja_1", "Ja_2", "Ja_3", "Ja_4", "Ja_5", "Ja_6"]
 
-    def __init__(self, target_text_groups):
+    def __init__(self, static_dir_path, target_text_groups):
+        self.static_dir_path = static_dir_path
         self.target_text_groups = target_text_groups
 
     def search(self, keyword, br_flag=False):
@@ -324,16 +325,16 @@ class PaliSearcher:
         return results
 
     def text_vol_loader(self, text_vol):
-        file = os.path.join(static_path, text_vol + "_.txt")
+        file = os.path.join(self.static_dir_path, text_vol + "_.txt")
         data = open(file, "r", encoding="utf-8")
         text_for_search = data.read()
         return text_for_search
 
     def bin_loader(self, name, index, line, page):
         # この関数の前に、中身が空の page, line, index array を作る必要があり
-        index_bin = os.path.join(static_path, name + "_index_.bin")
-        line_bin = os.path.join(static_path, name + "_page_.bin")
-        page_bin = os.path.join(static_path, name + "_line_.bin")
+        index_bin = os.path.join(self.static_dir_path, name + "_index_.bin")
+        line_bin = os.path.join(self.static_dir_path, name + "_page_.bin")
+        page_bin = os.path.join(self.static_dir_path, name + "_line_.bin")
         # I made mistake when I named these bin files; I try to re-name here.
 
         f1 = open(index_bin, "rb")
@@ -581,7 +582,7 @@ def result_view():
 
     target_text_groups = request.form.getlist("text")
 
-    searcher = PaliSearcher(target_text_groups)
+    searcher = PaliSearcher(static_path, target_text_groups)
     results = searcher.search(keyword, br_flag)
     # print(results)
 

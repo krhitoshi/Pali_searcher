@@ -45,6 +45,31 @@ class PaliSearcher:
     def __init__(self, target_text_groups):
         self.target_text_groups = target_text_groups
 
+    def search(self, keyword, br_flag=False):
+        results = []
+        for text_vol in self.target_text_vols():
+            results += self.search_text_vol(text_vol, keyword, br_flag)
+        return results
+
+    def search_text_vol(self, text_vol, keyword, br_flag):
+        results = []
+        if text_vol == "J":
+            results += search_keyword_jataka(keyword, br_flag)
+        elif text_vol == "Ap":
+            results += text_maker(keyword, br_flag, text_vol, break_point={"~"})
+        # results += [re.sub(r"~", "", item.output() + "<BR>") for item in pre_result]
+        elif text_vol == "Sn":
+            results += search_keyword_suttanipata(keyword, br_flag)
+
+        elif text_vol in {"Dhp", "Cp", "Bv", "Vm", "Pv"}:
+            results += verse_text_searcher(text_vol, keyword)
+        elif text_vol in {"Th", "Thi"}:
+            results += th_searcher(text_vol, keyword)
+        else:
+            results += text_maker(keyword, br_flag, text_vol)
+        # results += [item.output() + "<BR>" for item in pre_result]
+        return results
+
     def target_text_vols(self):
         result = []
         for text_group in self.target_text_groups:
@@ -501,26 +526,6 @@ def search_keyword_suttanipata(keyword, br_flag):
     return results
 
 
-def search_keyword(text_type, keyword, br_flag=False):
-    results = []
-    if text_type == "J":
-        results += search_keyword_jataka(keyword, br_flag)
-    elif text_type == "Ap":
-        results += text_maker(keyword, br_flag, text_type, break_point={"~"})
-    # results += [re.sub(r"~", "", item.output() + "<BR>") for item in pre_result]
-    elif text_type == "Sn":
-        results += search_keyword_suttanipata(keyword, br_flag)
-
-    elif text_type in {"Dhp", "Cp", "Bv", "Vm", "Pv"}:
-        results += verse_text_searcher(text_type, keyword)
-    elif text_type in {"Th", "Thi"}:
-        results += th_searcher(text_type, keyword)
-    else:
-        results += text_maker(keyword, br_flag, text_type)
-    # results += [item.output() + "<BR>" for item in pre_result]
-    return results
-
-
 @app.route('/')
 def form():
     return render_template('index.html')
@@ -535,7 +540,6 @@ def send_static(path):
 
 @app.route('/result', methods=["POST"])
 def result_view():
-    results = []
     keyword = str(request.form["word"])
     item_number = int(request.form["item_max_number"])
 
@@ -560,9 +564,7 @@ def result_view():
     target_text_groups = request.form.getlist("text")
 
     searcher = PaliSearcher(target_text_groups)
-
-    for text_type in searcher.target_text_vols():
-        results += search_keyword(text_type, keyword, br_flag)
+    results = searcher.search(keyword, br_flag)
     # print(results)
 
     # Send output-text to html

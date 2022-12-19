@@ -273,42 +273,42 @@ class PaliSearcher:
         index = array("I")
         page = array("I")
         line = array("I")
-        text_data = self.load_text_vol(text_vol)
+        text_vol_data = self.load_text_vol(text_vol)
         self.load_bin_files(text_vol, index, page, line)
         start_index = 0
-        start_point_list = self.search_pali_text(keyword, text_data)
+        start_point_list = self.search_pali_text(keyword, text_vol_data)
         for start_point in start_point_list:
             if text_vol:  # あとで Apadanaの場合などに関して場合分けを考える
-                sentence_start = self.pali_pre_space(start_point, text_data,
+                sentence_start = self.pali_pre_space(start_point, text_vol_data,
                                                      break_point)
-                sentence_end = self.pali_pos_space(start_point, text_data,
+                sentence_end = self.pali_pos_space(start_point, text_vol_data,
                                                    break_point)
                 start_index = self.page_line_search(sentence_start, index,
                                                     start_index)
                 end_index = self.page_line_search(sentence_end, index,
                                                   start_index)
                 # キーワードにマッチした sentence
-                searched_text = text_data[sentence_start: sentence_end]
+                sentence = text_vol_data[sentence_start: sentence_end]
+
                 if br_flag:
-                    new_searched_text = ""
+                    new_sentence = ""
                     edges = [index[k] - sentence_start
                              for k in range(start_index, end_index + 1)
                              if index[k] - sentence_start != 0]
-                    for j in range(len(searched_text)):
+                    for j in range(len(sentence)):
                         if j in edges:
-                            new_searched_text += ("<BR>" + searched_text[j])
+                            new_sentence += ("<BR>" + sentence[j])
                         else:
-                            new_searched_text += searched_text[j]
-                    new_searched_text = re.sub(r"(?<=\S)<BR>", "-<BR>",
-                                               new_searched_text)
-                    searched_text = new_searched_text
+                            new_sentence += sentence[j]
+                    new_sentence = re.sub(r"(?<=\S)<BR>", "-<BR>", new_sentence)
+                    sentence = new_sentence
 
             # ハイライト処理など
-            searched_text = searched_text.replace("@", " . . . ")
+            sentence = sentence.replace("@", " . . . ")
             spaned = re.compile(r"(" + keyword + ")", re.IGNORECASE)
-            searched_text = re.sub(spaned,
+            sentence = re.sub(spaned,
                                    """<span style="color:red">""" + r"\1" + "</span>",
-                                   searched_text)
+                                   sentence)
 
             start_page = page[start_index]
             start_line = line[start_index]
@@ -316,7 +316,7 @@ class PaliSearcher:
             end_line = line[end_index]
             result = PaliText(text_vol, start_page, start_line, end_page,
                               end_line,
-                              searched_text)
+                              sentence)
             results.append(result)
         return results
 

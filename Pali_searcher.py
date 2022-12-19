@@ -232,18 +232,18 @@ class PaliSearcher:
 
         return result
 
-    def text_maker(self, word, br_flag=False, text_name="",
+    def text_maker(self, word, br_flag=False, text_vol="",
                    break_point={".", ":", "?", "!", "|", "@", ". ", ","}):
         results = []
         index = array("I");
         page = array("I");
         line = array("I")
-        text = self.load_text_vol(text_name)
-        self.load_bin_files(text_name, index, page, line)
+        text = self.load_text_vol(text_vol)
+        self.load_bin_files(text_vol, index, page, line)
         start_index = 0
         start_point_list = pali_word_searcher(word, text)
         for start_point in start_point_list:
-            if text_name:  # あとで Apadanaの場合などに関して場合分けを考える
+            if text_vol:  # あとで Apadanaの場合などに関して場合分けを考える
                 sentence_start = pali_pre_space(start_point, text, break_point)
                 sentence_end = pali_pos_space(start_point, text, break_point)
                 start_index = page_line_search(sentence_start, index,
@@ -276,7 +276,7 @@ class PaliSearcher:
             start_line = line[start_index]
             end_page = page[end_index]
             end_line = line[end_index]
-            result = PaliText(text_name, start_page, start_line, end_page,
+            result = PaliText(text_vol, start_page, start_line, end_page,
                               end_line,
                               searched_text)
             results.append(result)

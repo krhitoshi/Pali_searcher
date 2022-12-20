@@ -78,7 +78,7 @@ class PaliSearcher:
         elif text_vol in {"Dhp", "Cp", "Bv", "Vm", "Pv"}:
             results += self.verse_text_searcher(text_vol, keyword)
         elif text_vol in {"Th", "Thi"}:
-            results += th_searcher(text_vol, keyword)
+            results += self.th_searcher(text_vol, keyword)
         else:
             results += self.search_text_vol_base(keyword, br_flag, text_vol)
         # results += [item.output() + "<BR>" for item in pre_result]
@@ -346,6 +346,32 @@ class PaliSearcher:
         csvfile.close()
         return result
 
+    def th_searcher(self, text, searched):
+        if text == "Th":
+            csvfile = open(static_path + "Thera_.csv", "r", encoding="utf-8",
+                           newline="\n")
+        else:
+            csvfile = open(static_path + "Theri_.csv", "r", encoding="utf-8",
+                           newline="\n")
+        reader = csv.reader(csvfile)
+        lines = list(list(reader)[0])
+
+        spaned = re.compile(r"(" + searched + ")", re.IGNORECASE)
+        result = [
+            PaliVerse(
+                re.sub(r"(^.*?\|\| )(Th.*?)( \|\|.*?$)", r"\2", line),
+                re.sub(spaned,
+                       """<span style="color:red">""" + r"\1" + "</span>",
+                       line.lstrip().rstrip()),
+                text
+            )
+            for line in lines
+            if re.search(searched, re.sub(r"\*\d\d?|<BR>|<br>", "", line),
+                         re.IGNORECASE)
+        ]
+        csvfile.close()
+        return result
+
     def load_text_vol(self, text_vol):
         file = self.__static_dir_file_path(text_vol + "_.txt")
         f = open(file, "r", encoding="utf-8")
@@ -475,27 +501,6 @@ def kh_changer(word):
                 result_word += i
     return result_word
 
-
-def th_searcher(text, searched):
-    if text == "Th":
-        csvfile = open(static_path + "Thera_.csv", "r", encoding="utf-8", newline="\n")
-    else:
-        csvfile = open(static_path + "Theri_.csv", "r", encoding="utf-8", newline="\n")
-    reader = csv.reader(csvfile)
-    lines = list(list(reader)[0])
-
-    spaned = re.compile(r"(" + searched + ")", re.IGNORECASE)
-    result = [
-        PaliVerse(
-            re.sub(r"(^.*?\|\| )(Th.*?)( \|\|.*?$)", r"\2", line), 
-            re.sub(spaned, """<span style="color:red">"""+ r"\1" + "</span>", line.lstrip().rstrip()), 
-            text 
-            )
-        for line in lines
-        if re.search(searched, re.sub(r"\*\d\d?|<BR>|<br>", "", line), re.IGNORECASE)
-        ]
-    csvfile.close()
-    return result
 
 @app.route('/')
 def form():

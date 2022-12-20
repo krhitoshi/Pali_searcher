@@ -8,10 +8,10 @@
 <h1>GRETIL Pali Text Searcher</h1><br>
 <form action="/result" method="post" enctype="cgi-bin/abc.cgi"><br>
     <input type="text" placeholder="Input word(s) to be searched here" name="word" required/><br>
-    <input type="radio" name="KH" value="1">Use KH-transcription system
-    <input type="radio" name="KH" value="0" checked = "checked">Input Unicode characters by yourself<br>
-    <input type="radio" name="BR" value="1">Show line-changes
-    <input type="radio" name="BR" value="0" checked = "checked">Neglect line-changes<br><br>
+    <label><input type="radio" name="KH" value="1">Use KH-transcription system</label>
+    <label><input type="radio" name="KH" value="0" checked="checked">Input Unicode characters by yourself</label><br>
+    <label><input type="radio" name="BR" value="1">Show line-changes</label>
+    <label><input type="radio" name="BR" value="0" checked="checked">Neglect line-changes</label><br><br>
     Please input maximum number of results shown at ones
     <input type="number" name="item_max_number" min="100" step="100" value="100", required><br><br>
     Please select texts:

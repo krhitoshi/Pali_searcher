@@ -290,19 +290,10 @@ class PaliSearcher:
                 # キーワードにマッチした sentence
                 sentence = text_vol_data[sentence_start: sentence_end]
 
-                # 行をまたいでいる部分の処理
                 if br_flag:
-                    new_sentence = ""
-                    edges = [index[k] - sentence_start
-                             for k in range(start_index, end_index + 1)
-                             if index[k] - sentence_start != 0]
-                    for j in range(len(sentence)):
-                        if j in edges:
-                            new_sentence += ("<BR>" + sentence[j])
-                        else:
-                            new_sentence += sentence[j]
-                    new_sentence = re.sub(r"(?<=\S)<BR>", "-<BR>", new_sentence)
-                    sentence = new_sentence
+                    sentence = self.restore_new_line(index, start_index,
+                                                     end_index, sentence,
+                                                     sentence_start)
 
             # ハイライト処理など
             sentence = sentence.replace("@", " . . . ")
@@ -320,6 +311,22 @@ class PaliSearcher:
                               sentence)
             results.append(result)
         return results
+
+    # 元のテキストの行またぎの状態に戻す処理
+    def restore_new_line(self, index, start_index, end_index, sentence,
+                         sentence_start):
+        new_sentence = ""
+        edges = [index[k] - sentence_start
+                 for k in range(start_index, end_index + 1)
+                 if index[k] - sentence_start != 0]
+        for j in range(len(sentence)):
+            if j in edges:
+                new_sentence += ("<BR>" + sentence[j])
+            else:
+                new_sentence += sentence[j]
+        new_sentence = re.sub(r"(?<=\S)<BR>", "-<BR>", new_sentence)
+        sentence = new_sentence
+        return sentence
 
     def load_text_vol(self, text_vol):
         file = self.__static_dir_file_path(text_vol + "_.txt")

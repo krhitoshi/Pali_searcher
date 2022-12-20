@@ -484,8 +484,8 @@ class PaliVerse:
 
 def kh_changer(word):
     Not_change_flag = 0
-    KH_list =  ["A", "I", "U", "R" ,"L", "M", "G", "J", "T", "D", "N", "z", "S", "H"]
-    NC_list = ["ā", "ī", "ū", "ṛ" ,"ḷ", "ṃ", "ṅ", "ñ", "ṭ", "ḍ", "ṇ", "ś", "ṣ", "ḥ"]
+    KH_list = ["A", "I", "U", "R", "L", "M", "G", "J", "T", "D", "N", "z", "S", "H"]
+    NC_list = ["ā", "ī", "ū", "ṛ", "ḷ", "ṃ", "ṅ", "ñ", "ṭ", "ḍ", "ṇ", "ś", "ṣ", "ḥ"]
     result_word = ""
     for i in word:
         if i == "{":

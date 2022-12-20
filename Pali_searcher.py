@@ -330,8 +330,8 @@ class PaliSearcher:
 
     def verse_text_searcher(self, text_name, searched):
         spaned = re.compile(r"(" + searched + ")", re.IGNORECASE)
-        csvfile = open(static_path + text_name + "_.csv", "r", encoding="utf-8",
-                       newline="\n")
+        path = self.__static_dir_file_path(text_name + "_.csv")
+        csvfile = open(path, "r", encoding="utf-8", newline="\n")
         lines = csv.reader(csvfile, delimiter=",", skipinitialspace=True)
         result = [
             PaliVerse(line[0],
@@ -348,11 +348,11 @@ class PaliSearcher:
 
     def th_searcher(self, text, searched):
         if text == "Th":
-            csvfile = open(static_path + "Thera_.csv", "r", encoding="utf-8",
-                           newline="\n")
+            path = self.__static_dir_file_path("Thera_.csv")
+            csvfile = open(path, "r", encoding="utf-8", newline="\n")
         else:
-            csvfile = open(static_path + "Theri_.csv", "r", encoding="utf-8",
-                           newline="\n")
+            path = self.__static_dir_file_path("Theri_.csv")
+            csvfile = open(path, "r", encoding="utf-8", newline="\n")
         reader = csv.reader(csvfile)
         lines = list(list(reader)[0])
 
@@ -509,7 +509,6 @@ def form():
 
 @app.route("/static/<string:path>")
 def send_static(path):
-    target = static_path + path
     return send_from_directory(static_path, path)
 # This function is Mac only.
 

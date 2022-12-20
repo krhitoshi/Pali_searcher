@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # coding: utf-8
-from Pali_searcher import PaliSearcher
+from pali_searcher import PaliSearcher
 from flask import Flask, make_response, request, render_template, session, send_from_directory
 import re
 import os

@@ -76,7 +76,7 @@ class PaliSearcher:
             results += self.search_suttanipata(keyword, br_flag)
 
         elif text_vol in {"Dhp", "Cp", "Bv", "Vm", "Pv"}:
-            results += verse_text_searcher(text_vol, keyword)
+            results += self.verse_text_searcher(text_vol, keyword)
         elif text_vol in {"Th", "Thi"}:
             results += th_searcher(text_vol, keyword)
         else:
@@ -328,6 +328,24 @@ class PaliSearcher:
         sentence = new_sentence
         return sentence
 
+    def verse_text_searcher(self, text_name, searched):
+        spaned = re.compile(r"(" + searched + ")", re.IGNORECASE)
+        csvfile = open(static_path + text_name + "_.csv", "r", encoding="utf-8",
+                       newline="\n")
+        lines = csv.reader(csvfile, delimiter=",", skipinitialspace=True)
+        result = [
+            PaliVerse(line[0],
+                      re.sub(spaned,
+                             """<span style="color:red">""" + r"\1" + "</span>",
+                             line[1].lstrip().rstrip()),
+                      text_name)
+            for line in lines
+            if re.search(searched, re.sub(r"\*\d\d?|<BR>|<br>", "", line[1]),
+                         re.IGNORECASE)
+        ]
+        csvfile.close()
+        return result
+
     def load_text_vol(self, text_vol):
         file = self.__static_dir_file_path(text_vol + "_.txt")
         f = open(file, "r", encoding="utf-8")
@@ -456,21 +474,6 @@ def kh_changer(word):
             else:
                 result_word += i
     return result_word
-
-
-def verse_text_searcher(text_name, searched):
-    spaned = re.compile(r"(" + searched + ")", re.IGNORECASE)
-    csvfile = open( static_path + text_name + "_.csv", "r", encoding="utf-8", newline="\n")
-    lines = csv.reader(csvfile, delimiter=",", skipinitialspace=True)
-    result = [
-        PaliVerse(line[0], 
-        re.sub(spaned, """<span style="color:red">"""+ r"\1" +"</span>", line[1].lstrip().rstrip()), 
-        text_name)
-        for line in lines 
-        if re.search(searched, re.sub(r"\*\d\d?|<BR>|<br>", "", line[1]), re.IGNORECASE)
-            ]
-    csvfile.close()
-    return result
 
 
 def th_searcher(text, searched):

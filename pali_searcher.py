@@ -120,8 +120,7 @@ class PaliSearcher:
         path = self.__static_dir_file_path("Sn_verse.csv")
         self.load_suttanipata_bin_files(index, line_start, page,
                                         verse_start_point)
-        csvfile = open(path, "r", encoding="utf-8",
-                       newline="\n")
+        csvfile = open(path, "r", encoding="utf-8", newline="\n")
         lines = csv.reader(csvfile, delimiter=",", skipinitialspace=True)
         i = 0
         start_index = 0
@@ -441,7 +440,7 @@ class PaliText:
 
 
 class PaliVerse:
-    def __init__(self, text_number, text, text_name, text_id = ""):
+    def __init__(self, text_number, text, text_name, text_id=""):
         self.name = self
         self.text_number = text_number
         self.text = text

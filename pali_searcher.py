@@ -72,9 +72,9 @@ class PaliSearcher:
     def search_jataka(self, keyword, br_flag):
         results = []
         for num in range(1, 7):
-            page = array("I");
-            line_start = array("I");
-            index = array("I");
+            page = array("I")
+            line_start = array("I")
+            index = array("I")
             verse_start_point = array("I")
             self.load_jataka_bin_files(num, index, line_start, page,
                                        verse_start_point)
@@ -118,9 +118,9 @@ class PaliSearcher:
 
     def search_suttanipata(self, keyword, br_flag):
         results = []
-        line_start = array("I");
-        index = array("I");
-        verse_start_point = array("I");
+        line_start = array("I")
+        index = array("I")
+        verse_start_point = array("I")
         page = array("I")
         path = self.__static_dir_file_path("Sn_verse.csv")
         self.load_suttanipata_bin_files(index, line_start, page,

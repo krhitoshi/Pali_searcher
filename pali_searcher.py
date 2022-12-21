@@ -280,9 +280,22 @@ class PaliSearcher:
             start_line = line[start_index]
             end_page = page[end_index]
             end_line = line[end_index]
+
             result = PaliText(text_vol, start_page, start_line, end_page,
                               end_line,
                               sentence)
+
+            # 同じ sentence の場合は結果としての登録をスキップする
+            if len(results) > 0:
+                last = results[-1]
+                if last.name == result.name and \
+                    last.start_page == result.start_page and \
+                    last.end_page == result.end_page and \
+                    last.start_line == result.start_line and \
+                    last.end_line == result.end_line and \
+                    last.text == result.text:
+                    continue
+
             results.append(result)
         return results
 

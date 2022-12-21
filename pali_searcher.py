@@ -83,44 +83,12 @@ class PaliSearcher:
             text_vol = "J_{}".format(roman_number[num - 1])
             csv_file_name = "J_{}.csv".format(num)
 
-            path = self.__static_dir_file_path(csv_file_name)
-            csvfile = open(path, "r", encoding="utf-8", newline="\n")
-            lines = csv.reader(csvfile, delimiter=",", skipinitialspace=True)
-            i = 0
-            start_index = 0
-            for rows in lines:
-                sentence = rows[0]
-                if re.search(keyword, sentence):
-                    try:
-                        sentence_start = verse_start_point[i]
-                    except IndexError:
-                        break
-                    end = sentence_start + len(sentence)
-                    start_index = self.page_line_search(sentence_start, index, start_index)
-                    end_index = self.page_line_search(end, index, start_index)
-                    if br_flag:
-                        sentence = self.restore_new_line(index, start_index,
-                                                         end_index, sentence,
-                                                         sentence_start)
-
-                    sentence = self.html_sentence(sentence, keyword)
-
-                    start_page = page[start_index]
-                    start_line = line_start[start_index]
-                    end_page = page[end_index]
-                    end_line = line_start[end_index]
-
-                    result = SearchResult(text_vol, start_page,
-                                           start_line, end_page,
-                                           end_line, sentence)
-                    results.append(result)
-                i += 1
-            csvfile.close()
-
-            return results
+            results += self.search_csv_base(text_vol, csv_file_name, keyword,
+                                            br_flag, index, line_start, page,
+                                            verse_start_point)
+        return results
 
     def search_suttanipata(self, keyword, br_flag):
-        results = []
         line_start = array("I")
         index = array("I")
         verse_start_point = array("I")
@@ -128,10 +96,20 @@ class PaliSearcher:
 
         self.load_suttanipata_bin_files(index, line_start, page,
                                         verse_start_point)
-        text_vol = "Sn"
-        csv_file_name = "Sn_verse.csv"
 
-        path = self.__static_dir_file_path("Sn_verse.csv")
+        results = self.search_csv_base("Sn", "Sn_verse.csv", keyword, br_flag,
+                                       index, line_start, page,
+                                       verse_start_point)
+        # ここから散文の方の検索；最後に全体をまとめてソートし、完成
+        pre_result = self.search_text_vol_base(keyword, br_flag, "Sn")
+        results += pre_result
+        results.sort(key=lambda x: (x.start_page, x.start_line))
+        return results
+
+    def search_csv_base(self, text_vol, csv_file_name, keyword, br_flag, index,
+                        line_start, page, verse_start_point):
+        results = []
+        path = self.__static_dir_file_path(csv_file_name)
         csvfile = open(path, "r", encoding="utf-8", newline="\n")
         lines = csv.reader(csvfile, delimiter=",", skipinitialspace=True)
         i = 0
@@ -144,7 +122,8 @@ class PaliSearcher:
                 except IndexError:
                     break
                 end = sentence_start + len(sentence)
-                start_index = self.page_line_search(sentence_start, index, start_index)
+                start_index = self.page_line_search(sentence_start, index,
+                                                    start_index)
                 end_index = self.page_line_search(end, index, start_index)
                 if br_flag:
                     sentence = self.restore_new_line(index, start_index,
@@ -163,11 +142,7 @@ class PaliSearcher:
                                       end_line, sentence)
                 results.append(result)
             i += 1
-        # ここから散文の方の検索；最後に全体をまとめてソートし、完成
         csvfile.close()
-        pre_result = self.search_text_vol_base(keyword, br_flag, "Sn")
-        results += pre_result
-        results.sort(key=lambda x: (x.start_page, x.start_line))
         return results
 
     def load_jataka_bin_files(self, number, index, line, page, start_point):

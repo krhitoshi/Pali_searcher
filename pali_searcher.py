@@ -79,7 +79,11 @@ class PaliSearcher:
             self.load_jataka_bin_files(num, index, line_start, page,
                                        verse_start_point)
             roman_number = ["I", "II", "III", "IV", "V", "VI"]
-            path = self.__static_dir_file_path("J_{}.csv".format(num))
+
+            text_vol = "J_{}".format(roman_number[num - 1])
+            csv_file_name = "J_{}.csv".format(num)
+
+            path = self.__static_dir_file_path(csv_file_name)
             csvfile = open(path, "r", encoding="utf-8", newline="\n")
             lines = csv.reader(csvfile, delimiter=",", skipinitialspace=True)
             i = 0
@@ -101,7 +105,6 @@ class PaliSearcher:
 
                     sentence = self.html_sentence(sentence, keyword)
 
-                    text_vol = "J_{}".format(roman_number[num - 1])
                     start_page = page[start_index]
                     start_line = line_start[start_index]
                     end_page = page[end_index]
@@ -122,9 +125,13 @@ class PaliSearcher:
         index = array("I")
         verse_start_point = array("I")
         page = array("I")
-        path = self.__static_dir_file_path("Sn_verse.csv")
+
         self.load_suttanipata_bin_files(index, line_start, page,
                                         verse_start_point)
+        text_vol = "Sn"
+        csv_file_name = "Sn_verse.csv"
+
+        path = self.__static_dir_file_path("Sn_verse.csv")
         csvfile = open(path, "r", encoding="utf-8", newline="\n")
         lines = csv.reader(csvfile, delimiter=",", skipinitialspace=True)
         i = 0
@@ -146,7 +153,6 @@ class PaliSearcher:
 
                 sentence = self.html_sentence(sentence, keyword)
 
-                text_vol = "Sn"
                 start_page = page[start_index]
                 start_line = line_start[start_index]
                 end_page = page[end_index]

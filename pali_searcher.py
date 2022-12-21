@@ -122,38 +122,36 @@ class PaliSearcher:
         lines = csv.reader(csvfile, delimiter=",", skipinitialspace=True)
         i = 0
         start_index = 0
-        for line in lines:
-            if re.search(keyword, line[0]):
+        for rows in lines:
+            sentence = rows[0]
+            if re.search(keyword, sentence):
                 try:
-                    start = verse_start_point[i]
+                    sentence_start = verse_start_point[i]
                 except IndexError:
                     break
-                end = start + len(line[0])
-                start_index = self.page_line_search(start, index, start_index)
+                end = sentence_start + len(sentence)
+                start_index = self.page_line_search(sentence_start, index, start_index)
                 end_index = self.page_line_search(end, index, start_index)
-                searched_text = line[0]
-                new_text = ""
                 if br_flag:
-                    edges = [index[k] - verse_start_point[i]
-                             for k in range(start_index, end_index + 1)
-                             if index[k] - verse_start_point[i] != 0]
-                    for j in range(len(searched_text)):
-                        if j in edges:
-                            new_text += ("<BR>" + searched_text[j])
-                        else:
-                            new_text += searched_text[j]
-                else:
-                    new_text = line[0]
-                searched_text = re.sub(r"(?<=\S)<BR>", "-<BR>", new_text)
-                searched_text = searched_text.replace("@", " . . . ")
+                    sentence = self.restore_new_line(index, start_index,
+                                                     end_index, sentence,
+                                                     sentence_start)
+
+                sentence = sentence.replace("@", " . . . ")
                 spaned = re.compile(r"(" + keyword + ")", re.IGNORECASE)
-                searched_text = re.sub(spaned,
+                sentence = re.sub(spaned,
                                        """<span style="color:red">""" + r"\1" + "</span>",
-                                       searched_text)
-                new_set = SearchResult("Sn", page[start_index],
-                                       line_start[start_index], page[end_index],
-                                       line_start[end_index], searched_text)
-                results.append(new_set)
+                                       sentence)
+                text_vol = "Sn"
+                start_page = page[start_index]
+                start_line = line_start[start_index]
+                end_page = page[end_index]
+                end_line = line_start[end_index]
+
+                result = SearchResult(text_vol, start_page,
+                                      start_line, end_page,
+                                      end_line, sentence)
+                results.append(result)
             i += 1
         # ここから散文の方の検索；最後に全体をまとめてソートし、完成
         csvfile.close()

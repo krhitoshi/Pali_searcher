@@ -102,10 +102,10 @@ class PaliSearcher:
                     searched_text = re.sub(spaned,
                                            """<span style="color:red">""" + r"\1" + "</span>",
                                            searched_text)
-                    new_set = PaliText("J_{}".format(roman_number[num - 1]),
-                                       page[start_index],
-                                       line_start[start_index], page[end_index],
-                                       line_start[end_index], searched_text)
+                    new_set = SearchResult("J_{}".format(roman_number[num - 1]),
+                                           page[start_index],
+                                           line_start[start_index], page[end_index],
+                                           line_start[end_index], searched_text)
                     results.append(new_set)
                 i += 1
 
@@ -152,9 +152,9 @@ class PaliSearcher:
                 searched_text = re.sub(spaned,
                                        """<span style="color:red">""" + r"\1" + "</span>",
                                        searched_text)
-                new_set = PaliText("Sn", page[start_index],
-                                   line_start[start_index], page[end_index],
-                                   line_start[end_index], searched_text)
+                new_set = SearchResult("Sn", page[start_index],
+                                       line_start[start_index], page[end_index],
+                                       line_start[end_index], searched_text)
                 results.append(new_set)
             i += 1
         # ここから散文の方の検索；最後に全体をまとめてソートし、完成
@@ -281,9 +281,9 @@ class PaliSearcher:
             end_page = page[end_index]
             end_line = line[end_index]
 
-            result = PaliText(text_vol, start_page, start_line, end_page,
-                              end_line,
-                              sentence)
+            result = SearchResult(text_vol, start_page, start_line, end_page,
+                                  end_line,
+                                  sentence)
 
             # 全く同一の sentence の場合は結果としての登録をスキップする
             if len(results) > 0:
@@ -367,7 +367,7 @@ class PaliSearcher:
         # I made mistake when I named these bin files; I try to re-name here.
 
 
-class PaliText:
+class SearchResult:
     __slots__ = ("name", "start_page", "end_page", "start_line", "end_line", "text")
 
     # 環境変数 STATIC_URL が設定されていればベースとなるURLを変更する
@@ -424,7 +424,7 @@ class PaliText:
         else:
             href_name = self.name
 
-        return PaliText.static_url + href_name + "_.htm#" + sharp
+        return SearchResult.static_url + href_name + "_.htm#" + sharp
 
     # 結果表示のためのテキスト形成
     def output(self):

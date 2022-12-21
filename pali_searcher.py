@@ -94,11 +94,17 @@ class PaliSearcher:
                     sentence = re.sub(spaned,
                                            """<span style="color:red">""" + r"\1" + "</span>",
                                            sentence)
-                    new_set = SearchResult("J_{}".format(roman_number[num - 1]),
-                                           page[start_index],
-                                           line_start[start_index], page[end_index],
-                                           line_start[end_index], sentence)
-                    results.append(new_set)
+
+                    text_vol = "J_{}".format(roman_number[num - 1])
+                    start_page = page[start_index]
+                    start_line = line_start[start_index]
+                    end_page = page[end_index]
+                    end_line = line_start[end_index]
+
+                    result = SearchResult(text_vol, start_page,
+                                           start_line, end_page,
+                                           end_line, sentence)
+                    results.append(result)
                 i += 1
 
             return results

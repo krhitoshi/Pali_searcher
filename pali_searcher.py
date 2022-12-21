@@ -112,6 +112,7 @@ class PaliSearcher:
                                            end_line, sentence)
                     results.append(result)
                 i += 1
+            csvfile.close()
 
             return results
 

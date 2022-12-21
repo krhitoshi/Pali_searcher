@@ -305,45 +305,39 @@ class PaliSearcher:
         sentence = new_sentence
         return sentence
 
-    def verse_text_searcher(self, text_name, searched):
-        spaned = re.compile(r"(" + searched + ")", re.IGNORECASE)
+    def verse_text_searcher(self, text_name, keyword):
         path = self.__static_dir_file_path(text_name + "_.csv")
         csvfile = open(path, "r", encoding="utf-8", newline="\n")
         lines = csv.reader(csvfile, delimiter=",", skipinitialspace=True)
         result = [
             PaliVerse(line[0],
-                      re.sub(spaned,
-                             """<span style="color:red">""" + r"\1" + "</span>",
-                             line[1].lstrip().rstrip()),
+                      self.html_highlight(line[1].lstrip().rstrip(), keyword),
                       text_name)
             for line in lines
-            if re.search(searched, re.sub(r"\*\d\d?|<BR>|<br>", "", line[1]),
+            if re.search(keyword, re.sub(r"\*\d\d?|<BR>|<br>", "", line[1]),
                          re.IGNORECASE)
         ]
         csvfile.close()
         return result
 
-    def th_searcher(self, text, searched):
+    def th_searcher(self, text, keyword):
         if text == "Th":
             path = self.__static_dir_file_path("Thera_.csv")
-            csvfile = open(path, "r", encoding="utf-8", newline="\n")
         else:
             path = self.__static_dir_file_path("Theri_.csv")
-            csvfile = open(path, "r", encoding="utf-8", newline="\n")
+
+        csvfile = open(path, "r", encoding="utf-8", newline="\n")
         reader = csv.reader(csvfile)
         lines = list(list(reader)[0])
 
-        spaned = re.compile(r"(" + searched + ")", re.IGNORECASE)
         result = [
             PaliVerse(
                 re.sub(r"(^.*?\|\| )(Th.*?)( \|\|.*?$)", r"\2", line),
-                re.sub(spaned,
-                       """<span style="color:red">""" + r"\1" + "</span>",
-                       line.lstrip().rstrip()),
+                self.html_highlight(line.lstrip().rstrip(), keyword),
                 text
             )
             for line in lines
-            if re.search(searched, re.sub(r"\*\d\d?|<BR>|<br>", "", line),
+            if re.search(keyword, re.sub(r"\*\d\d?|<BR>|<br>", "", line),
                          re.IGNORECASE)
         ]
         csvfile.close()

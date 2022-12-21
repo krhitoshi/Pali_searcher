@@ -33,6 +33,11 @@ class PaliSearcher:
             pass
         f.close()
 
+    def html_highlight(self, sentence, keyword):
+        regex = re.compile(r"({})".format(keyword), re.IGNORECASE)
+        replace = r'<span style="color:red">\1</span>'
+        return re.sub(regex, replace, sentence)
+
     def search(self, keyword, br_flag=False):
         results = []
         for text_vol in self.target_text_vols():
@@ -90,10 +95,7 @@ class PaliSearcher:
                                                          sentence_start)
 
                     sentence = sentence.replace("@", " . . . ")
-                    spaned = re.compile(r"(" + keyword + ")", re.IGNORECASE)
-                    sentence = re.sub(spaned,
-                                           """<span style="color:red">""" + r"\1" + "</span>",
-                                           sentence)
+                    sentence = self.html_highlight(sentence, keyword)
 
                     text_vol = "J_{}".format(roman_number[num - 1])
                     start_page = page[start_index]
@@ -138,10 +140,8 @@ class PaliSearcher:
                                                      sentence_start)
 
                 sentence = sentence.replace("@", " . . . ")
-                spaned = re.compile(r"(" + keyword + ")", re.IGNORECASE)
-                sentence = re.sub(spaned,
-                                       """<span style="color:red">""" + r"\1" + "</span>",
-                                       sentence)
+                sentence = self.html_highlight(sentence, keyword)
+
                 text_vol = "Sn"
                 start_page = page[start_index]
                 start_line = line_start[start_index]
@@ -267,10 +267,7 @@ class PaliSearcher:
 
             # ハイライト処理など
             sentence = sentence.replace("@", " . . . ")
-            spaned = re.compile(r"(" + keyword + ")", re.IGNORECASE)
-            sentence = re.sub(spaned,
-                                   """<span style="color:red">""" + r"\1" + "</span>",
-                                   sentence)
+            sentence = self.html_highlight(sentence, keyword)
 
             start_page = page[start_index]
             start_line = line[start_index]

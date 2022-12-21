@@ -285,15 +285,10 @@ class PaliSearcher:
                               end_line,
                               sentence)
 
-            # 同じ sentence の場合は結果としての登録をスキップする
+            # 全く同一の sentence の場合は結果としての登録をスキップする
             if len(results) > 0:
-                last = results[-1]
-                if last.name == result.name and \
-                    last.start_page == result.start_page and \
-                    last.end_page == result.end_page and \
-                    last.start_line == result.start_line and \
-                    last.end_line == result.end_line and \
-                    last.text == result.text:
+                last_result = results[-1]
+                if last_result == result:
                     continue
 
             results.append(result)
@@ -385,6 +380,14 @@ class PaliText:
         self.start_line = start_line
         self.end_line = end_line
         self.text = text
+
+    def __eq__(self, other):
+        return self.name == other.name and \
+            self.start_page == other.start_page and \
+            self.end_page == other.end_page and \
+            self.start_line == other.start_line and \
+            self.end_line == other.end_line and \
+            self.text == other.text
 
     def __link_url(self):
         sharp = ""

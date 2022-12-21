@@ -33,6 +33,11 @@ class PaliSearcher:
             pass
         f.close()
 
+    # 表示する前のハイライト処理などを行う
+    def html_sentence(self, sentence, keyword):
+        new_sentence = sentence.replace("@", " . . . ")
+        return self.html_highlight(new_sentence, keyword)
+
     def html_highlight(self, sentence, keyword):
         regex = re.compile(r"({})".format(keyword), re.IGNORECASE)
         replace = r'<span style="color:red">\1</span>'
@@ -94,8 +99,7 @@ class PaliSearcher:
                                                          end_index, sentence,
                                                          sentence_start)
 
-                    sentence = sentence.replace("@", " . . . ")
-                    sentence = self.html_highlight(sentence, keyword)
+                    sentence = self.html_sentence(sentence, keyword)
 
                     text_vol = "J_{}".format(roman_number[num - 1])
                     start_page = page[start_index]
@@ -139,8 +143,7 @@ class PaliSearcher:
                                                      end_index, sentence,
                                                      sentence_start)
 
-                sentence = sentence.replace("@", " . . . ")
-                sentence = self.html_highlight(sentence, keyword)
+                sentence = self.html_sentence(sentence, keyword)
 
                 text_vol = "Sn"
                 start_page = page[start_index]
@@ -265,9 +268,7 @@ class PaliSearcher:
                                                      end_index, sentence,
                                                      sentence_start)
 
-            # ハイライト処理など
-            sentence = sentence.replace("@", " . . . ")
-            sentence = self.html_highlight(sentence, keyword)
+            sentence = self.html_sentence(sentence, keyword)
 
             start_page = page[start_index]
             start_line = line[start_index]

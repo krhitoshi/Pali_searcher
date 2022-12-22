@@ -411,11 +411,8 @@ class SearchResult:
 
     # 結果表示のためのテキスト形成
     def output(self):
-        result = ""
         if self.name == "Ap":
             self.text = re.sub(r"~", "", self.text)
-
-        href = self.__link_url()
 
         if self.name[:2] == "Ja":
             roman = ["I", "II", "III", "IV", "V", "VI"]
@@ -424,17 +421,18 @@ class SearchResult:
         if self.start_line == self.end_line:
             if self.start_page == 1:
                 self.start_line -= 1
-            result = """<a href={} target="_blank">""".format(href) + "{} {}.{}</a>: {}".format(self.name, self.start_page, self.start_line, self.text)
+            ref_str = "{} {}.{}".format(self.name, self.start_page, self.start_line)
         elif self.start_page == self.end_page:
             if self.start_page == 1:
                 self.start_line -= 1
                 self.end_line -= 1
-            result = """<a href={} target="_blank">""".format(href) +"{} {}.{}-{}</a>: {}".format(self.name, self.start_page, self.start_line, self.end_line, self.text)
+            ref_str = "{} {}.{}-{}".format(self.name, self.start_page, self.start_line, self.end_line)
         else:
             if self.start_page == 1:
                 self.start_line -= 1
                 self.end_line -= 1
-            result = """<a href={} target="_blank">""".format(href) +"{} {}.{}-{}.{}</a>: {}".format(self.name, self.start_page, self.start_line, self.end_page, self.end_line, self.text)
+            ref_str = "{} {}.{}-{}.{}".format(self.name, self.start_page, self.start_line, self.end_page, self.end_line)
+        result = '<a href={} target="_blank">{}</a>: {}'.format(self.__link_url(), ref_str, self.text)
         return result
 
 

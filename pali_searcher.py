@@ -4,11 +4,17 @@ from array import array
 import re
 import csv
 import os
+from enum import Enum
 
 SENTENCE_SEPARATORS = {".", ":", "?", "!", "|", "@", ". ", ","}
 
+
+class PaliSearcherMode(Enum):
+    Web = 0
+    CLI = 1
+
 class PaliSearcher:
-    __slots__ = ("static_dir_path", "target_text_groups")
+    __slots__ = ("static_dir_path", "target_text_groups", "mode")
 
     text_vols = ["Vin_I", "Vin_II", "Vin_III", "Vin_IV", "Vin_V",
     "DN_I", "DN_II", "DN_III",
@@ -18,9 +24,11 @@ class PaliSearcher:
     "Khp", "Dhp", "Ud", "It", "Sn", "Pv", "Vm", "Th", "Thi", "J", "Nidd_I", "Nidd_II", "Paṭis_I", "Paṭis_II", "Ap", "Bv", "Cp",
     "Dhs", "Vibh", "Dhātuk", "Pugg", "Kv", "Yam_I", "Yam_II", "Mil", "Vism", "Sp", "Ja_1", "Ja_2", "Ja_3", "Ja_4", "Ja_5", "Ja_6"]
 
-    def __init__(self, static_dir_path, target_text_groups):
+    def __init__(self, static_dir_path, target_text_groups,
+                 mode=PaliSearcherMode.Web):
         self.static_dir_path = static_dir_path
         self.target_text_groups = target_text_groups
+        self.mode = mode
 
     def __static_dir_file_path(self, path):
         return os.path.join(self.static_dir_path, path)
@@ -37,7 +45,13 @@ class PaliSearcher:
     # 表示する前のハイライト処理などを行う
     def html_sentence(self, sentence, keyword):
         new_sentence = sentence.replace("@", " . . . ")
-        return self.html_highlight(new_sentence, keyword)
+        return self.highlight(new_sentence, keyword)
+
+    def highlight(self, sentence, keyword):
+        if self.mode == PaliSearcherMode.CLI:
+            return sentence
+        else:
+            return self.html_highlight(sentence, keyword)
 
     def html_highlight(self, sentence, keyword):
         regex = re.compile(r"({})".format(keyword), re.IGNORECASE)
@@ -293,7 +307,7 @@ class PaliSearcher:
         lines = csv.reader(csvfile, delimiter=",", skipinitialspace=True)
         result = [
             PaliVerse(line[0],
-                      self.html_highlight(line[1].lstrip().rstrip(), keyword),
+                      self.highlight(line[1].lstrip().rstrip(), keyword),
                       text_name)
             for line in lines
             if re.search(keyword, re.sub(r"\*\d\d?|<BR>|<br>", "", line[1]),
@@ -315,7 +329,7 @@ class PaliSearcher:
         result = [
             PaliVerse(
                 re.sub(r"(^.*?\|\| )(Th.*?)( \|\|.*?$)", r"\2", line),
-                self.html_highlight(line.lstrip().rstrip(), keyword),
+                self.highlight(line.lstrip().rstrip(), keyword),
                 text
             )
             for line in lines

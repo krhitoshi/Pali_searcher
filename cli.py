@@ -2,7 +2,7 @@
 
 import sys
 import os
-from pali_searcher import PaliSearcher
+from pali_searcher import PaliSearcher, PaliSearcherMode
 
 # keyword = "gahapatiputto"
 # keyword = "jātovarake"
@@ -16,7 +16,8 @@ target_text_groups = ["Vin", "DN", "MN", "SN", "AN",
 
 app_dir = os.path.abspath(os.path.dirname(__file__))
 static_path = os.path.join(app_dir, "static")
-searcher = PaliSearcher(static_path, target_text_groups)
+searcher = PaliSearcher(static_path, target_text_groups,
+                        mode=PaliSearcherMode.CLI)
 results = searcher.search(keyword)
 
 for result in results:

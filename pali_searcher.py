@@ -409,31 +409,36 @@ class SearchResult:
 
         return SearchResult.static_url + href_name + "_.htm#" + sharp
 
-    # 結果表示のためのテキスト形成
-    def output(self):
-        if self.name == "Ap":
-            self.text = re.sub(r"~", "", self.text)
-
+    def reference_info(self):
         if self.name[:2] == "Ja":
             roman = ["I", "II", "III", "IV", "V", "VI"]
-            self.name = self.name[:3] + roman[int(self.name[3]) - 1]
+            text_vol = self.name[:3] + roman[int(self.name[3]) - 1]
+        else:
+            text_vol = self.name
 
         if self.start_line == self.end_line:
             if self.start_page == 1:
                 self.start_line -= 1
-            ref_str = "{} {}.{}".format(self.name, self.start_page, self.start_line)
+            res = "{} {}.{}".format(text_vol, self.start_page, self.start_line)
         elif self.start_page == self.end_page:
             if self.start_page == 1:
                 self.start_line -= 1
                 self.end_line -= 1
-            ref_str = "{} {}.{}-{}".format(self.name, self.start_page, self.start_line, self.end_line)
+            res = "{} {}.{}-{}".format(text_vol, self.start_page, self.start_line, self.end_line)
         else:
             if self.start_page == 1:
                 self.start_line -= 1
                 self.end_line -= 1
-            ref_str = "{} {}.{}-{}.{}".format(self.name, self.start_page, self.start_line, self.end_page, self.end_line)
-        result = '<a href={} target="_blank">{}</a>: {}'.format(self.__link_url(), ref_str, self.text)
-        return result
+            res = "{} {}.{}-{}.{}".format(text_vol, self.start_page, self.start_line, self.end_page, self.end_line)
+        return res
+
+    # 結果表示のためのテキスト形成
+    def output(self):
+        if self.name == "Ap":
+            self.text = re.sub(r"~", "", self.text)
+        html = '<a href={} target="_blank">{}</a>: {}'
+        res = html.format(self.__link_url(), self.reference_info(), self.text)
+        return res
 
 
 class PaliVerse:

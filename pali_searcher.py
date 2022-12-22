@@ -48,14 +48,12 @@ class PaliSearcher:
         return self.highlight(new_sentence, keyword)
 
     def highlight(self, sentence, keyword):
-        if self.mode == PaliSearcherMode.CLI:
-            return sentence
-        else:
-            return self.html_highlight(sentence, keyword)
-
-    def html_highlight(self, sentence, keyword):
         regex = re.compile(r"({})".format(keyword), re.IGNORECASE)
-        replace = r'<span style="color:red">\1</span>'
+        if self.mode == PaliSearcherMode.CLI:
+            # ANSIエスケープ 赤色
+            replace = "\u001b[31m" + r"\1" + "\u001b[0m"
+        else:
+            replace = r'<span style="color:red">\1</span>'
         return re.sub(regex, replace, sentence)
 
     def search(self, keyword, br_flag=False):

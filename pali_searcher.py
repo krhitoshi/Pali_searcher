@@ -8,6 +8,7 @@ from enum import Enum
 
 SENTENCE_SEPARATORS = {".", ":", "?", "!", "|", "@", ". ", ","}
 
+# TODO: app.py へ移行する
 # 環境変数 STATIC_URL が設定されていればベースとなるURLを変更する
 STATIC_URL = os.environ.get("STATIC_URL", "static/")
 

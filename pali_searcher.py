@@ -211,10 +211,10 @@ class PaliSearcher:
         # この上で、どこまで出力するのかを決定する。あんまり長いとよくないので、いい感じにしないといけない。
 
     # テキストインデックス(テキスト内の位置)から実際のPTS書籍におけるページ番号,行番号を取得するためのインデックスを取得する
-    def page_line_search(self, target, index,
-                         start_index):  # start は、index[x] の x に相当する汎用インデックス番号を定める
-        for i in range(start_index - 1,
-                       len(index)):  # このスタートは単純増加していく汎用インデックス番号
+    # start は、index[x] の x に相当する汎用インデックス番号を定める
+    def page_line_search(self, target, index, start_index):
+        # このスタートは単純増加していく汎用インデックス番号
+        for i in range(start_index - 1, len(index)):
             try:
                 index[i + 1]
             except IndexError:
@@ -233,7 +233,8 @@ class PaliSearcher:
         start_index = 0
         start_point_list = self.search_pali_text(keyword, text_vol_data)
         for start_point in start_point_list:
-            if text_vol:  # あとで Apadanaの場合などに関して場合分けを考える
+            # あとで Apadana の場合などに関して場合分けを考える
+            if text_vol:
                 sentence_start = self.pali_pre_space(start_point, text_vol_data,
                                                      break_point)
                 sentence_end = self.pali_pos_space(start_point, text_vol_data,

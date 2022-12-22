@@ -5,6 +5,7 @@ import re
 import csv
 import os
 
+SENTENCE_SEPARATORS = {".", ":", "?", "!", "|", "@", ". ", ","}
 
 class PaliSearcher:
     __slots__ = ("static_dir_path", "target_text_groups")
@@ -196,15 +197,14 @@ class PaliSearcher:
         return li
 
     # text[n] が含まれる sentence の最初の文字のインデックスを返す
-    def pali_pre_space(self, n, text, breakpoint={".", ":", "?", "!", "|", "@", ". ",
-                                            ","}):  # モノによっては breakpoint を適時変更してやる必要がある
+    # モノによっては breakpoint を適時変更してやる必要がある
+    def pali_pre_space(self, n, text, breakpoint=SENTENCE_SEPARATORS):
         while n - 1 != 0 and not (text[n] in breakpoint):
             n = n - 1
         return n + 2  # コンマなどの後ろには基本半角スペースがあるため
 
     # text[n] が含まれる sentence の最後の文字のインデックスを返す
-    def pali_pos_space(self, n, text,
-                       breakpoint={".", ":", "?", "!", "|", "@", ". ", ","}):
+    def pali_pos_space(self, n, text, breakpoint=SENTENCE_SEPARATORS):
         while (n + 1 != len(text) - 1) and not (text[n] in breakpoint):
             n = n + 1
         return n + 1
@@ -223,7 +223,7 @@ class PaliSearcher:
                 return i
 
     def search_text_vol_base(self, keyword, br_flag=False, text_vol="",
-                   break_point={".", ":", "?", "!", "|", "@", ". ", ","}):
+                             break_point=SENTENCE_SEPARATORS):
         results = []
         index = array("I")
         page = array("I")

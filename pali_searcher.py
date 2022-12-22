@@ -424,17 +424,17 @@ class SearchResult:
         if self.start_line == self.end_line:
             if self.start_page == 1:
                 self.start_line -= 1
-            result = """<a href = {} target="_blank">""".format(href) + "{} {}.{}</a>: {}".format(self.name, self.start_page, self.start_line, self.text)
+            result = """<a href={} target="_blank">""".format(href) + "{} {}.{}</a>: {}".format(self.name, self.start_page, self.start_line, self.text)
         elif self.start_page == self.end_page:
             if self.start_page == 1:
                 self.start_line -= 1
                 self.end_line -= 1
-            result = """<a href = {} target="_blank">""".format(href) +"{} {}.{}-{}</a>: {}".format(self.name, self.start_page, self.start_line, self.end_line, self.text)
+            result = """<a href={} target="_blank">""".format(href) +"{} {}.{}-{}</a>: {}".format(self.name, self.start_page, self.start_line, self.end_line, self.text)
         else:
             if self.start_page == 1:
                 self.start_line -= 1
                 self.end_line -= 1
-            result = """<a href = {} target="_blank">""".format(href) +"{} {}.{}-{}.{}</a>: {}".format(self.name, self.start_page, self.start_line, self.end_page, self.end_line, self.text)
+            result = """<a href={} target="_blank">""".format(href) +"{} {}.{}-{}.{}</a>: {}".format(self.name, self.start_page, self.start_line, self.end_page, self.end_line, self.text)
         return result
 
 

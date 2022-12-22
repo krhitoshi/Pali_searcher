@@ -436,8 +436,8 @@ class SearchResult:
     def output(self):
         if self.name == "Ap":
             self.text = re.sub(r"~", "", self.text)
-        html = '<a href={} target="_blank">{}</a>: {}'
-        res = html.format(self.__link_url(), self.reference_info(), self.text)
+        base = '<a href={} target="_blank">{}</a>: {}'
+        res = base.format(self.__link_url(), self.reference_info(), self.text)
         return res
 
 
@@ -449,10 +449,14 @@ class PaliVerse:
         self.text_name = text_name
         self.text_id = text_id
 
+    def reference_info(self):
+        return self.text_number
+
     def output(self):
         if self.text == "Vm" or self.text == "Pv":
             self.text_id = self.text_number[:-4]
         if self.text_id == "":
             self.text_id = self.text_number
             href = "static/" + self.text_name + "_.htm#" + self.text_id.replace(".", "_")
-        return """<a href = {} target="_blank">""".format(href) + "{}</a>: {}".format(self.text_number, self.text)
+            base = '<a href = {} target="_blank">{}</a>: {}'
+        return base.format(href, self.text_number, self.text)

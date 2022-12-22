@@ -21,4 +21,4 @@ searcher = PaliSearcher(static_path, target_text_groups,
 results = searcher.search(keyword)
 
 for result in results:
-      print("{} :{}".format(result.name, result.text))
+      print("{}: {}".format(result.reference_info(), result.text))

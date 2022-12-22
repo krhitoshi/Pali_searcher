@@ -8,6 +8,8 @@ from enum import Enum
 
 SENTENCE_SEPARATORS = {".", ":", "?", "!", "|", "@", ". ", ","}
 
+# 環境変数 STATIC_URL が設定されていればベースとなるURLを変更する
+STATIC_URL = os.environ.get("STATIC_URL", "static/")
 
 class PaliSearcherMode(Enum):
     Web = 0
@@ -353,9 +355,6 @@ class PaliSearcher:
 class SearchResult:
     __slots__ = ("name", "start_page", "end_page", "start_line", "end_line", "text")
 
-    # 環境変数 STATIC_URL が設定されていればベースとなるURLを変更する
-    static_url = os.environ.get("STATIC_URL", "static/")
-
     def __init__(self, name, start_page, start_line, end_page, end_line, text):
         self.name = name
         self.start_page = start_page
@@ -407,7 +406,7 @@ class SearchResult:
         else:
             href_name = self.name
 
-        return SearchResult.static_url + href_name + "_.htm#" + sharp
+        return STATIC_URL + href_name + "_.htm#" + sharp
 
     def reference_info(self):
         if self.name[:2] == "Ja":
@@ -457,6 +456,6 @@ class PaliVerse:
             self.text_id = self.text_number[:-4]
         if self.text_id == "":
             self.text_id = self.text_number
-            href = "static/" + self.text_name + "_.htm#" + self.text_id.replace(".", "_")
+            href = STATIC_URL + self.text_name + "_.htm#" + self.text_id.replace(".", "_")
             base = '<a href = {} target="_blank">{}</a>: {}'
         return base.format(href, self.text_number, self.text)

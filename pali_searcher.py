@@ -43,7 +43,7 @@ class PaliSearcher:
         f.close()
 
     # 表示する前のハイライト処理などを行う
-    def html_sentence(self, sentence, keyword):
+    def display_sentence(self, sentence, keyword):
         new_sentence = sentence.replace("@", " . . . ")
         return self.highlight(new_sentence, keyword)
 
@@ -143,7 +143,7 @@ class PaliSearcher:
                                                      end_index, sentence,
                                                      sentence_start)
 
-                sentence = self.html_sentence(sentence, keyword)
+                sentence = self.display_sentence(sentence, keyword)
 
                 start_page = page[start_index]
                 start_line = line_start[start_index]
@@ -263,7 +263,7 @@ class PaliSearcher:
                                                      end_index, sentence,
                                                      sentence_start)
 
-            sentence = self.html_sentence(sentence, keyword)
+            sentence = self.display_sentence(sentence, keyword)
 
             start_page = page[start_index]
             start_line = line[start_index]

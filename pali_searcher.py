@@ -303,6 +303,7 @@ class PaliSearcher:
         sentence = new_sentence
         return sentence
 
+    # Dhp, Cp, Bv, Vm, Pv
     def verse_text_searcher(self, text_name, keyword):
         path = self.__static_dir_file_path(text_name + "_.csv")
         csvfile = open(path, "r", encoding="utf-8", newline="\n")

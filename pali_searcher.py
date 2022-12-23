@@ -29,10 +29,8 @@ class PaliSearcher:
                  "Khp", "Dhp", "Ud", "It", "Sn", "Pv", "Vm", "Th", "Thi", "J", "Nidd_I", "Nidd_II", "Paṭis_I", "Paṭis_II", "Ap", "Bv", "Cp",
                  "Dhs", "Vibh", "Dhātuk", "Pugg", "Kv", "Yam_I", "Yam_II", "Mil", "Vism", "Sp", "Ja_1", "Ja_2", "Ja_3", "Ja_4", "Ja_5", "Ja_6"]
 
-    def __init__(self, static_dir_path, target_text_groups,
-                 mode=PaliSearcherMode.Web):
+    def __init__(self, static_dir_path, mode=PaliSearcherMode.Web):
         self.static_dir_path = static_dir_path
-        self.target_text_groups = target_text_groups
         self.mode = mode
 
     def __static_dir_file_path(self, path):
@@ -61,9 +59,9 @@ class PaliSearcher:
             replace = r'<span style="color:red">\1</span>'
         return re.sub(regex, replace, sentence)
 
-    def search(self, keyword, br_flag=False):
+    def search(self, target_text_groups, keyword, br_flag=False):
         results = []
-        for text_vol in self.target_text_vols():
+        for text_vol in self.target_text_vols(target_text_groups):
             results += self.search_text_vol(text_vol, keyword, br_flag)
         return results
 
@@ -179,9 +177,9 @@ class PaliSearcher:
         self.__load_bin("Sn_page_.bin", page)
         self.__load_bin("Sn_verse_start_point.bin", start_point)
 
-    def target_text_vols(self):
+    def target_text_vols(self, target_text_groups):
         result = []
-        for text_group in self.target_text_groups:
+        for text_group in target_text_groups:
             if text_group == "Vin":
                 result += ["Vin_I", "Vin_II", "Vin_III", "Vin_IV",
                                      "Vin_V"]

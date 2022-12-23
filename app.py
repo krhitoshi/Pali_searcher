@@ -83,8 +83,8 @@ def result_view():
 
     target_text_groups = request.form.getlist("text")
 
-    searcher = PaliSearcher(static_path, target_text_groups)
-    results = searcher.search(keyword, br_flag)
+    searcher = PaliSearcher(static_path)
+    results = searcher.search(target_text_groups, keyword, br_flag)
     # print(results)
 
     # Send output-text to html

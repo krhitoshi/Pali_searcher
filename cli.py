@@ -16,9 +16,8 @@ target_text_groups = ["Vin", "DN", "MN", "SN", "AN",
 
 app_dir = os.path.abspath(os.path.dirname(__file__))
 static_path = os.path.join(app_dir, "static")
-searcher = PaliSearcher(static_path, target_text_groups,
-                        mode=PaliSearcherMode.CLI)
-results = searcher.search(keyword)
+searcher = PaliSearcher(static_path, mode=PaliSearcherMode.CLI)
+results = searcher.search(target_text_groups, keyword)
 
 for result in results:
       print("{}: {}".format(result.reference_info(), result.sentence))

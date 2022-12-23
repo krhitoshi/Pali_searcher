@@ -447,10 +447,10 @@ class SearchResult:
 
 
 class PaliVerse:
-    def __init__(self, text_number, text, text_name, text_id=""):
+    def __init__(self, text_number, sentence, text_name, text_id=""):
         self.name = self
         self.text_number = text_number
-        self.text = text
+        self.sentence = sentence
         self.text_name = text_name
         self.text_id = text_id
 
@@ -458,10 +458,10 @@ class PaliVerse:
         return self.text_number
 
     def output(self):
-        if self.text == "Vm" or self.text == "Pv":
+        if self.sentence == "Vm" or self.sentence == "Pv":
             self.text_id = self.text_number[:-4]
         if self.text_id == "":
             self.text_id = self.text_number
             href = STATIC_URL + self.text_name + "_.htm#" + self.text_id.replace(".", "_")
             base = '<a href = {} target="_blank">{}</a>: {}'
-        return base.format(href, self.text_number, self.text)
+        return base.format(href, self.text_number, self.sentence)

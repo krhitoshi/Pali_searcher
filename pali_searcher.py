@@ -85,6 +85,7 @@ class PaliSearcher:
         # results += [item.output() + "<BR>" for item in pre_result]
         return results
 
+    # J_1, J_2, J_3, J_4, J_5, J_6 (韻文)
     def search_jataka(self, keyword, br_flag):
         results = []
         for num in range(1, 7):
@@ -104,6 +105,7 @@ class PaliSearcher:
                                             verse_start_point)
         return results
 
+    # Sn (散文), Sn_verse.csv (韻文)
     def search_suttanipata(self, keyword, br_flag):
         line_start = array("I")
         index = array("I")

@@ -12,9 +12,11 @@ SENTENCE_SEPARATORS = {".", ":", "?", "!", "|", "@", ". ", ","}
 # 環境変数 STATIC_URL が設定されていればベースとなるURLを変更する
 STATIC_URL = os.environ.get("STATIC_URL", "static/")
 
+
 class PaliSearcherMode(Enum):
     Web = 0
     CLI = 1
+
 
 class PaliSearcher:
     __slots__ = ("static_dir_path", "target_text_groups", "mode")

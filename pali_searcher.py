@@ -274,8 +274,7 @@ class PaliSearcher:
             end_line = line[end_index]
 
             result = SearchResult(text_vol, start_page, start_line, end_page,
-                                  end_line,
-                                  sentence)
+                                  end_line, sentence)
 
             # 全く同一の sentence の場合は結果としての登録をスキップする
             if len(results) > 0:
@@ -354,15 +353,17 @@ class PaliSearcher:
 
 
 class SearchResult:
-    __slots__ = ("name", "start_page", "end_page", "start_line", "end_line", "text")
+    __slots__ = ("name", "start_page", "end_page", "start_line", "end_line",
+                 "sentence")
 
-    def __init__(self, name, start_page, start_line, end_page, end_line, text):
+    def __init__(self, name, start_page, start_line, end_page, end_line,
+                 sentence):
         self.name = name
         self.start_page = start_page
         self.end_page = end_page
         self.start_line = start_line
         self.end_line = end_line
-        self.text = text
+        self.sentence = sentence
 
     def __eq__(self, other):
         return self.name == other.name and \
@@ -370,10 +371,9 @@ class SearchResult:
             self.end_page == other.end_page and \
             self.start_line == other.start_line and \
             self.end_line == other.end_line and \
-            self.text == other.text
+            self.sentence == other.sentence
 
     def __link_url(self):
-        sharp = ""
         if self.start_page <= 9:
             sharp = "00" + str(self.start_page)
         elif self.start_page <= 99:
@@ -381,7 +381,6 @@ class SearchResult:
         else:
             sharp = str(self.start_page)
 
-        href_name = ""
         if self.name[:2] == "J_":
             pre = self.name[:2]
             aft = self.name[2:]
@@ -435,9 +434,9 @@ class SearchResult:
     # 結果表示のためのテキスト形成
     def output(self):
         if self.name == "Ap":
-            self.text = re.sub(r"~", "", self.text)
+            self.sentence = re.sub(r"~", "", self.sentence)
         base = '<a href={} target="_blank">{}</a>: {}'
-        res = base.format(self.__link_url(), self.reference_info(), self.text)
+        res = base.format(self.__link_url(), self.reference_info(), self.sentence)
         return res
 
 

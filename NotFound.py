@@ -160,7 +160,7 @@ import copy
 def text_make(text):
     response = requests.get(text_dict[text])
     response.encoding = "utf-8"
-    vin_ = response.text
+    vin_ = response.sentence
     htm_make(text, copy.deepcopy(vin_))
     vin_ = re.sub(r"<!DOCTYPE html>(.|\s)*?(?=\[page)", "", vin_)
     vin_ = re.sub(r"\r\n", "\n", vin_)#これが大事な一行になる
@@ -268,7 +268,7 @@ def Sp_make(text = "Sp"):
     for i in range(1, 8):
         response = requests.get(text_dict["Sp_{}".format(i)])
         response.encoding = "utf-8"
-        vin_ = response.text
+        vin_ = response.sentence
         vin_ = re.sub(r"<!DOCTYPE html>(.|\s)*?(?=\[page)", "", vin_)
         vin_ = re.sub(r"\r\n", "\n", vin_)
         if i == 1:
@@ -362,7 +362,7 @@ def Jataka(text_for_search, text_number):
 def Sn_text_make(text = "Sn"):
     response = requests.get(text_dict["Sn.txt"])
     response.encoding = "utf-8"
-    vin_ = response.text
+    vin_ = response.sentence
     htm_make(text, copy.deepcopy(vin_))
     vin_ = re.sub(r"<!DOCTYPE html>(.|\s)*?(?=\[page)", "", vin_)
     vin_ = re.sub(r"\r\n", "\n", vin_)#これが大事な一行になる
@@ -422,7 +422,7 @@ def Sn(text_for_search):
 def Ap_make(text = "Ap"):
     response = requests.get(text_dict["Ap.txt"])
     response.encoding = "utf-8"
-    vin_ = response.text
+    vin_ = response.sentence
     htm_make(text, copy.deepcopy(vin_))
     vin_ = re.sub(r"<!DOCTYPE html>(.|\s)*?(?=\[page)", "", vin_)
     vin_ = re.sub(r"\r\n", "\n", vin_)#これが大事な一行になる
@@ -462,7 +462,7 @@ def Ap_make(text = "Ap"):
 def Theri_make(text = "Thi"):
     response = requests.get("http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/therigou.htm")
     response.encoding = "utf-8"
-    vin_ = response.text
+    vin_ = response.sentence
     text_body = re.sub(r"(\|\| Thī_)(.*?)( \|\|)", "<section id ='Thī_" + r"\2" + "'>" + r"\1"+r"\2"+r"\3" + "</section>", copy.deepcopy(vin_))
     with open(static_path + "Thi_.htm" , "w", encoding="utf-8") as f:
         f.write(text_body)
@@ -498,7 +498,7 @@ def Theri_make(text = "Thi"):
 def Thera_make(text = "Th"):
     response = requests.get("http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/theragou.htm")
     response.encoding = "utf-8"
-    vin_ = response.text
+    vin_ = response.sentence
     vin_ = re.sub(r"\|\| 939 \|\|", "|| Th_939 ||", vin_)
     text_body = re.sub(r"(\|\| Th_)(.*?)( \|\|)", "<section id ='Th_" + r"\2" + "'>" + r"\1"+r"\2"+r"\3" + "</section>", copy.deepcopy(vin_))
     with open(static_path + "Th_.htm" , "w", encoding="utf-8") as f:
@@ -544,7 +544,7 @@ def Cp_make(text = "Cp"):
     Cp_vers = r"\d\s\|\|</b><BR>"
     response = requests.get("http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/carpitou.htm")
     response.encoding = "utf-8"
-    text = response.text
+    text = response.sentence
     text_body = re.sub(r"(<b>)(Cp_.*?)(\.)(.*?)(</b>)", "<section id ='" + r"\2" + "_" + r"\4" + "'>" + r"\1"+r"\2"+r"\3"+r"\4"+r"\5" + "</section>", copy.deepcopy(text))
     with open(static_path + "Cp_.htm", "w", encoding="utf-8") as f:
         f.write(text_body)
@@ -577,7 +577,7 @@ def Cp_make(text = "Cp"):
 def Vm_make(text = "Vv"):
     response = requests.get("http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/vimvatou.htm")
     response.encoding = "utf-8"
-    text = response.text
+    text = response.sentence
     text_body = re.sub(r"(<b>)(Vv_.*?)(\d*?)(\[.*?\])(\.)(\d*?)(</b>)", "<section id='" + r"\2" + r"\3" + r"\4" + "_" + r"\6" + "'>".replace(".", "_") + r"\1"+r"\2"+r"\3"+r"\4"+r"\5"+r"\6"+r"\7" + "</section>" ,copy.deepcopy(text))
     with open(static_path + "Vm_.htm", "w", encoding = "utf-8") as f:
         f.write(text_body)
@@ -617,7 +617,7 @@ def Vm_make(text = "Vv"):
 def Pv_make(text = "Pv"):
     response = requests.get("http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/petvatou.htm")
     response.encoding = "utf-8"
-    text = response.text
+    text = response.sentence
     text = re.sub(r"\r\n", "\n", text)
     text = re.sub(r"(?<=48 Akkharukkhapetavatthu</b><BR>\r\n) ", "<b>Vv_IV,13[=48].1</b>", text)
     text_body = re.sub(r"(<b>)(Vv_.*?)(\d*?)(\[.*?\])(\.)(\d*?)(</b>)", "<section id='" + r"\2" + r"\3" + r"\4" + "_" + r"\6" + "'>" + r"\1"+r"\2"+r"\3"+r"\4"+r"\5"+r"\6"+r"\7" + "</section>" ,copy.deepcopy(text))
@@ -657,7 +657,7 @@ def Pv_make(text = "Pv"):
 def Dhp_make(name = "Dhp", targetter = r"\/\/ Dhp_.* \/\/<BR>"):
     response = requests.get("http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/dhampdou.htm")
     response.encoding = "utf-8"
-    text = response.text
+    text = response.sentence
     text_body = re.sub(r"(\/\/ )(Dhp_.*)( \/\/)", "<section id='" + r"\2" + "'>" + r"\1" + r"\2" + r"\3" + "</section>", copy.deepcopy(text))
     with open(static_path + "Dhp_.htm", "w", encoding = "utf-8") as f:
         f.write(text_body)
@@ -694,7 +694,7 @@ def Dhp_make(name = "Dhp", targetter = r"\/\/ Dhp_.* \/\/<BR>"):
 def Bv_make(name = "Bv", targetter = r"\/\/ Bv_.* \/\/<BR>"):
     response = requests.get("http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/budvmsou.htm")
     response.encoding = "utf-8"
-    text = response.text
+    text = response.sentence
     text_body = re.sub(r"(\/\/ )(Bv_)(\d*?)(\.)(\d*?)( \/\/)", "<section id='" + r"\2" + r"\3" + "_" + r"\5" + "'>" + r"\1"+r"\2"+r"\3"+r"\4"+r"\5"+r"\6" + "</section>", copy.deepcopy(text))
     with open(static_path + "Bv_.htm", "w", encoding = "utf-8") as f:
         f.write(text_body)

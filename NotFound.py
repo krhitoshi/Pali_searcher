@@ -381,8 +381,7 @@ def Jataka(text_for_search, text_number):
         verse_long = len(text_for_search[text.start(): text.end()])
         text_for_search = text_for_search[0: text.start()] + "."*verse_long + text_for_search[text.end():]
     new_Ja = "Ja_" + str(text_number) + "_.txt"
-    with open(static_file_path(new_Ja), "w", encoding="utf-8") as f:
-        f.write(text_for_search)        
+    write_text_file(new_Ja, text_for_search)
 
     new_bin = "J_" + str(text_number) + "_start_point_.bin"
     write_bin_file(new_bin, J_verse_start)
@@ -391,9 +390,6 @@ def Jataka(text_for_search, text_number):
     with open(static_file_path(new_verse), "w", encoding="utf-8", newline="") as f:
         writer = csv.writer(f)
         writer.writerows(verse)
-
-
-
 
 def Sn_text_make(text = "Sn"):
     vin_ = download(text_dict["Sn.txt"])
@@ -442,8 +438,7 @@ def Sn(text_for_search):
         verse_long = len(text_for_search[text.start(): text.end()])
         text_for_search = text_for_search[0: text.start()] + "."*verse_long + text_for_search[text.end():]
     new_Ja = "Sn_.txt"
-    with open(static_file_path(new_Ja), "w", encoding="utf-8") as f:
-        f.write(text_for_search)        
+    write_text_file(new_Ja, text_for_search)
 
     new_bin = "Sn_verse_start_point.bin"
     write_bin_file(new_bin, J_verse_start)
@@ -495,8 +490,9 @@ def Theri_make(text = "Thi"):
     url = "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/therigou.htm"
     vin_ = download(url)
     text_body = re.sub(r"(\|\| Thī_)(.*?)( \|\|)", "<section id ='Thī_" + r"\2" + "'>" + r"\1"+r"\2"+r"\3" + "</section>", copy.deepcopy(vin_))
-    with open(static_file_path("Thi_.htm"), "w", encoding="utf-8") as f:
-        f.write(text_body)
+
+    write_text_file("Thi_.htm", text_body)
+
     vin_ = re.sub(r"<!DOCTYPE html>(.|\s)*?(?=\[page)", "", vin_)
     vin_ = re.sub(r"\r\n", "\n", vin_)#これが大事な一行になる
     vin_ = re.sub(r"itthaṃ sudaṃ bhagavā Muttaṃ sikkhamānaṃ imāya<BR>\ngāthāya abhiṇhaṃ ovadati\. ||<BR>", "", vin_)
@@ -531,8 +527,9 @@ def Thera_make(text = "Th"):
     vin_ = download(url)
     vin_ = re.sub(r"\|\| 939 \|\|", "|| Th_939 ||", vin_)
     text_body = re.sub(r"(\|\| Th_)(.*?)( \|\|)", "<section id ='Th_" + r"\2" + "'>" + r"\1"+r"\2"+r"\3" + "</section>", copy.deepcopy(vin_))
-    with open(static_file_path("Th_.htm") , "w", encoding="utf-8") as f:
-        f.write(text_body)
+
+    write_text_file("Th_.htm", text_body)
+
     vin_ = re.sub(r"<!DOCTYPE html>(.|\s)*?(?=\[page)", "", vin_)
     vin_ = re.sub(r"\r\n", "\n", vin_)#これが大事な一行になる
     vin_ = re.sub(r"(<span class=\"red\">)(.|\s)*?(</span>)", "", vin_)
@@ -575,8 +572,9 @@ def Cp_make(text = "Cp"):
     url = "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/carpitou.htm"
     text = download(url)
     text_body = re.sub(r"(<b>)(Cp_.*?)(\.)(.*?)(</b>)", "<section id ='" + r"\2" + "_" + r"\4" + "'>" + r"\1"+r"\2"+r"\3"+r"\4"+r"\5" + "</section>", copy.deepcopy(text))
-    with open(static_file_path("Cp_.htm"), "w", encoding="utf-8") as f:
-        f.write(text_body)
+
+    write_text_file("Cp_.htm", text_body)
+
     Cp = re.finditer(Cp_number, text)
     Cp_list = [
         (Cp_index.start(), Cp_index.end()) 
@@ -607,8 +605,9 @@ def Vm_make(text = "Vv"):
     url = "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/vimvatou.htm"
     text = download(url)
     text_body = re.sub(r"(<b>)(Vv_.*?)(\d*?)(\[.*?\])(\.)(\d*?)(</b>)", "<section id='" + r"\2" + r"\3" + r"\4" + "_" + r"\6" + "'>".replace(".", "_") + r"\1"+r"\2"+r"\3"+r"\4"+r"\5"+r"\6"+r"\7" + "</section>" ,copy.deepcopy(text))
-    with open(static_file_path("Vm_.htm"), "w", encoding = "utf-8") as f:
-        f.write(text_body)
+
+    write_text_file("Vm_.htm", text_body)
+
     text = re.sub(r"\r\n", "\n", text)
     text = re.sub(r"\[page.*?\].*?<BR>\n", "", text)
     text = re.sub(r"(?<=\n)\s*?<b>\d.*?<BR>\n", "", text)
@@ -648,8 +647,9 @@ def Pv_make(text = "Pv"):
     text = re.sub(r"\r\n", "\n", text)
     text = re.sub(r"(?<=48 Akkharukkhapetavatthu</b><BR>\r\n) ", "<b>Vv_IV,13[=48].1</b>", text)
     text_body = re.sub(r"(<b>)(Vv_.*?)(\d*?)(\[.*?\])(\.)(\d*?)(</b>)", "<section id='" + r"\2" + r"\3" + r"\4" + "_" + r"\6" + "'>" + r"\1"+r"\2"+r"\3"+r"\4"+r"\5"+r"\6"+r"\7" + "</section>" ,copy.deepcopy(text))
-    with open(static_file_path("Pv_.htm"), "w", encoding = "utf-8") as f:
-        f.write(text_body)
+
+    write_text_file("Pv_.htm", text_body)
+
     text = re.sub(r"\[page.*?\].*?<BR>\n", "", text)
     text = re.sub(r"(?<=\n)\s*?<b>\d.*?<BR>\n", "", text)
 #    text = re.sub(r"<b>.*?</b>", "", text)
@@ -685,8 +685,9 @@ def Dhp_make(name = "Dhp", targetter = r"\/\/ Dhp_.* \/\/<BR>"):
     url = "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/dhampdou.htm"
     text = download(url)
     text_body = re.sub(r"(\/\/ )(Dhp_.*)( \/\/)", "<section id='" + r"\2" + "'>" + r"\1" + r"\2" + r"\3" + "</section>", copy.deepcopy(text))
-    with open(static_file_path("Dhp_.htm"), "w", encoding = "utf-8") as f:
-        f.write(text_body)
+
+    write_text_file("Dhp_.htm", text_body)
+
     text = re.sub(r"<!DOCTYPE html>(.|\s)*?(?=\[page)", "", text)
     main = re.sub(r"\r\n", "\n", text)
     vers_number = re.findall(targetter, main)
@@ -721,8 +722,9 @@ def Bv_make(name = "Bv", targetter = r"\/\/ Bv_.* \/\/<BR>"):
     url = "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/budvmsou.htm"
     text = download(url)
     text_body = re.sub(r"(\/\/ )(Bv_)(\d*?)(\.)(\d*?)( \/\/)", "<section id='" + r"\2" + r"\3" + "_" + r"\5" + "'>" + r"\1"+r"\2"+r"\3"+r"\4"+r"\5"+r"\6" + "</section>", copy.deepcopy(text))
-    with open(static_file_path("Bv_.htm"), "w", encoding = "utf-8") as f:
-        f.write(text_body)
+
+    write_text_file("Bv_.htm", text_body)
+
     text = re.sub(r"<!DOCTYPE html>(.|\s)*?(?=\[page)", "", text)
     main = re.sub(r"\r\n", "\n", text)
     vers_number = re.findall(targetter, main)
@@ -757,15 +759,13 @@ def Sp_create(text = "Sp"):
     text_for_count, text_for_search = Sp_make(text)
     bin_maker(text_for_count, text_name = "Sp")
     new_text = "Sp_.txt"
-    with open(static_file_path(new_text), "w", encoding="utf-8") as f:
-        f.write(text_for_search)
+    write_text_file(new_text, text_for_search)
 
 @process_print
 def Ap_create():
     text_for_count, text_for_search = Ap_make()
     bin_maker(text_for_count, "Ap")
-    with open(static_file_path("Ap_.txt"), "w", encoding="utf-8") as f:
-        f.write(text_for_search)
+    write_text_file("Ap_.txt", text_for_search)
 
 @process_print
 def Sn_create(text = "Sn", text_name = "Sn"):

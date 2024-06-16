@@ -86,6 +86,10 @@ text_dict = {"Vin_I.txt": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_t
              "Sp_7": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/4_comm/samp_7ou.htm",
              }
 
+def static_file_path(file_name):
+    global static_path
+    return os.path.join(static_path, file_name)
+
 def mainpart(path):
     global static_path
     static_path = path
@@ -131,8 +135,8 @@ def process_print(func):
         proc_per = ( len(os.listdir(static_path)) * 100 // 268 )
         if args:
             text_name = args[0].split(".")[0]
-            txt_path = os.path.join(static_path, text_name + "_.txt")
-            htm_path = os.path.join(static_path, text_name + "_.htm")
+            txt_path = static_file_path(text_name + "_.txt")
+            htm_path = static_file_path(text_name + "_.htm")
             if not(os.path.exists(txt_path)) and not(os.path.exists(htm_path)):
                 print("\r#### Preparing {:14}: ".format(text_name) + "Process {:3} %".format(proc_per) + "*" * (proc_per // 5) + "_" * (20 - (proc_per // 5)), end = "")
                 result = func(*args, **kwargs)               
@@ -142,9 +146,9 @@ def process_print(func):
                 print("\r#### Pass {:19}: ".format(text_name) + "Process {:3} %".format(proc_per) + "*" * (proc_per // 5) + "_" * (20 - (proc_per // 5)), end = "")
         else:
             file_name = func.__name__.split("_")[0]
-            txt_path = os.path.join(static_path, file_name + "_.txt")
-            csv_path = os.path.join(static_path, file_name + "_.csv")
-            htm_path = os.path.join(static_path, file_name + "_.htm")
+            txt_path = static_file_path(file_name + "_.txt")
+            csv_path = static_file_path(file_name + "_.csv")
+            htm_path = static_file_path(file_name + "_.htm")
             if not(os.path.exists(txt_path)) and not(os.path.exists(csv_path)) and not(os.path.exists(htm_path)):
                 print("\r#### Preparing {:14}: ".format(file_name) + "Process {:3} %".format(proc_per) + "*" * (proc_per // 5) + "_" * (20 - (proc_per // 5)), end="")
                 result = func(*args, **kwargs)
@@ -158,7 +162,7 @@ def htm_make(name, text_body):
     new_name = name.split(".")[0]
     new_name = new_name + "_.htm"
     text_body = re.sub(r"(\[page )(\d{1,4})(\])", """<section id ='""" + r"\2" + """'>""" + r"\1" + r"\2" + r"\3" + """</section>""", text_body)
-    with open(os.path.join(static_path, new_name), "w", encoding="utf-8") as f:
+    with open(static_file_path(new_name), "w", encoding="utf-8") as f:
         f.write(text_body)
 
 import copy
@@ -253,15 +257,15 @@ def bin_maker(text_for_count, text_name):
             page_list.append(page)
             
     index_bin = text_name + "_index_" + ".bin"
-    fp = open(os.path.join(static_path, index_bin), "wb")
+    fp = open(static_file_path(index_bin), "wb")
     text_index.tofile(fp)
     fp.close()
     line_bin = text_name + "_line_" + ".bin"
-    fp = open(os.path.join(static_path, line_bin), "wb")
+    fp = open(static_file_path(line_bin), "wb")
     line_list.tofile(fp)
     fp.close()
     page_bin = text_name + "_page_" + ".bin"
-    fp = open(os.path.join(static_path, page_bin), "wb")
+    fp = open(static_file_path(page_bin), "wb")
     page_list.tofile(fp)
     fp.close()
 
@@ -350,14 +354,14 @@ def Jataka(text_for_search, text_number):
         verse_long = len(text_for_search[text.start(): text.end()])
         text_for_search = text_for_search[0: text.start()] + "."*verse_long + text_for_search[text.end():]
     new_Ja = "Ja_" + str(text_number) + "_.txt"
-    with open(os.path.join(static_path, new_Ja), "w", encoding="utf-8") as f:
+    with open(static_file_path(new_Ja), "w", encoding="utf-8") as f:
         f.write(text_for_search)        
     new_bin = "J_" + str(text_number) + "_start_point_.bin"
-    fp = open(os.path.join(static_path, new_bin), "wb")
+    fp = open(static_file_path(new_bin), "wb")
     J_verse_start.tofile(fp)
     fp.close()
     new_verse = "J_" + str(text_number) + ".csv"
-    with open(os.path.join(static_path, new_verse), "w", encoding="utf-8", newline="") as f:
+    with open(static_file_path(new_verse), "w", encoding="utf-8", newline="") as f:
         writer = csv.writer(f)
         writer.writerows(verse)
 
@@ -413,14 +417,14 @@ def Sn(text_for_search):
         verse_long = len(text_for_search[text.start(): text.end()])
         text_for_search = text_for_search[0: text.start()] + "."*verse_long + text_for_search[text.end():]
     new_Ja = "Sn_.txt"
-    with open(os.path.join(static_path, new_Ja), "w", encoding="utf-8") as f:
+    with open(static_file_path(new_Ja), "w", encoding="utf-8") as f:
         f.write(text_for_search)        
     new_bin = "Sn_verse_start_point.bin"
-    fp = open(os.path.join(static_path, new_bin), "wb")
+    fp = open(static_file_path(new_bin), "wb")
     J_verse_start.tofile(fp)
     fp.close()
     new_verse = "Sn_verse.csv"
-    with open(os.path.join(static_path, new_verse), "w", encoding="utf-8", newline="") as f:
+    with open(static_file_path(new_verse), "w", encoding="utf-8", newline="") as f:
         writer = csv.writer(f)
         writer.writerows(verse)
 
@@ -469,7 +473,7 @@ def Theri_make(text = "Thi"):
     response.encoding = "utf-8"
     vin_ = response.text
     text_body = re.sub(r"(\|\| Thī_)(.*?)( \|\|)", "<section id ='Thī_" + r"\2" + "'>" + r"\1"+r"\2"+r"\3" + "</section>", copy.deepcopy(vin_))
-    with open(os.path.join(static_path, "Thi_.htm"), "w", encoding="utf-8") as f:
+    with open(static_file_path("Thi_.htm"), "w", encoding="utf-8") as f:
         f.write(text_body)
     vin_ = re.sub(r"<!DOCTYPE html>(.|\s)*?(?=\[page)", "", vin_)
     vin_ = re.sub(r"\r\n", "\n", vin_)#これが大事な一行になる
@@ -495,7 +499,7 @@ def Theri_make(text = "Thi"):
         verse = re.sub(r" \|\n", "|<BR>", verse)
         verse = re.sub(r"\n", "", verse)
         verse_set.append(verse)
-    with open(os.path.join(static_path, "Theri_.csv"), "w", encoding="utf-8", newline="") as g:
+    with open(static_file_path("Theri_.csv"), "w", encoding="utf-8", newline="") as g:
         writer = csv.writer(g)
         writer.writerow(verse_set)# not writerows
 
@@ -506,7 +510,7 @@ def Thera_make(text = "Th"):
     vin_ = response.text
     vin_ = re.sub(r"\|\| 939 \|\|", "|| Th_939 ||", vin_)
     text_body = re.sub(r"(\|\| Th_)(.*?)( \|\|)", "<section id ='Th_" + r"\2" + "'>" + r"\1"+r"\2"+r"\3" + "</section>", copy.deepcopy(vin_))
-    with open(os.path.join(static_path, "Th_.htm") , "w", encoding="utf-8") as f:
+    with open(static_file_path("Th_.htm") , "w", encoding="utf-8") as f:
         f.write(text_body)
     vin_ = re.sub(r"<!DOCTYPE html>(.|\s)*?(?=\[page)", "", vin_)
     vin_ = re.sub(r"\r\n", "\n", vin_)#これが大事な一行になる
@@ -538,7 +542,7 @@ def Thera_make(text = "Th"):
                 changed_verse = changed_verse[:-4] + line + " <BR>"
         changed_verse = changed_verse[:-4]
         verse_set.append(changed_verse)
-    with open(os.path.join(static_path, "Thera_.csv"), "w", encoding="utf-8", newline="") as g:
+    with open(static_file_path("Thera_.csv"), "w", encoding="utf-8", newline="") as g:
         writer = csv.writer(g)
         writer.writerow(verse_set)
 
@@ -551,7 +555,7 @@ def Cp_make(text = "Cp"):
     response.encoding = "utf-8"
     text = response.text
     text_body = re.sub(r"(<b>)(Cp_.*?)(\.)(.*?)(</b>)", "<section id ='" + r"\2" + "_" + r"\4" + "'>" + r"\1"+r"\2"+r"\3"+r"\4"+r"\5" + "</section>", copy.deepcopy(text))
-    with open(os.path.join(static_path, "Cp_.htm"), "w", encoding="utf-8") as f:
+    with open(static_file_path("Cp_.htm"), "w", encoding="utf-8") as f:
         f.write(text_body)
     Cp = re.finditer(Cp_number, text)
     Cp_list = [
@@ -574,7 +578,7 @@ def Cp_make(text = "Cp"):
         main = re.sub(r"\n", "<BR>", main)
         main.lstrip().rstrip()
         final_result.append([number, main])        
-    with open(os.path.join(static_path, "Cp_.csv"), "w", encoding="utf-8", newline="") as g:
+    with open(static_file_path("Cp_.csv"), "w", encoding="utf-8", newline="") as g:
         writer = csv.writer(g)
         writer.writerows(final_result)
 
@@ -584,7 +588,7 @@ def Vm_make(text = "Vv"):
     response.encoding = "utf-8"
     text = response.text
     text_body = re.sub(r"(<b>)(Vv_.*?)(\d*?)(\[.*?\])(\.)(\d*?)(</b>)", "<section id='" + r"\2" + r"\3" + r"\4" + "_" + r"\6" + "'>".replace(".", "_") + r"\1"+r"\2"+r"\3"+r"\4"+r"\5"+r"\6"+r"\7" + "</section>" ,copy.deepcopy(text))
-    with open(os.path.join(static_path, "Vm_.htm"), "w", encoding = "utf-8") as f:
+    with open(static_file_path("Vm_.htm"), "w", encoding = "utf-8") as f:
         f.write(text_body)
     text = re.sub(r"\r\n", "\n", text)
     text = re.sub(r"\[page.*?\].*?<BR>\n", "", text)
@@ -614,7 +618,7 @@ def Vm_make(text = "Vv"):
         if main[-4:] == "<BR>":
             main = main[:-4]
         result.append([number + "(Vv)", main.strip()])#(Vv, Vm のテキスト名をここに入力しておく)
-    with open(os.path.join(static_path, "Vm_.csv"), "w", encoding="utf-8", newline="") as g:
+    with open(static_file_path("Vm_.csv"), "w", encoding="utf-8", newline="") as g:
         writer = csv.writer(g)
         writer.writerows(result)
 
@@ -626,7 +630,7 @@ def Pv_make(text = "Pv"):
     text = re.sub(r"\r\n", "\n", text)
     text = re.sub(r"(?<=48 Akkharukkhapetavatthu</b><BR>\r\n) ", "<b>Vv_IV,13[=48].1</b>", text)
     text_body = re.sub(r"(<b>)(Vv_.*?)(\d*?)(\[.*?\])(\.)(\d*?)(</b>)", "<section id='" + r"\2" + r"\3" + r"\4" + "_" + r"\6" + "'>" + r"\1"+r"\2"+r"\3"+r"\4"+r"\5"+r"\6"+r"\7" + "</section>" ,copy.deepcopy(text))
-    with open(os.path.join(static_path, "Pv_.htm"), "w", encoding = "utf-8") as f:
+    with open(static_file_path("Pv_.htm"), "w", encoding = "utf-8") as f:
         f.write(text_body)
     text = re.sub(r"\[page.*?\].*?<BR>\n", "", text)
     text = re.sub(r"(?<=\n)\s*?<b>\d.*?<BR>\n", "", text)
@@ -654,7 +658,7 @@ def Pv_make(text = "Pv"):
         if main[-4:] == "<BR>":
             main = main[:-4]
         result.append([number + "(Pv)", main.strip()])#(Vv, Vm のテキスト名をここに入力しておく)
-    with open(os.path.join(static_path, "Pv_.csv"), "w", encoding="utf-8", newline="") as g:
+    with open(static_file_path("Pv_.csv"), "w", encoding="utf-8", newline="") as g:
         writer = csv.writer(g)
         writer.writerows(result)
 
@@ -664,7 +668,7 @@ def Dhp_make(name = "Dhp", targetter = r"\/\/ Dhp_.* \/\/<BR>"):
     response.encoding = "utf-8"
     text = response.text
     text_body = re.sub(r"(\/\/ )(Dhp_.*)( \/\/)", "<section id='" + r"\2" + "'>" + r"\1" + r"\2" + r"\3" + "</section>", copy.deepcopy(text))
-    with open(os.path.join(static_path, "Dhp_.htm"), "w", encoding = "utf-8") as f:
+    with open(static_file_path("Dhp_.htm"), "w", encoding = "utf-8") as f:
         f.write(text_body)
     text = re.sub(r"<!DOCTYPE html>(.|\s)*?(?=\[page)", "", text)
     main = re.sub(r"\r\n", "\n", text)
@@ -691,7 +695,7 @@ def Dhp_make(name = "Dhp", targetter = r"\/\/ Dhp_.* \/\/<BR>"):
             vers_heap += line + "<BR>"
     out = zip(vers_number, final_result)
     print_out = [list(i) for i in out]
-    with open(os.path.join(static_path, "Dhp_.csv"), "w", encoding="utf-8", newline="") as g:
+    with open(static_file_path("Dhp_.csv"), "w", encoding="utf-8", newline="") as g:
         writer = csv.writer(g)
         writer.writerows(print_out)
 
@@ -701,7 +705,7 @@ def Bv_make(name = "Bv", targetter = r"\/\/ Bv_.* \/\/<BR>"):
     response.encoding = "utf-8"
     text = response.text
     text_body = re.sub(r"(\/\/ )(Bv_)(\d*?)(\.)(\d*?)( \/\/)", "<section id='" + r"\2" + r"\3" + "_" + r"\5" + "'>" + r"\1"+r"\2"+r"\3"+r"\4"+r"\5"+r"\6" + "</section>", copy.deepcopy(text))
-    with open(os.path.join(static_path, "Bv_.htm"), "w", encoding = "utf-8") as f:
+    with open(static_file_path("Bv_.htm"), "w", encoding = "utf-8") as f:
         f.write(text_body)
     text = re.sub(r"<!DOCTYPE html>(.|\s)*?(?=\[page)", "", text)
     main = re.sub(r"\r\n", "\n", text)
@@ -728,7 +732,7 @@ def Bv_make(name = "Bv", targetter = r"\/\/ Bv_.* \/\/<BR>"):
             vers_heap += line + "<BR>"
     out = zip(vers_number, final_result)
     print_out = [list(i) for i in out]
-    with open(os.path.join(static_path, "Bv_.csv"), "w", encoding="utf-8", newline="") as g:
+    with open(static_file_path("Bv_.csv"), "w", encoding="utf-8", newline="") as g:
         writer = csv.writer(g)
         writer.writerows(print_out)
 
@@ -737,14 +741,14 @@ def Sp_create(text = "Sp"):
     text_for_count, text_for_search = Sp_make(text)
     bin_maker(text_for_count, text_name = "Sp")
     new_text = "Sp_.txt"
-    with open(os.path.join(static_path, new_text), "w", encoding="utf-8") as f:
+    with open(static_file_path(new_text), "w", encoding="utf-8") as f:
         f.write(text_for_search)
 
 @process_print
 def Ap_create():
     text_for_count, text_for_search = Ap_make()
     bin_maker(text_for_count, "Ap")
-    with open(os.path.join(static_path, "Ap_.txt"), "w", encoding="utf-8") as f:
+    with open(static_file_path("Ap_.txt"), "w", encoding="utf-8") as f:
         f.write(text_for_search)
 
 @process_print
@@ -765,7 +769,7 @@ def text_create(text):
     name, extention = text.split(".")
     bin_maker(text_for_count, name)
     new_text = name + "_.txt"
-    path = os.path.join(static_path, new_text)
+    path = static_file_path(new_text)
     with open(path, "w", encoding="utf-8") as f:
         f.write(text_for_search)
 

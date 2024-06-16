@@ -97,8 +97,8 @@ def download(url):
     response.encoding = "utf-8"
     return response.text
 
-def write_text_file(file_name, content):
-    with open(static_file_path(file_name), "w", encoding="utf-8") as f:
+def write_text_file(file_name, content, newline=None):
+    with open(static_file_path(file_name), "w", encoding="utf-8", newline=newline) as f:
         f.write(content)
 
 def write_bin_file(file_name, data):

@@ -95,6 +95,10 @@ def download(url):
     response.encoding = "utf-8"
     return response.text
 
+def write_text_file(file_name, content):
+    with open(static_file_path(file_name), "w", encoding="utf-8") as f:
+        f.write(content)
+
 def mainpart(path):
     global static_path
     static_path = path
@@ -163,14 +167,17 @@ def process_print(func):
                 print("\r#### Pass {:19}: ".format(file_name) + "Process {:3} %".format(proc_per) + "*" * (proc_per // 5) + "_" * (20 - (proc_per // 5)), end="")
     return printer
 
-# ページ表記に section タグを追加する
-# <section id ='223'>[page 223]</section>
-def htm_make(name, text_body):
+def htm_make(name, html):
     new_name = name.split(".")[0]
     new_name = new_name + "_.htm"
-    text_body = re.sub(r"(\[page )(\d{1,4})(\])", """<section id ='""" + r"\2" + """'>""" + r"\1" + r"\2" + r"\3" + """</section>""", text_body)
-    with open(static_file_path(new_name), "w", encoding="utf-8") as f:
-        f.write(text_body)
+    new_html = add_page_section(html)
+    write_text_file(new_name, new_html)
+
+# ページ表記に section タグを追加する
+# <section id ='223'>[page 223]</section>
+def add_page_section(html):
+    replace = """<section id ='""" + r"\2" + """'>""" + r"\1" + r"\2" + r"\3" + """</section>"""
+    return re.sub(r"(\[page )(\d{1,4})(\])", replace, html)
 
 import copy
 def text_make(text):

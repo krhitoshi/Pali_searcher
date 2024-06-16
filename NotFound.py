@@ -124,6 +124,7 @@ def write_csv_file(file_name, data, oneline=False):
     with open(static_file_path(file_name), "w", encoding="utf-8", newline="") as f:
         writer = csv.writer(f)
         if oneline:
+            # 単一行のCSV
             writer.writerow(data)
         else:
             writer.writerows(data)

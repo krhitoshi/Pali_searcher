@@ -95,6 +95,9 @@ def static_file_path(file_name):
     return os.path.join(static_path, file_name)
 
 # html_cache_path にHTMLファイルがあればそれを利用する
+# ダウンロードしたHTMLの改行コードは CRLF
+# $ file html_cache/vin1maou.htm
+# html_cache/vin1maou.htm: HTML document text, Unicode text, UTF-8 text, with very long lines (333), with CRLF line terminators
 def download(url):
     parsed_url = urlparse(url)
     file_name = os.path.basename(parsed_url.path)

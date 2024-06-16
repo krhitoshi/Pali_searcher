@@ -10,6 +10,8 @@ import os
 import functools
 from concurrent import futures
 
+app_dir = os.path.abspath(os.path.dirname(__file__))
+static_path = os.path.join(app_dir, "static")
 
 def resource_path(relative_path):
     if hasattr(sys, '_MEIPASS'):
@@ -99,10 +101,9 @@ def write_text_file(file_name, content):
     with open(static_file_path(file_name), "w", encoding="utf-8") as f:
         f.write(content)
 
-def mainpart(path):
-    global static_path
-    static_path = path
+def mainpart():
     print(static_path)
+    exit
     print("### Start ###")
     print(" ")
     with futures.ThreadPoolExecutor() as executor:
@@ -780,6 +781,4 @@ def text_create(text):
         f.write(text_for_search)
 
 if __name__ == "__main__":
-    app_dir = os.path.abspath(os.path.dirname(__file__))
-    static_path = os.path.join(app_dir, "static")
-    mainpart(static_path)
+    mainpart()

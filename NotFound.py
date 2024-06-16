@@ -101,6 +101,10 @@ def write_text_file(file_name, content):
     with open(static_file_path(file_name), "w", encoding="utf-8") as f:
         f.write(content)
 
+def write_bin_file(file_name, data):
+    with open(static_file_path(file_name), "wb") as f:
+        data.tofile(f)
+
 def mainpart():
     print(static_path)
     exit
@@ -270,20 +274,13 @@ def bin_maker(text_for_count, text_name):
             page_list.append(page)
             
     index_bin = text_name + "_index_" + ".bin"
-    fp = open(static_file_path(index_bin), "wb")
-    text_index.tofile(fp)
-    fp.close()
+    write_bin_file(index_bin, text_index)
+
     line_bin = text_name + "_line_" + ".bin"
-    fp = open(static_file_path(line_bin), "wb")
-    line_list.tofile(fp)
-    fp.close()
+    write_bin_file(line_bin, line_list)
+
     page_bin = text_name + "_page_" + ".bin"
-    fp = open(static_file_path(page_bin), "wb")
-    page_list.tofile(fp)
-    fp.close()
-
-
-
+    write_bin_file(page_bin, page_list)
 
 def Sp_make(text = "Sp"):
     Sp_raw = ""
@@ -367,10 +364,10 @@ def Jataka(text_for_search, text_number):
     new_Ja = "Ja_" + str(text_number) + "_.txt"
     with open(static_file_path(new_Ja), "w", encoding="utf-8") as f:
         f.write(text_for_search)        
+
     new_bin = "J_" + str(text_number) + "_start_point_.bin"
-    fp = open(static_file_path(new_bin), "wb")
-    J_verse_start.tofile(fp)
-    fp.close()
+    write_bin_file(new_bin, J_verse_start)
+
     new_verse = "J_" + str(text_number) + ".csv"
     with open(static_file_path(new_verse), "w", encoding="utf-8", newline="") as f:
         writer = csv.writer(f)
@@ -428,10 +425,10 @@ def Sn(text_for_search):
     new_Ja = "Sn_.txt"
     with open(static_file_path(new_Ja), "w", encoding="utf-8") as f:
         f.write(text_for_search)        
+
     new_bin = "Sn_verse_start_point.bin"
-    fp = open(static_file_path(new_bin), "wb")
-    J_verse_start.tofile(fp)
-    fp.close()
+    write_bin_file(new_bin, J_verse_start)
+
     new_verse = "Sn_verse.csv"
     with open(static_file_path(new_verse), "w", encoding="utf-8", newline="") as f:
         writer = csv.writer(f)

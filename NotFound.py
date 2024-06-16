@@ -158,6 +158,8 @@ def process_print(func):
                 print("\r#### Pass {:19}: ".format(file_name) + "Process {:3} %".format(proc_per) + "*" * (proc_per // 5) + "_" * (20 - (proc_per // 5)), end="")
     return printer
 
+# ページ表記に section タグを追加する
+# <section id ='223'>[page 223]</section>
 def htm_make(name, text_body):
     new_name = name.split(".")[0]
     new_name = new_name + "_.htm"

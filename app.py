@@ -112,14 +112,16 @@ def result_view():
 
 
 if __name__ == "__main__":
-    if len(os.listdir(static_path)) >= 259:
+    num_files = len(os.listdir(static_path))
+    # テキストのダウンロードを行うかどうかはファイルの数で判定している
+    if num_files >= 259:
         url = "http://127.0.0.1:1125"
         threading.Timer(1.25, lambda: webbrowser.open(url)).start()
         app.run(port=1125, debug=False)
     else:
         print("Now we are making text for search at first. Please make sure you have internet accusses. It will be done in 10 minutes")
         import NotFound
-        NotFound.mainpart()
+        NotFound.mainpart(static_path)
         input("### Please input Enter key and close this window. When you execute this application again, you can get Pali_searcher on your blowser ###")
         exit()
     # To make the package: $ pyinstaller Pali_searcher.py -F --add-data "./templates/*:templates" --add-data "./static/*:static"

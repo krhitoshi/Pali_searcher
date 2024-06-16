@@ -105,14 +105,14 @@ def download(url):
 
     if os.path.exists(path):
         # 改行コードを保ったまま開く
-        with open(path, "r", newline="") as f:
+        with open(path, "r", encoding="utf-8", newline="") as f:
             result = f.read()
     else:
         response = requests.get(url)
         response.encoding = "utf-8"
         result = response.text
         # 改行コードを保ったまま保存する
-        with open(path, "w", newline="") as f:
+        with open(path, "w", encoding="utf-8", newline="") as f:
             f.write(result)
     return result
 

@@ -755,6 +755,13 @@ def J_create(text, text_number, text_name):
     Jataka(text_for_search, text_number)
     bin_maker(text_for_count, text_name)
 
+# 例: text: "Vin_I.txt"
+# 生成されるファイル:
+#   static/Vin_I_.htm
+#   static/Vin_I_.txt
+#   static/Vin_I_index_.bin
+#   static/Vin_I_line_.bin
+#   static/Vin_I_page_.bin
 @process_print
 def text_create(text):
     text_for_count, text_for_search = text_make(text)

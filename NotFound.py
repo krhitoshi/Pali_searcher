@@ -120,10 +120,13 @@ def write_text_file(file_name, content, newline=None):
     with open(static_file_path(file_name), "w", encoding="utf-8", newline=newline) as f:
         f.write(content)
 
-def write_csv_file(file_name, data):
+def write_csv_file(file_name, data, oneline=False):
     with open(static_file_path(file_name), "w", encoding="utf-8", newline="") as f:
         writer = csv.writer(f)
-        writer.writerows(data)
+        if oneline:
+            writer.writerow(data)
+        else:
+            writer.writerows(data)
 
 def write_bin_file(file_name, data):
     with open(static_file_path(file_name), "wb") as f:
@@ -518,9 +521,7 @@ def Theri_make(text = "Thi"):
         verse = re.sub(r" \|\n", "|<BR>", verse)
         verse = re.sub(r"\n", "", verse)
         verse_set.append(verse)
-    with open(static_file_path("Theri_.csv"), "w", encoding="utf-8", newline="") as g:
-        writer = csv.writer(g)
-        writer.writerow(verse_set)# not writerows
+    write_csv_file("Theri_.csv", verse_set, oneline=True)
 
 @process_print
 def Thera_make(text = "Th"):
@@ -561,10 +562,7 @@ def Thera_make(text = "Th"):
                 changed_verse = changed_verse[:-4] + line + " <BR>"
         changed_verse = changed_verse[:-4]
         verse_set.append(changed_verse)
-    with open(static_file_path("Thera_.csv"), "w", encoding="utf-8", newline="") as g:
-        writer = csv.writer(g)
-        writer.writerow(verse_set)
-
+    write_csv_file("Thera_.csv", verse_set, oneline=True)
 
 @process_print
 def Cp_make(text = "Cp"):

@@ -120,6 +120,11 @@ def write_text_file(file_name, content, newline=None):
     with open(static_file_path(file_name), "w", encoding="utf-8", newline=newline) as f:
         f.write(content)
 
+def write_csv_file(file_name, data):
+    with open(static_file_path(file_name), "w", encoding="utf-8", newline="") as f:
+        writer = csv.writer(f)
+        writer.writerows(data)
+
 def write_bin_file(file_name, data):
     with open(static_file_path(file_name), "wb") as f:
         data.tofile(f)
@@ -387,9 +392,7 @@ def Jataka(text_for_search, text_number):
     write_bin_file(new_bin, J_verse_start)
 
     new_verse = "J_" + str(text_number) + ".csv"
-    with open(static_file_path(new_verse), "w", encoding="utf-8", newline="") as f:
-        writer = csv.writer(f)
-        writer.writerows(verse)
+    write_csv_file(new_verse, verse)
 
 def Sn_text_make(text = "Sn"):
     vin_ = download(text_dict["Sn.txt"])
@@ -444,9 +447,7 @@ def Sn(text_for_search):
     write_bin_file(new_bin, J_verse_start)
 
     new_verse = "Sn_verse.csv"
-    with open(static_file_path(new_verse), "w", encoding="utf-8", newline="") as f:
-        writer = csv.writer(f)
-        writer.writerows(verse)
+    write_csv_file(new_verse, verse)
 
 def Ap_make(text = "Ap"):
     vin_ = download(text_dict["Ap.txt"])
@@ -595,10 +596,8 @@ def Cp_make(text = "Cp"):
         main = re.sub(r"(<i>(.|\s)*?</i>|<span class=\"red\">|</span>|<b>|</b>|&nbsp;|&#8216;|<BR>)", "", main)
         main = re.sub(r"\n", "<BR>", main)
         main.lstrip().rstrip()
-        final_result.append([number, main])        
-    with open(static_file_path("Cp_.csv"), "w", encoding="utf-8", newline="") as g:
-        writer = csv.writer(g)
-        writer.writerows(final_result)
+        final_result.append([number, main])
+    write_csv_file("Cp_.csv", final_result)
 
 @process_print
 def Vm_make(text = "Vv"):
@@ -636,9 +635,7 @@ def Vm_make(text = "Vv"):
         if main[-4:] == "<BR>":
             main = main[:-4]
         result.append([number + "(Vv)", main.strip()])#(Vv, Vm のテキスト名をここに入力しておく)
-    with open(static_file_path("Vm_.csv"), "w", encoding="utf-8", newline="") as g:
-        writer = csv.writer(g)
-        writer.writerows(result)
+    write_csv_file("Vm_.csv", result)
 
 @process_print
 def Pv_make(text = "Pv"):
@@ -676,9 +673,7 @@ def Pv_make(text = "Pv"):
         if main[-4:] == "<BR>":
             main = main[:-4]
         result.append([number + "(Pv)", main.strip()])#(Vv, Vm のテキスト名をここに入力しておく)
-    with open(static_file_path("Pv_.csv"), "w", encoding="utf-8", newline="") as g:
-        writer = csv.writer(g)
-        writer.writerows(result)
+    write_csv_file("Pv_.csv", result)
 
 @process_print
 def Dhp_make(name = "Dhp", targetter = r"\/\/ Dhp_.* \/\/<BR>"):
@@ -713,9 +708,7 @@ def Dhp_make(name = "Dhp", targetter = r"\/\/ Dhp_.* \/\/<BR>"):
             vers_heap += line + "<BR>"
     out = zip(vers_number, final_result)
     print_out = [list(i) for i in out]
-    with open(static_file_path("Dhp_.csv"), "w", encoding="utf-8", newline="") as g:
-        writer = csv.writer(g)
-        writer.writerows(print_out)
+    write_csv_file("Dhp_.csv", print_out)
 
 @process_print
 def Bv_make(name = "Bv", targetter = r"\/\/ Bv_.* \/\/<BR>"):
@@ -750,9 +743,7 @@ def Bv_make(name = "Bv", targetter = r"\/\/ Bv_.* \/\/<BR>"):
             vers_heap += line + "<BR>"
     out = zip(vers_number, final_result)
     print_out = [list(i) for i in out]
-    with open(static_file_path("Bv_.csv"), "w", encoding="utf-8", newline="") as g:
-        writer = csv.writer(g)
-        writer.writerows(print_out)
+    write_csv_file("Bv_.csv", print_out)
 
 @process_print
 def Sp_create(text = "Sp"):

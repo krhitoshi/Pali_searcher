@@ -776,9 +776,7 @@ def text_create(text):
     name, extention = text.split(".")
     bin_maker(text_for_count, name)
     new_text = name + "_.txt"
-    path = static_file_path(new_text)
-    with open(path, "w", encoding="utf-8") as f:
-        f.write(text_for_search)
+    write_text_file(new_text, text_for_search)
 
 if __name__ == "__main__":
     mainpart()

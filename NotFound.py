@@ -9,9 +9,11 @@ import sys
 import os
 import functools
 from concurrent import futures
+from urllib.parse import urlparse
 
 app_dir = os.path.abspath(os.path.dirname(__file__))
 static_path = os.path.join(app_dir, "static")
+html_cache_path = os.path.join(app_dir, "html_cache")
 
 def resource_path(relative_path):
     if hasattr(sys, '_MEIPASS'):
@@ -92,10 +94,24 @@ def static_file_path(file_name):
     global static_path
     return os.path.join(static_path, file_name)
 
+# html_cache_path にHTMLファイルがあればそれを利用する
 def download(url):
-    response = requests.get(url)
-    response.encoding = "utf-8"
-    return response.text
+    parsed_url = urlparse(url)
+    file_name = os.path.basename(parsed_url.path)
+    path = os.path.join(html_cache_path, file_name)
+
+    if os.path.exists(path):
+        # 改行コードを保ったまま開く
+        with open(path, "r", newline="") as f:
+            result = f.read()
+    else:
+        response = requests.get(url)
+        response.encoding = "utf-8"
+        result = response.text
+        # 改行コードを保ったまま保存する
+        with open(path, "w", newline="") as f:
+            f.write(result)
+    return result
 
 def write_text_file(file_name, content, newline=None):
     with open(static_file_path(file_name), "w", encoding="utf-8", newline=newline) as f:

@@ -5,3 +5,4 @@ static/*.htm
 static/*.bin
 static/*.txt
 static/*.csv
+html_cache/*.htm

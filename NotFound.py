@@ -221,6 +221,7 @@ def save_txt_file(name, text_for_count):
 # 生成されるファイル:
 #   static/Vin_I_.htm
 def htm_make(name, html):
+    # name が Vin_I.txt ではなく Vin_I でも大丈夫
     new_name = name.split(".")[0]
     new_name = new_name + "_.htm"
     new_html = add_page_section(copy.deepcopy(html))
@@ -238,29 +239,29 @@ def generate_text_for_count(content, text):
     res = copy.deepcopy(content)
     res = re.sub(r"<!DOCTYPE html>(.|\s)*?(?=\[page)", "", res)
     res = re.sub(r"\r\n", "\n", res)#これが大事な一行になる
-    if text in {"SN_II.txt", "SN_III.txt", "SN_IV.txt", "SN_V.txt"}:
+    if text in {"SN_II", "SN_III", "SN_IV", "SN_V"}:
         res = re.sub(r"(?<=page 001\])(.|\s)*?(?=CHAPTER)", "", res)
-    elif text == "SN_I.txt":
+    elif text == "SN_I":
         res = re.sub(r"(?<=page 001\])(.|\s)*?(?=<b>SN_1)", "", res)
-    elif text == "Khp.txt":
+    elif text == "Khp":
         res = re.sub(r"(?<=page 001\])(.|\s)*?(?=Buddhaṃ)", "", res)
-    elif text == "Nidd_I.txt":
+    elif text == "Nidd_I":
         res = re.sub(r"""(?<=page 001\])(.|\s)*?Part I""", "", res)
-    elif text == "Nidd_II.txt":
+    elif text == "Nidd_II":
         res = re.sub(r"""(?<=page 001\])(.|\s)*?Vatthugāthā\.""", "", res)
     elif text == "J_1":
         res = re.sub(r"(?<=page 001\])(.|\s)*?(?=JaNi)", "", res)
-    elif text == "Paṭis_II.txt":
+    elif text == "Paṭis_II":
         res = re.sub(r"""(?<=page 001\])(.|\s)*?INDRIYAKATHĀ</span><BR>""", "", res)
-    elif text == "Dhs.txt":
+    elif text == "Dhs":
         res = re.sub(r"(?<=page 001\])(.|\s)*?{MĀTIKĀ\.}<br>", "", res)
-    elif text == "Dhātuk.txt":
+    elif text == "Dhātuk":
         res = re.sub(r"(?<=page 001\])(.|\s)*?BUDDHASSA<BR>", "", res)
-    elif text == "Mil.txt":
+    elif text == "Mil":
         res = re.sub(r"(?<=page 001\])(.|\s)*?TASSA BHAGAVATO ARAHATO SAMMĀSAMBUDDHASSA\.<BR>", "", res)
-    elif text == "Vism.txt":
+    elif text == "Vism":
         res = re.sub(r"(?<=page 001\])(.|\s)*?NIDĀNĀDIKATHĀ<BR>", "", res)
-    elif "&nbsp;" in text[:1000] or text in {"Yam_I.txt", "Yam_II.txt", "Pugg.txt", "Paṭis_I.txt"}:
+    elif "&nbsp;" in text[:1000] or text in {"Yam_I", "Yam_II", "Pugg", "Paṭis_I"}:
         res = re.sub(r"(?<=page 001\])(.|\s)*?(?=\n(\w|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\w))", "", res)
     else:
         res = re.sub(r"(?<=page 001\])(.|\s)*?(?=\n     \S)", "", res)
@@ -808,7 +809,7 @@ def J_create(text_name):
     url = text_dict[text]
     html = download(url)
     htm_make(text, html)
-    text_for_count = generate_text_for_count(html, text)
+    text_for_count = generate_text_for_count(html, text_name)
     Jataka(generate_text_for_search(text_for_count), text_number)
     bin_maker(text_for_count, text_name)
 
@@ -825,8 +826,8 @@ def text_create(text_name):
     text = text_name + ".txt"
     url = text_dict[text]
     html = download(url)
-    htm_make(text, html)
-    text_for_count = generate_text_for_count(html, text)
+    htm_make(text_name, html)
+    text_for_count = generate_text_for_count(html, text_name)
     bin_maker(text_for_count, text_name)
     save_txt_file(text_name, text_for_count)
 

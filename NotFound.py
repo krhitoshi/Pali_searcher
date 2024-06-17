@@ -213,62 +213,65 @@ def add_page_section(html):
 
 import copy
 def text_make(text):
-    vin_ = download(text_dict[text])
-    htm_make(text, copy.deepcopy(vin_))
-    vin_ = re.sub(r"<!DOCTYPE html>(.|\s)*?(?=\[page)", "", vin_)
-    vin_ = re.sub(r"\r\n", "\n", vin_)#これが大事な一行になる
+    html = download(text_dict[text])
+    htm_make(text, copy.deepcopy(html))
+    return generate_text_for_count(html, text)
+
+def generate_text_for_count(content, text):
+    res = copy.deepcopy(content)
+    res = re.sub(r"<!DOCTYPE html>(.|\s)*?(?=\[page)", "", res)
+    res = re.sub(r"\r\n", "\n", res)#これが大事な一行になる
     if text in {"SN_II.txt", "SN_III.txt", "SN_IV.txt", "SN_V.txt"}:
-        vin_ = re.sub(r"(?<=page 001\])(.|\s)*?(?=CHAPTER)", "", vin_)
+        res = re.sub(r"(?<=page 001\])(.|\s)*?(?=CHAPTER)", "", res)
     elif text == "SN_I.txt":
-        vin_ = re.sub(r"(?<=page 001\])(.|\s)*?(?=<b>SN_1)", "", vin_)
+        res = re.sub(r"(?<=page 001\])(.|\s)*?(?=<b>SN_1)", "", res)
     elif text == "Khp.txt":
-        vin_ = re.sub(r"(?<=page 001\])(.|\s)*?(?=Buddhaṃ)", "", vin_)
+        res = re.sub(r"(?<=page 001\])(.|\s)*?(?=Buddhaṃ)", "", res)
     elif text == "Nidd_I.txt":
-        vin_ = re.sub(r"""(?<=page 001\])(.|\s)*?Part I""", "", vin_)
+        res = re.sub(r"""(?<=page 001\])(.|\s)*?Part I""", "", res)
     elif text == "Nidd_II.txt":
-        vin_ = re.sub(r"""(?<=page 001\])(.|\s)*?Vatthugāthā\.""", "", vin_)
+        res = re.sub(r"""(?<=page 001\])(.|\s)*?Vatthugāthā\.""", "", res)
     elif text == "J_1":
-        vin_ = re.sub(r"(?<=page 001\])(.|\s)*?(?=JaNi)", "", vin_)
+        res = re.sub(r"(?<=page 001\])(.|\s)*?(?=JaNi)", "", res)
     elif text == "Paṭis_II.txt":
-        vin_ = re.sub(r"""(?<=page 001\])(.|\s)*?INDRIYAKATHĀ</span><BR>""", "", vin_)
+        res = re.sub(r"""(?<=page 001\])(.|\s)*?INDRIYAKATHĀ</span><BR>""", "", res)
     elif text == "Dhs.txt":
-        vin_ = re.sub(r"(?<=page 001\])(.|\s)*?{MĀTIKĀ\.}<br>", "", vin_)
+        res = re.sub(r"(?<=page 001\])(.|\s)*?{MĀTIKĀ\.}<br>", "", res)
     elif text == "Dhātuk.txt":
-        vin_ = re.sub(r"(?<=page 001\])(.|\s)*?BUDDHASSA<BR>", "", vin_)
+        res = re.sub(r"(?<=page 001\])(.|\s)*?BUDDHASSA<BR>", "", res)
     elif text == "Mil.txt":
-        vin_ = re.sub(r"(?<=page 001\])(.|\s)*?TASSA BHAGAVATO ARAHATO SAMMĀSAMBUDDHASSA\.<BR>", "", vin_)
+        res = re.sub(r"(?<=page 001\])(.|\s)*?TASSA BHAGAVATO ARAHATO SAMMĀSAMBUDDHASSA\.<BR>", "", res)
     elif text == "Vism.txt":
-        vin_ = re.sub(r"(?<=page 001\])(.|\s)*?NIDĀNĀDIKATHĀ<BR>", "", vin_)
+        res = re.sub(r"(?<=page 001\])(.|\s)*?NIDĀNĀDIKATHĀ<BR>", "", res)
     elif "&nbsp;" in text[:1000] or text in {"Yam_I.txt", "Yam_II.txt", "Pugg.txt", "Paṭis_I.txt"}:
-        vin_ = re.sub(r"(?<=page 001\])(.|\s)*?(?=\n(\w|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\w))", "", vin_)
+        res = re.sub(r"(?<=page 001\])(.|\s)*?(?=\n(\w|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\w))", "", res)
     else:
-        vin_ = re.sub(r"(?<=page 001\])(.|\s)*?(?=\n     \S)", "", vin_)
-    vin_ = re.sub(r"\[page(.|\s)*?\]", "%", vin_)
-    vin_ = re.sub(r"(?<=page 001])(.|\s)*?(?=\n\     \S)", "", vin_)
-    vin_ = re.sub(r"<span class=\"red\">\d*?</span>", "", vin_)
-    vin_ = re.sub(r"\((.|\s).*?\d\)", "", vin_)
-    vin_ = re.sub(r"\[\d.*?\]", "", vin_)#カッコで括られたセクションの名前のようなところを削除したい
-    vin_ = re.sub(r"\s+\d{1,3}\. .*?VAGGA\.", "", vin_)#Jataka の ~ vagga っていうのを消したい
-    vin_ = re.sub(r"\s+\[.*?\](\<BR\>|\<br\>)", "", vin_)
-    vin_ = re.sub(r"\s+VAGGA (I[VX]|V*?I{0,3})\..*?\.", "", vin_)
-    vin_ = re.sub(r"(<span class=\"red\">)(.|\s)*?(</span>)", "", vin_)
-    vin_ = re.sub(r"(<span class=\"large\">)(.|\s)*?(</span>)", "", vin_)
-    vin_ = re.sub(r"\. \. \.", "@", vin_)
-    vin_ = re.sub(r"(?<=\n)\s+?\[.*?\](<BR>|<br>)", "", vin_)#Majjhimanikaya の数字のやつを消したい
-    vin_ = re.sub(r"(?<=\n)\s+?(C[MD]|D?C{0,3})(X[CL]|L?X{0,3})(I[VX]|V?I{0,3}|I{1,3})\.\s{0,1}(?=(<BR>|<br>))", "", vin_)
-    vin_ = re.sub(r"(?<=\n)\s+?(X[CL]|L?X{0,3})(I[VX]|V?I{0,3}|I{1,3})\. \w*?\.\s{0,1}(?=(<BR>|<br>))", "", vin_)
-    vin_ = re.sub(r"(?<=\n)\s+?.*?, ((C[MD]|D?C{0,3})(X[CL]|L?X{0,3})(I[VX]|V?I{0,3}))\.\s{0,1}(?=(<BR>\n|<br>\n))", "", vin_)
-    vin_ = re.sub(r"(<i>(.|\s)*?</i>|<span class=\"(red|blue)\">|</span>|<b>|</b>|&nbsnbsp;|&nbsp;|&#8216;|&lt;|&gt;|_{3,})", "", vin_)
-    vin_ = re.sub(r"(<BR>|<br>)", "", vin_)
-    vin_ = re.sub(r"\n{2,}", "\n", vin_)
-    vin_ = re.sub(r"\n%\n", "%", vin_)
-    vin_ = re.sub(r"(\w)-%", r"\1"+"&", vin_)
-    vin_ = re.sub(r"&{2,}", "&", vin_)#これ特に要らない気もするけど、とりあえず残す。
-    vin_ = re.sub(r"(\w)\-\n", r"\1"+"#", vin_)# -改行 は # でとりあえず置き換えておく)
-    vin_ = re.sub(r"\n", " \n", vin_)
-    vin_ = re.sub(r"--", "@", vin_)#--pa--, --la-- が検索のときに入らないようにするだけ
-    text_for_count = re.sub(r"%", " %", vin_)
-    return text_for_count
+        res = re.sub(r"(?<=page 001\])(.|\s)*?(?=\n     \S)", "", res)
+    res = re.sub(r"\[page(.|\s)*?\]", "%", res)
+    res = re.sub(r"(?<=page 001])(.|\s)*?(?=\n\     \S)", "", res)
+    res = re.sub(r"<span class=\"red\">\d*?</span>", "", res)
+    res = re.sub(r"\((.|\s).*?\d\)", "", res)
+    res = re.sub(r"\[\d.*?\]", "", res)#カッコで括られたセクションの名前のようなところを削除したい
+    res = re.sub(r"\s+\d{1,3}\. .*?VAGGA\.", "", res)#Jataka の ~ vagga っていうのを消したい
+    res = re.sub(r"\s+\[.*?\](\<BR\>|\<br\>)", "", res)
+    res = re.sub(r"\s+VAGGA (I[VX]|V*?I{0,3})\..*?\.", "", res)
+    res = re.sub(r"(<span class=\"red\">)(.|\s)*?(</span>)", "", res)
+    res = re.sub(r"(<span class=\"large\">)(.|\s)*?(</span>)", "", res)
+    res = re.sub(r"\. \. \.", "@", res)
+    res = re.sub(r"(?<=\n)\s+?\[.*?\](<BR>|<br>)", "", res)#Majjhimanikaya の数字のやつを消したい
+    res = re.sub(r"(?<=\n)\s+?(C[MD]|D?C{0,3})(X[CL]|L?X{0,3})(I[VX]|V?I{0,3}|I{1,3})\.\s{0,1}(?=(<BR>|<br>))", "", res)
+    res = re.sub(r"(?<=\n)\s+?(X[CL]|L?X{0,3})(I[VX]|V?I{0,3}|I{1,3})\. \w*?\.\s{0,1}(?=(<BR>|<br>))", "", res)
+    res = re.sub(r"(?<=\n)\s+?.*?, ((C[MD]|D?C{0,3})(X[CL]|L?X{0,3})(I[VX]|V?I{0,3}))\.\s{0,1}(?=(<BR>\n|<br>\n))", "", res)
+    res = re.sub(r"(<i>(.|\s)*?</i>|<span class=\"(red|blue)\">|</span>|<b>|</b>|&nbsnbsp;|&nbsp;|&#8216;|&lt;|&gt;|_{3,})", "", res)
+    res = re.sub(r"(<BR>|<br>)", "", res)
+    res = re.sub(r"\n{2,}", "\n", res)
+    res = re.sub(r"\n%\n", "%", res)
+    res = re.sub(r"(\w)-%", r"\1"+"&", res)
+    res = re.sub(r"&{2,}", "&", res)#これ特に要らない気もするけど、とりあえず残す。
+    res = re.sub(r"(\w)\-\n", r"\1"+"#", res)# -改行 は # でとりあえず置き換えておく)
+    res = re.sub(r"\n", " \n", res)
+    res = re.sub(r"--", "@", res)#--pa--, --la-- が検索のときに入らないようにするだけ
+    return re.sub(r"%", " %", res)
 
 def generate_text_for_search(text_for_count):
     return re.sub(r"[%&#\n]", "", text_for_count)

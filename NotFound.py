@@ -7,6 +7,7 @@ import csv
 import requests
 import sys
 import os
+import copy
 import functools
 from concurrent import futures
 from urllib.parse import urlparse
@@ -202,7 +203,7 @@ def process_print(func):
 def htm_make(name, html):
     new_name = name.split(".")[0]
     new_name = new_name + "_.htm"
-    new_html = add_page_section(html)
+    new_html = add_page_section(copy.deepcopy(html))
     write_text_file(new_name, new_html)
 
 # ページ表記に section タグを追加する
@@ -210,12 +211,6 @@ def htm_make(name, html):
 def add_page_section(html):
     replace = """<section id ='""" + r"\2" + """'>""" + r"\1" + r"\2" + r"\3" + """</section>"""
     return re.sub(r"(\[page )(\d{1,4})(\])", replace, html)
-
-import copy
-def text_make(text):
-    html = download(text_dict[text])
-    htm_make(text, copy.deepcopy(html))
-    return generate_text_for_count(html, text)
 
 def generate_text_for_count(content, text):
     res = copy.deepcopy(content)
@@ -319,32 +314,32 @@ def Sp_make(text = "Sp"):
         vin_ = re.sub(r"<!DOCTYPE html>(.|\s)*?(?=\[page)", "", vin_)
         vin_ = re.sub(r"\r\n", "\n", vin_)
         if i == 1:
-            htm_make("Sp_1", copy.deepcopy(vin_))
+            htm_make("Sp_1", vin_)
             vin_ = re.sub(r"(?<=page 001\])(.|\s)*?sammāsambuddhassa\.<br>", "", vin_)
         elif i == 2:
-            htm_make("Sp_2", copy.deepcopy(vin_))
+            htm_make("Sp_2", vin_)
             start, end = re.search(r"(?<=\d\])(.|\s)*?II<br>", vin_).span()
             vin_ = vin_[:start] + vin_[end:]
 #            vin_ = re.sub(r"(?<=\d\])(.|\s)*?II<br>", "", vin_)
         elif i == 3:
-            htm_make("Sp_3", copy.deepcopy(vin_))
+            htm_make("Sp_3", vin_)
             start, end = re.search(r"(?<=\d\])(.|\s)*?SAṄGHĀDISESA I-XIII<br>", vin_).span()
             vin_ = vin_[:start] + vin_[end:]
         elif i == 4:
-            htm_make("Sp_4", copy.deepcopy(vin_))
+            htm_make("Sp_4", vin_)
             start, end = re.search(r"""(?<=\d\])(.|\s)*?SAMBUDDHASSA\.<span class="red"><sup>1</sup></span><br>""", vin_).span()
             vin_ = vin_[:start] + vin_[end:]
             vin_ += "%"#For page 950 is not exist.
         elif i == 5:
-            htm_make("Sp_5", copy.deepcopy(vin_))
+            htm_make("Sp_5", vin_)
             start, end = re.search(r"(?<=\d\])(.|\s)*?SAMANTAPĀSĀDIKĀ<br>", vin_).span()
             vin_ = vin_[:start] + vin_[end:]
         elif i == 6:
-            htm_make("Sp_6", copy.deepcopy(vin_))
+            htm_make("Sp_6", vin_)
             start, end = re.search(r"(?<=\d\])(.|\s)*?KAMMAKKHANDHAKA-VAṆṆANĀ<br>", vin_).span()
             vin_ = vin_[:start] + vin_[end:]
         elif i == 7:
-            htm_make("Sp_7", copy.deepcopy(vin_))
+            htm_make("Sp_7", vin_)
             start, end = re.search(r"(?<=\d\])(.|\s)*?I<br>", vin_).span()
             vin_ = vin_[:start] + vin_[end:]
         Sp_raw += vin_
@@ -402,7 +397,7 @@ def Jataka(text_for_search, text_number):
 
 def Sn_text_make(text = "Sn"):
     vin_ = download(text_dict["Sn.txt"])
-    htm_make(text, copy.deepcopy(vin_))
+    htm_make(text, vin_)
     vin_ = re.sub(r"<!DOCTYPE html>(.|\s)*?(?=\[page)", "", vin_)
     vin_ = re.sub(r"\r\n", "\n", vin_)#これが大事な一行になる
     vin_ = re.sub(r"(?<=\[page 001\])(.|\s)*?Uragasutta\.", "", vin_)
@@ -457,7 +452,7 @@ def Sn(text_for_search):
 
 def Ap_make(text = "Ap"):
     vin_ = download(text_dict["Ap.txt"])
-    htm_make(text, copy.deepcopy(vin_))
+    htm_make(text, vin_)
     vin_ = re.sub(r"<!DOCTYPE html>(.|\s)*?(?=\[page)", "", vin_)
     vin_ = re.sub(r"\r\n", "\n", vin_)#これが大事な一行になる
     vin_ = re.sub(r"\[page(.|\s)*?\]", "%", vin_)
@@ -767,7 +762,9 @@ def Sn_create(text = "Sn", text_name = "Sn"):
 
 @process_print
 def J_create(text, text_number, text_name):
-    text_for_count = text_make(text)
+    html = download(text_dict[text])
+    htm_make(text, html)
+    text_for_count = generate_text_for_count(html, text)
     Jataka(generate_text_for_search(text_for_count), text_number)
     bin_maker(text_for_count, text_name)
 
@@ -780,7 +777,9 @@ def J_create(text, text_number, text_name):
 #   static/Vin_I_page_.bin
 @process_print
 def text_create(text):
-    text_for_count = text_make(text)
+    html = download(text_dict[text])
+    htm_make(text, html)
+    text_for_count = generate_text_for_count(html, text)
     name, extention = text.split(".")
     bin_maker(text_for_count, name)
     new_text = name + "_.txt"

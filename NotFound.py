@@ -213,22 +213,21 @@ def save_txt_file(name, text_for_count):
     content = generate_text_for_search(text_for_count)
     write_text_file(file_name, content)
 
+def htm_make_base(text_name, html, pattern, replace):
+    file_name = text_name + "_.htm"
+    new_html = copy.deepcopy(html)
+    contents = re.sub(pattern, replace, new_html)
+    write_text_file(file_name, contents)
 
 # 例: text_name: "Vin_I"
 # 生成されるファイル:
 #   static/Vin_I_.htm
-def htm_make(text_name, html):
-    file_name = text_name + "_.htm"
-    new_html = add_page_section(copy.deepcopy(html))
-    write_text_file(file_name, new_html)
-
-
 # ページ表記に section タグを追加する
 # <section id ='223'>[page 223]</section>
-def add_page_section(html):
+def htm_make(text_name, html):
+    pattern = r"(\[page )(\d{1,4})(\])"
     replace = """<section id ='""" + r"\2" + """'>""" + r"\1" + r"\2" + r"\3" + """</section>"""
-    return re.sub(r"(\[page )(\d{1,4})(\])", replace, html)
-
+    htm_make_base(text_name, html, pattern, replace)
 
 def generate_text_for_count(content, text):
     res = copy.deepcopy(content)

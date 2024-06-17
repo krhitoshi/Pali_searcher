@@ -268,10 +268,10 @@ def text_make(text):
     vin_ = re.sub(r"\n", " \n", vin_)
     vin_ = re.sub(r"--", "@", vin_)#--pa--, --la-- が検索のときに入らないようにするだけ
     text_for_count = re.sub(r"%", " %", vin_)
-    text_for_search = re.sub(r"[%&#\n]", "", text_for_count)
-    return text_for_count, text_for_search
+    return text_for_count
 
-
+def generate_text_for_search(text_for_count):
+    return re.sub(r"[%&#\n]", "", text_for_count)
 
 def bin_maker(text_for_count, text_name):
     line = 0
@@ -764,8 +764,8 @@ def Sn_create(text = "Sn", text_name = "Sn"):
 
 @process_print
 def J_create(text, text_number, text_name):
-    text_for_count, text_for_search = text_make(text)
-    Jataka(text_for_search, text_number)
+    text_for_count = text_make(text)
+    Jataka(generate_text_for_search(text_for_count), text_number)
     bin_maker(text_for_count, text_name)
 
 # 例: text: "Vin_I.txt"
@@ -777,11 +777,11 @@ def J_create(text, text_number, text_name):
 #   static/Vin_I_page_.bin
 @process_print
 def text_create(text):
-    text_for_count, text_for_search = text_make(text)
+    text_for_count = text_make(text)
     name, extention = text.split(".")
     bin_maker(text_for_count, name)
     new_text = name + "_.txt"
-    write_text_file(new_text, text_for_search)
+    write_text_file(new_text, generate_text_for_search(text_for_count))
 
 if __name__ == "__main__":
     mainpart()

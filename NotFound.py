@@ -135,7 +135,6 @@ def write_bin_file(file_name, data):
 
 def mainpart():
     print(static_path)
-    exit
     print("### Start ###")
     print(" ")
     with futures.ThreadPoolExecutor() as executor:

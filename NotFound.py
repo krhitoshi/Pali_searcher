@@ -214,15 +214,13 @@ def save_txt_file(name, text_for_count):
     write_text_file(file_name, content)
 
 
-# 例: name: "Vin_I.txt"
+# 例: text_name: "Vin_I"
 # 生成されるファイル:
 #   static/Vin_I_.htm
-def htm_make(name, html):
-    # name が Vin_I.txt ではなく Vin_I でも大丈夫
-    new_name = name.split(".")[0]
-    new_name = new_name + "_.htm"
+def htm_make(text_name, html):
+    file_name = text_name + "_.htm"
     new_html = add_page_section(copy.deepcopy(html))
-    write_text_file(new_name, new_html)
+    write_text_file(file_name, new_html)
 
 
 # ページ表記に section タグを追加する

@@ -158,9 +158,9 @@ def text_requests(text_dict_item):
     global Sp_flag
     name, url = text_dict_item
     if name == "Th":
-        Thera_make()
+        Thera_make(url)
     elif name == "Thi":
-        Theri_make()
+        Theri_make(url)
     elif name == "Ap":
         Ap_create()
     elif name == "Sn":
@@ -517,9 +517,8 @@ def Ap_make():
 
 
 @process_print
-def Theri_make():
+def Theri_make(url):
     text_name = "Thi"
-    url = text_dict[text_name]
     vin_ = download(url)
     htm_make_base(text_name, vin_, r"(\|\| Thī_)(.*?)( \|\|)",
                   "<section id ='Thī_" + r"\2" + "'>" + r"\1"+r"\2"+r"\3" + "</section>")
@@ -552,9 +551,8 @@ def Theri_make():
 
 
 @process_print
-def Thera_make():
+def Thera_make(url):
     text_name = "Th"
-    url = text_dict[text_name]
     vin_ = download(url)
     vin_ = re.sub(r"\|\| 939 \|\|", "|| Th_939 ||", vin_)
 

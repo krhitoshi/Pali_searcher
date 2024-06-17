@@ -67,12 +67,12 @@ text_dict = {"Vin_I.txt": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_t
              "Nidd_II.txt": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/nidde2ou.htm",
              "Bv.txt": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/budvmsou.htm",
              "Cp.txt": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/carpitou.htm",
-             "Ja_1.txt":"http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/jatak1ou.htm",
-             "Ja_2.txt": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/jatak2ou.htm",
-             "Ja_3.txt": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/jatak3ou.htm",
-             "Ja_4.txt": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/jatak4ou.htm",
-             "Ja_5.txt": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/jatak5ou.htm",
-             "Ja_6.txt": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/jatak6ou.htm",
+             "Ja_1":"http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/jatak1ou.htm",
+             "Ja_2": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/jatak2ou.htm",
+             "Ja_3": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/jatak3ou.htm",
+             "Ja_4": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/jatak4ou.htm",
+             "Ja_5": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/jatak5ou.htm",
+             "Ja_6": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/jatak6ou.htm",
              "Dhātuk.txt": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/3_abh/dhatukou.htm",
              "Yam_I.txt": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/3_abh/yamak_1ou.htm",
              "Yam_II.txt": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/3_abh/yamak_2ou.htm",
@@ -165,11 +165,10 @@ def text_requests(text_dict_item):
     elif name == "Sn.txt":
         Sn_create()
     elif name in {"Cp.txt", "Vm.txt", "Pv.txt", "Dhp.txt", "Bv.txt"}:
-        text_name, extention = name.split(".")
+        text_name, _ = name.split(".")
         exec("{}_make()".format(text_name))
-    elif name in ["Ja_{}.txt".format(i) for i in range(1, 7)]:
-        text_name, extention = name.split(".")
-        J_create(text_name)
+    elif name in ["Ja_{}".format(i) for i in range(1, 7)]:
+        J_create(name, url)
     elif name in ["Sp_{}".format(i) for i in range(1,8)]:
         if Sp_flag == 1:
             pass
@@ -803,12 +802,10 @@ def Sn_create(text = "Sn", text_name = "Sn"):
 
 
 @process_print
-def J_create(text_name):
+def J_create(text_name, url):
     text_number = text_name[-1]
-    text = text_name + ".txt"
-    url = text_dict[text]
     html = download(url)
-    htm_make(text, html)
+    htm_make(text_name, html)
     text_for_count = generate_text_for_count(html, text_name)
     Jataka(generate_text_for_search(text_for_count), text_number)
     bin_maker(text_for_count, text_name)

@@ -16,10 +16,12 @@ app_dir = os.path.abspath(os.path.dirname(__file__))
 static_path = os.path.join(app_dir, "static")
 html_cache_path = os.path.join(app_dir, "html_cache")
 
+
 def resource_path(relative_path):
     if hasattr(sys, '_MEIPASS'):
         return os.path.join(sys._MEIPASS, relative_path)
     return os.path.join(os.path.abspath("."), relative_path)
+
 
 text_list = ["Vin_I.txt", "Vin_II.txt", "Vin_III.txt", "Vin_IV.txt", "Vin_V.txt",
              "DN_I.txt", "DN_II.txt", "DN_III.txt",
@@ -91,9 +93,11 @@ text_dict = {"Vin_I.txt": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_t
              "Sp_7": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/4_comm/samp_7ou.htm",
              }
 
+
 def static_file_path(file_name):
     global static_path
     return os.path.join(static_path, file_name)
+
 
 # html_cache_path にHTMLファイルがあればそれを利用する
 # ダウンロードしたHTMLの改行コードは CRLF
@@ -117,9 +121,11 @@ def download(url):
             f.write(result)
     return result
 
+
 def write_text_file(file_name, content, newline=None):
     with open(static_file_path(file_name), "w", encoding="utf-8", newline=newline) as f:
         f.write(content)
+
 
 def write_csv_file(file_name, data, oneline=False):
     with open(static_file_path(file_name), "w", encoding="utf-8", newline="") as f:
@@ -130,9 +136,11 @@ def write_csv_file(file_name, data, oneline=False):
         else:
             writer.writerows(data)
 
+
 def write_bin_file(file_name, data):
     with open(static_file_path(file_name), "wb") as f:
         data.tofile(f)
+
 
 def mainpart():
     print(static_path)
@@ -142,6 +150,7 @@ def mainpart():
         res = executor.map(text_requests, text_dict.items())
         list(res)
     print("\n\n#### All texts were installed" + ": Process 100 %"+  "*" * (100 // 5))#八百長
+
 
 Sp_flag = 0
 def text_requests(text_dict_item):
@@ -200,10 +209,12 @@ def process_print(func):
                 print("\r#### Pass {:19}: ".format(file_name) + "Process {:3} %".format(proc_per) + "*" * (proc_per // 5) + "_" * (20 - (proc_per // 5)), end="")
     return printer
 
+
 def save_txt_file(name, text_for_count):
     file_name = name + "_.txt"
     content = generate_text_for_search(text_for_count)
     write_text_file(file_name, content)
+
 
 def htm_make(name, html):
     new_name = name.split(".")[0]
@@ -211,11 +222,13 @@ def htm_make(name, html):
     new_html = add_page_section(copy.deepcopy(html))
     write_text_file(new_name, new_html)
 
+
 # ページ表記に section タグを追加する
 # <section id ='223'>[page 223]</section>
 def add_page_section(html):
     replace = """<section id ='""" + r"\2" + """'>""" + r"\1" + r"\2" + r"\3" + """</section>"""
     return re.sub(r"(\[page )(\d{1,4})(\])", replace, html)
+
 
 def generate_text_for_count(content, text):
     res = copy.deepcopy(content)
@@ -273,8 +286,10 @@ def generate_text_for_count(content, text):
     res = re.sub(r"--", "@", res)#--pa--, --la-- が検索のときに入らないようにするだけ
     return re.sub(r"%", " %", res)
 
+
 def generate_text_for_search(text_for_count):
     return re.sub(r"[%&#\n]", "", text_for_count)
+
 
 # 例: text_name: "Vin_I"
 # 生成されるファイル:
@@ -316,6 +331,7 @@ def bin_maker(text_for_count, text_name):
 
     page_bin = text_name + "_page_" + ".bin"
     write_bin_file(page_bin, page_list)
+
 
 def Sp_make(text = "Sp"):
     Sp_raw = ""
@@ -460,6 +476,7 @@ def Sn(text_for_search):
     new_verse = "Sn_verse.csv"
     write_csv_file(new_verse, verse)
 
+
 def Ap_make(text = "Ap"):
     vin_ = download(text_dict["Ap.txt"])
     htm_make(text, vin_)
@@ -531,6 +548,7 @@ def Theri_make(text = "Thi"):
         verse_set.append(verse)
     write_csv_file("Theri_.csv", verse_set, oneline=True)
 
+
 @process_print
 def Thera_make(text = "Th"):
     url = "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/theragou.htm"
@@ -572,6 +590,7 @@ def Thera_make(text = "Th"):
         verse_set.append(changed_verse)
     write_csv_file("Thera_.csv", verse_set, oneline=True)
 
+
 @process_print
 def Cp_make(text = "Cp"):
     Cp_number = r"<b>Cp_.*</b>"
@@ -604,6 +623,7 @@ def Cp_make(text = "Cp"):
         main.lstrip().rstrip()
         final_result.append([number, main])
     write_csv_file("Cp_.csv", final_result)
+
 
 @process_print
 def Vm_make(text = "Vv"):
@@ -643,6 +663,7 @@ def Vm_make(text = "Vv"):
         result.append([number + "(Vv)", main.strip()])#(Vv, Vm のテキスト名をここに入力しておく)
     write_csv_file("Vm_.csv", result)
 
+
 @process_print
 def Pv_make(text = "Pv"):
     url = "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/petvatou.htm"
@@ -681,6 +702,7 @@ def Pv_make(text = "Pv"):
         result.append([number + "(Pv)", main.strip()])#(Vv, Vm のテキスト名をここに入力しておく)
     write_csv_file("Pv_.csv", result)
 
+
 @process_print
 def Dhp_make(name = "Dhp", targetter = r"\/\/ Dhp_.* \/\/<BR>"):
     url = "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/dhampdou.htm"
@@ -715,6 +737,7 @@ def Dhp_make(name = "Dhp", targetter = r"\/\/ Dhp_.* \/\/<BR>"):
     out = zip(vers_number, final_result)
     print_out = [list(i) for i in out]
     write_csv_file("Dhp_.csv", print_out)
+
 
 @process_print
 def Bv_make(name = "Bv", targetter = r"\/\/ Bv_.* \/\/<BR>"):
@@ -751,6 +774,7 @@ def Bv_make(name = "Bv", targetter = r"\/\/ Bv_.* \/\/<BR>"):
     print_out = [list(i) for i in out]
     write_csv_file("Bv_.csv", print_out)
 
+
 @process_print
 def Sp_create(text = "Sp"):
     text_for_count, text_for_search = Sp_make(text)
@@ -758,17 +782,20 @@ def Sp_create(text = "Sp"):
     new_text = "Sp_.txt"
     write_text_file(new_text, text_for_search)
 
+
 @process_print
 def Ap_create():
     text_for_count, text_for_search = Ap_make()
     bin_maker(text_for_count, "Ap")
     write_text_file("Ap_.txt", text_for_search)
 
+
 @process_print
 def Sn_create(text = "Sn", text_name = "Sn"):
     text_for_count, text_for_search = Sn_text_make(text)
     Sn(text_for_search)
     bin_maker(text_for_count, text_name)
+
 
 @process_print
 def J_create(text, text_number, text_name):
@@ -778,6 +805,7 @@ def J_create(text, text_number, text_name):
     text_for_count = generate_text_for_count(html, text)
     Jataka(generate_text_for_search(text_for_count), text_number)
     bin_maker(text_for_count, text_name)
+
 
 # 例: text: "Vin_I.txt"
 # 生成されるファイル:
@@ -795,6 +823,7 @@ def text_create(text):
     name, extension = text.split(".")
     bin_maker(text_for_count, name)
     save_txt_file(name, text_for_count)
+
 
 if __name__ == "__main__":
     mainpart()

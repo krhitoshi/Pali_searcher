@@ -169,7 +169,7 @@ def text_requests(text_dict_item):
         exec("{}_make()".format(text_name))
     elif name in ["Ja_{}.txt".format(i) for i in range(1, 7)]:
         text_name, extention = name.split(".")
-        J_create(name, text_name[-1], text_name)
+        J_create(text_name)
     elif name in ["Sp_{}".format(i) for i in range(1,8)]:
         if Sp_flag == 1:
             pass
@@ -177,7 +177,8 @@ def text_requests(text_dict_item):
             Sp_flag = 1
             Sp_create()
     else:
-        text_create(name)
+        text_name, _ = name.split(".")
+        text_create(text_name)
 
 
 def process_print(func):
@@ -801,7 +802,9 @@ def Sn_create(text = "Sn", text_name = "Sn"):
 
 
 @process_print
-def J_create(text, text_number, text_name):
+def J_create(text_name):
+    text_number = text_name[-1]
+    text = text_name + ".txt"
     url = text_dict[text]
     html = download(url)
     htm_make(text, html)
@@ -810,7 +813,7 @@ def J_create(text, text_number, text_name):
     bin_maker(text_for_count, text_name)
 
 
-# 例: text: "Vin_I.txt"
+# 例: text_name: "Vin_I"
 # 生成されるファイル:
 #   static/Vin_I_.htm
 #   static/Vin_I_.txt
@@ -818,14 +821,14 @@ def J_create(text, text_number, text_name):
 #   static/Vin_I_line_.bin
 #   static/Vin_I_page_.bin
 @process_print
-def text_create(text):
+def text_create(text_name):
+    text = text_name + ".txt"
     url = text_dict[text]
     html = download(url)
     htm_make(text, html)
     text_for_count = generate_text_for_count(html, text)
-    name, extension = text.split(".")
-    bin_maker(text_for_count, name)
-    save_txt_file(name, text_for_count)
+    bin_maker(text_for_count, text_name)
+    save_txt_file(text_name, text_for_count)
 
 
 if __name__ == "__main__":

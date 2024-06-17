@@ -216,6 +216,9 @@ def save_txt_file(name, text_for_count):
     write_text_file(file_name, content)
 
 
+# 例: name: "Vin_I.txt"
+# 生成されるファイル:
+#   static/Vin_I_.htm
 def htm_make(name, html):
     new_name = name.split(".")[0]
     new_name = new_name + "_.htm"

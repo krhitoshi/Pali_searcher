@@ -32,58 +32,58 @@ text_list = ["Vin_I.txt", "Vin_II.txt", "Vin_III.txt", "Vin_IV.txt", "Vin_V.txt"
              "Dhātuk.txt", "Yam_I.txt", "Yam_II.txt", "Kv.txt", "Pugg.txt", "Paṭis_I.txt", "Paṭis_II.txt",
              "Vibh.txt", "Dhs.txt", "Mil.txt", "Vism.txt"]
 
-text_dict = {"Vin_I.txt": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/1_vin/vin1maou.htm",
-             "Vin_II.txt": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/1_vin/vin2cuou.htm",
-             "Vin_III.txt": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/1_vin/vin3s1ou.htm",
-             "Vin_IV.txt": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/1_vin/vin4s2ou.htm",
-             "Vin_V.txt": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/1_vin/vin5paou.htm",
-             "DN_I.txt": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/1_digh/dighn1ou.htm",
-             "DN_II.txt": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/1_digh/dighn2ou.htm",
-             "DN_III.txt": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/1_digh/dighn3ou.htm",
-             "MN_I.txt": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/2_majjh/majjn1ou.htm",
-             "MN_II.txt": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/2_majjh/majjn2ou.htm",
-             "MN_III.txt": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/2_majjh/majjn3ou.htm",
-             "AN_I.txt": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/4_angu/angut1ou.htm",
-             "AN_II.txt": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/4_angu/angut2ou.htm",
-             "AN_III.txt": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/4_angu/angut3ou.htm",
-             "AN_IV.txt": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/4_angu/angut4ou.htm",
-             "AN_V.txt": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/4_angu/angut5ou.htm",
-             "SN_I.txt":"http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/3_samyu/samyu1ou.htm",
-             "SN_II.txt": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/3_samyu/samyu2ou.htm",
-             "SN_III.txt": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/3_samyu/samyu3ou.htm",
-             "SN_IV.txt": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/3_samyu/samyu4ou.htm",
-             "SN_V.txt": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/3_samyu/samyu5ou.htm",
-             "Ap.txt": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/apadanou.htm",
-             "Khp.txt": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/khudp_ou.htm",
-             "Dhp.txt": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/dhampdou.htm",
-             "Sn.txt": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/sutnipou.htm",
-             "Ud.txt": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/udana_ou.htm",
-             "It.txt": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/itivutou.htm",
-             "Vm.txt": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/vimvatou.htm",
-             "Pv.txt": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/petvatou.htm",
-             "Th.txt": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/theragou.htm",
-             "Thi.txt": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/therigou.htm",
-             "Nidd_I.txt": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/nidde1ou.htm",
-             "Nidd_II.txt": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/nidde2ou.htm",
-             "Bv.txt": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/budvmsou.htm",
-             "Cp.txt": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/carpitou.htm",
+text_dict = {"Vin_I": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/1_vin/vin1maou.htm",
+             "Vin_II": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/1_vin/vin2cuou.htm",
+             "Vin_III": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/1_vin/vin3s1ou.htm",
+             "Vin_IV": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/1_vin/vin4s2ou.htm",
+             "Vin_V": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/1_vin/vin5paou.htm",
+             "DN_I": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/1_digh/dighn1ou.htm",
+             "DN_II": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/1_digh/dighn2ou.htm",
+             "DN_III": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/1_digh/dighn3ou.htm",
+             "MN_I": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/2_majjh/majjn1ou.htm",
+             "MN_II": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/2_majjh/majjn2ou.htm",
+             "MN_III": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/2_majjh/majjn3ou.htm",
+             "AN_I": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/4_angu/angut1ou.htm",
+             "AN_II": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/4_angu/angut2ou.htm",
+             "AN_III": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/4_angu/angut3ou.htm",
+             "AN_IV": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/4_angu/angut4ou.htm",
+             "AN_V": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/4_angu/angut5ou.htm",
+             "SN_I":"http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/3_samyu/samyu1ou.htm",
+             "SN_II": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/3_samyu/samyu2ou.htm",
+             "SN_III": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/3_samyu/samyu3ou.htm",
+             "SN_IV": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/3_samyu/samyu4ou.htm",
+             "SN_V": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/3_samyu/samyu5ou.htm",
+             "Ap": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/apadanou.htm",
+             "Khp": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/khudp_ou.htm",
+             "Dhp": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/dhampdou.htm",
+             "Sn": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/sutnipou.htm",
+             "Ud": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/udana_ou.htm",
+             "It": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/itivutou.htm",
+             "Vm": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/vimvatou.htm",
+             "Pv": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/petvatou.htm",
+             "Th": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/theragou.htm",
+             "Thi": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/therigou.htm",
+             "Nidd_I": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/nidde1ou.htm",
+             "Nidd_II": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/nidde2ou.htm",
+             "Bv": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/budvmsou.htm",
+             "Cp": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/carpitou.htm",
              "Ja_1":"http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/jatak1ou.htm",
              "Ja_2": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/jatak2ou.htm",
              "Ja_3": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/jatak3ou.htm",
              "Ja_4": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/jatak4ou.htm",
              "Ja_5": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/jatak5ou.htm",
              "Ja_6": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/jatak6ou.htm",
-             "Dhātuk.txt": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/3_abh/dhatukou.htm",
-             "Yam_I.txt": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/3_abh/yamak_1ou.htm",
-             "Yam_II.txt": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/3_abh/yamak_2ou.htm",
-             "Kv.txt": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/3_abh/kathavou.htm",
-             "Pugg.txt": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/3_abh/pugpan_ou.htm",
-             "Paṭis_I.txt": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/patis1ou.htm",
-             "Paṭis_II.txt": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/patis2ou.htm",
-             "Vibh.txt": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/3_abh/vibhanou.htm",
-             "Dhs.txt": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/3_abh/dhamsgou.htm",
-             "Mil.txt": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/2_parcan/milindou.htm",
-             "Vism.txt":"http://gretil.sub.uni-goettingen.de/gretil/2_pali/4_comm/buvismou.htm",
+             "Dhātuk": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/3_abh/dhatukou.htm",
+             "Yam_I": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/3_abh/yamak_1ou.htm",
+             "Yam_II": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/3_abh/yamak_2ou.htm",
+             "Kv": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/3_abh/kathavou.htm",
+             "Pugg": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/3_abh/pugpan_ou.htm",
+             "Paṭis_I": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/patis1ou.htm",
+             "Paṭis_II": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/patis2ou.htm",
+             "Vibh": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/3_abh/vibhanou.htm",
+             "Dhs": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/3_abh/dhamsgou.htm",
+             "Mil": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/2_parcan/milindou.htm",
+             "Vism":"http://gretil.sub.uni-goettingen.de/gretil/2_pali/4_comm/buvismou.htm",
              "Sp_1":"http://gretil.sub.uni-goettingen.de/gretil/2_pali/4_comm/samp_1ou.htm",
              "Sp_2": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/4_comm/samp_2ou.htm",
              "Sp_3": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/4_comm/samp_3ou.htm",
@@ -156,17 +156,16 @@ Sp_flag = 0
 def text_requests(text_dict_item):
     global Sp_flag
     name, url = text_dict_item
-    if name == "Th.txt":
+    if name == "Th":
         Thera_make()
-    elif name == "Thi.txt":
+    elif name == "Thi":
         Theri_make()
-    elif name == "Ap.txt":
+    elif name == "Ap":
         Ap_create()
-    elif name == "Sn.txt":
+    elif name == "Sn":
         Sn_create()
-    elif name in {"Cp.txt", "Vm.txt", "Pv.txt", "Dhp.txt", "Bv.txt"}:
-        text_name, _ = name.split(".")
-        exec("{}_make()".format(text_name))
+    elif name in {"Cp", "Vm", "Pv", "Dhp", "Bv"}:
+        exec("{}_make()".format(name))
     elif name in ["Ja_{}".format(i) for i in range(1, 7)]:
         J_create(name, url)
     elif name in ["Sp_{}".format(i) for i in range(1,8)]:
@@ -176,8 +175,7 @@ def text_requests(text_dict_item):
             Sp_flag = 1
             Sp_create()
     else:
-        text_name, _ = name.split(".")
-        text_create(text_name, url)
+        text_create(name, url)
 
 
 def process_print(func):
@@ -426,7 +424,7 @@ def Jataka(text_for_search, text_number):
     write_csv_file(new_verse, verse)
 
 def Sn_text_make(text = "Sn"):
-    vin_ = download(text_dict["Sn.txt"])
+    vin_ = download(text_dict["Sn"])
     htm_make(text, vin_)
     vin_ = re.sub(r"<!DOCTYPE html>(.|\s)*?(?=\[page)", "", vin_)
     vin_ = re.sub(r"\r\n", "\n", vin_)#これが大事な一行になる
@@ -482,7 +480,7 @@ def Sn(text_for_search):
 
 
 def Ap_make(text = "Ap"):
-    vin_ = download(text_dict["Ap.txt"])
+    vin_ = download(text_dict["Ap"])
     htm_make(text, vin_)
     vin_ = re.sub(r"<!DOCTYPE html>(.|\s)*?(?=\[page)", "", vin_)
     vin_ = re.sub(r"\r\n", "\n", vin_)#これが大事な一行になる

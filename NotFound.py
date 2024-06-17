@@ -200,6 +200,11 @@ def process_print(func):
                 print("\r#### Pass {:19}: ".format(file_name) + "Process {:3} %".format(proc_per) + "*" * (proc_per // 5) + "_" * (20 - (proc_per // 5)), end="")
     return printer
 
+def save_txt_file(name, text_for_count):
+    file_name = name + "_.txt"
+    content = generate_text_for_search(text_for_count)
+    write_text_file(file_name, content)
+
 def htm_make(name, html):
     new_name = name.split(".")[0]
     new_name = new_name + "_.htm"
@@ -271,6 +276,11 @@ def generate_text_for_count(content, text):
 def generate_text_for_search(text_for_count):
     return re.sub(r"[%&#\n]", "", text_for_count)
 
+# 例: text_name: "Vin_I"
+# 生成されるファイル:
+#   static/Vin_I_index_.bin
+#   static/Vin_I_line_.bin
+#   static/Vin_I_page_.bin
 def bin_maker(text_for_count, text_name):
     line = 0
     page = 0
@@ -762,7 +772,8 @@ def Sn_create(text = "Sn", text_name = "Sn"):
 
 @process_print
 def J_create(text, text_number, text_name):
-    html = download(text_dict[text])
+    url = text_dict[text]
+    html = download(url)
     htm_make(text, html)
     text_for_count = generate_text_for_count(html, text)
     Jataka(generate_text_for_search(text_for_count), text_number)
@@ -777,13 +788,13 @@ def J_create(text, text_number, text_name):
 #   static/Vin_I_page_.bin
 @process_print
 def text_create(text):
-    html = download(text_dict[text])
+    url = text_dict[text]
+    html = download(url)
     htm_make(text, html)
     text_for_count = generate_text_for_count(html, text)
-    name, extention = text.split(".")
+    name, extension = text.split(".")
     bin_maker(text_for_count, name)
-    new_text = name + "_.txt"
-    write_text_file(new_text, generate_text_for_search(text_for_count))
+    save_txt_file(name, text_for_count)
 
 if __name__ == "__main__":
     mainpart()

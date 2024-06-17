@@ -516,7 +516,7 @@ def Ap_make(text = "Ap"):
 
 @process_print
 def Theri_make(text = "Thi"):
-    url = "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/therigou.htm"
+    url = text_dict["Thi"]
     vin_ = download(url)
     text_body = re.sub(r"(\|\| Thī_)(.*?)( \|\|)", "<section id ='Thī_" + r"\2" + "'>" + r"\1"+r"\2"+r"\3" + "</section>", copy.deepcopy(vin_))
 
@@ -551,7 +551,7 @@ def Theri_make(text = "Thi"):
 
 @process_print
 def Thera_make(text = "Th"):
-    url = "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/theragou.htm"
+    url = text_dict["Th"]
     vin_ = download(url)
     vin_ = re.sub(r"\|\| 939 \|\|", "|| Th_939 ||", vin_)
     text_body = re.sub(r"(\|\| Th_)(.*?)( \|\|)", "<section id ='Th_" + r"\2" + "'>" + r"\1"+r"\2"+r"\3" + "</section>", copy.deepcopy(vin_))
@@ -595,7 +595,7 @@ def Thera_make(text = "Th"):
 def Cp_make(text = "Cp"):
     Cp_number = r"<b>Cp_.*</b>"
     Cp_vers = r"\d\s\|\|</b><BR>"
-    url = "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/carpitou.htm"
+    url = text_dict["Cp"]
     text = download(url)
     text_body = re.sub(r"(<b>)(Cp_.*?)(\.)(.*?)(</b>)", "<section id ='" + r"\2" + "_" + r"\4" + "'>" + r"\1"+r"\2"+r"\3"+r"\4"+r"\5" + "</section>", copy.deepcopy(text))
 
@@ -627,7 +627,7 @@ def Cp_make(text = "Cp"):
 
 @process_print
 def Vm_make(text = "Vv"):
-    url = "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/vimvatou.htm"
+    url = text_dict["Vm"]
     text = download(url)
     text_body = re.sub(r"(<b>)(Vv_.*?)(\d*?)(\[.*?\])(\.)(\d*?)(</b>)", "<section id='" + r"\2" + r"\3" + r"\4" + "_" + r"\6" + "'>".replace(".", "_") + r"\1"+r"\2"+r"\3"+r"\4"+r"\5"+r"\6"+r"\7" + "</section>" ,copy.deepcopy(text))
 
@@ -666,6 +666,7 @@ def Vm_make(text = "Vv"):
 
 @process_print
 def Pv_make(text = "Pv"):
+    url = text_dict["Pv"]
     url = "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/petvatou.htm"
     text = download(url)
     text = re.sub(r"\r\n", "\n", text)
@@ -705,7 +706,7 @@ def Pv_make(text = "Pv"):
 
 @process_print
 def Dhp_make(name = "Dhp", targetter = r"\/\/ Dhp_.* \/\/<BR>"):
-    url = "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/dhampdou.htm"
+    url = text_dict["Dhp"]
     text = download(url)
     text_body = re.sub(r"(\/\/ )(Dhp_.*)( \/\/)", "<section id='" + r"\2" + "'>" + r"\1" + r"\2" + r"\3" + "</section>", copy.deepcopy(text))
 
@@ -741,7 +742,7 @@ def Dhp_make(name = "Dhp", targetter = r"\/\/ Dhp_.* \/\/<BR>"):
 
 @process_print
 def Bv_make(name = "Bv", targetter = r"\/\/ Bv_.* \/\/<BR>"):
-    url = "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/budvmsou.htm"
+    url = text_dict["Bv"]
     text = download(url)
     text_body = re.sub(r"(\/\/ )(Bv_)(\d*?)(\.)(\d*?)( \/\/)", "<section id='" + r"\2" + r"\3" + "_" + r"\5" + "'>" + r"\1"+r"\2"+r"\3"+r"\4"+r"\5"+r"\6" + "</section>", copy.deepcopy(text))
 

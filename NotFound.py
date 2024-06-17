@@ -155,7 +155,7 @@ def mainpart():
 Sp_flag = 0
 def text_requests(text_dict_item):
     global Sp_flag
-    name, _ = text_dict_item
+    name, url = text_dict_item
     if name == "Th.txt":
         Thera_make()
     elif name == "Thi.txt":
@@ -178,7 +178,7 @@ def text_requests(text_dict_item):
             Sp_create()
     else:
         text_name, _ = name.split(".")
-        text_create(text_name)
+        text_create(text_name, url)
 
 
 def process_print(func):
@@ -822,9 +822,7 @@ def J_create(text_name):
 #   static/Vin_I_line_.bin
 #   static/Vin_I_page_.bin
 @process_print
-def text_create(text_name):
-    text = text_name + ".txt"
-    url = text_dict[text]
+def text_create(text_name, url):
     html = download(url)
     htm_make(text_name, html)
     text_for_count = generate_text_for_count(html, text_name)

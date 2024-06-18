@@ -265,7 +265,6 @@ def generate_text_for_count(content, text):
         res = re.sub(r"(?<=page 001\])(.|\s)*?(?=\n     \S)", "", res)
 
     res = re.sub(r"\[page(.|\s)*?\]", "%", res)
-    res = re.sub(r"(?<=page 001])(.|\s)*?(?=\n\     \S)", "", res)
 
     res = re.sub(r"<span class=\"red\">\d*?</span>", "", res)
     res = re.sub(r"\((.|\s).*?\d\)", "", res)

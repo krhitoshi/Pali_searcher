@@ -10,7 +10,7 @@ import os
 import copy
 import functools
 from concurrent import futures
-from urllib.parse import urlparse
+from urllib.parse import urljoin
 
 app_dir = os.path.abspath(os.path.dirname(__file__))
 static_path = os.path.join(app_dir, "static")
@@ -33,65 +33,65 @@ text_list = ["Vin_I.txt", "Vin_II.txt", "Vin_III.txt", "Vin_IV.txt", "Vin_V.txt"
              "Vibh.txt", "Dhs.txt", "Mil.txt", "Vism.txt"]
 
 text_dict = {
-    "Vin_I": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/1_vin/vin1maou.htm",
-    "Vin_II": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/1_vin/vin2cuou.htm",
-    "Vin_III": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/1_vin/vin3s1ou.htm",
-    "Vin_IV": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/1_vin/vin4s2ou.htm",
-    "Vin_V": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/1_vin/vin5paou.htm",
-    "DN_I": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/1_digh/dighn1ou.htm",
-    "DN_II": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/1_digh/dighn2ou.htm",
-    "DN_III": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/1_digh/dighn3ou.htm",
-    "MN_I": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/2_majjh/majjn1ou.htm",
-    "MN_II": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/2_majjh/majjn2ou.htm",
-    "MN_III": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/2_majjh/majjn3ou.htm",
-    "AN_I": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/4_angu/angut1ou.htm",
-    "AN_II": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/4_angu/angut2ou.htm",
-    "AN_III": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/4_angu/angut3ou.htm",
-    "AN_IV": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/4_angu/angut4ou.htm",
-    "AN_V": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/4_angu/angut5ou.htm",
-    "SN_I": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/3_samyu/samyu1ou.htm",
-    "SN_II": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/3_samyu/samyu2ou.htm",
-    "SN_III": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/3_samyu/samyu3ou.htm",
-    "SN_IV": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/3_samyu/samyu4ou.htm",
-    "SN_V": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/3_samyu/samyu5ou.htm",
-    "Ap": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/apadanou.htm",
-    "Khp": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/khudp_ou.htm",
-    "Dhp": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/dhampdou.htm",
-    "Sn": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/sutnipou.htm",
-    "Ud": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/udana_ou.htm",
-    "It": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/itivutou.htm",
-    "Vm": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/vimvatou.htm",
-    "Pv": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/petvatou.htm",
-    "Th": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/theragou.htm",
-    "Thi": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/therigou.htm",
-    "Nidd_I": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/nidde1ou.htm",
-    "Nidd_II": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/nidde2ou.htm",
-    "Bv": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/budvmsou.htm",
-    "Cp": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/carpitou.htm",
-    "Ja_1": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/jatak1ou.htm",
-    "Ja_2": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/jatak2ou.htm",
-    "Ja_3": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/jatak3ou.htm",
-    "Ja_4": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/jatak4ou.htm",
-    "Ja_5": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/jatak5ou.htm",
-    "Ja_6": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/jatak6ou.htm",
-    "Dhātuk": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/3_abh/dhatukou.htm",
-    "Yam_I": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/3_abh/yamak_1ou.htm",
-    "Yam_II": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/3_abh/yamak_2ou.htm",
-    "Kv": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/3_abh/kathavou.htm",
-    "Pugg": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/3_abh/pugpan_ou.htm",
-    "Paṭis_I": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/patis1ou.htm",
-    "Paṭis_II": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/2_sut/5_khudd/patis2ou.htm",
-    "Vibh": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/3_abh/vibhanou.htm",
-    "Dhs": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/1_tipit/3_abh/dhamsgou.htm",
-    "Mil": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/2_parcan/milindou.htm",
-    "Vism": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/4_comm/buvismou.htm",
-    "Sp_1": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/4_comm/samp_1ou.htm",
-    "Sp_2": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/4_comm/samp_2ou.htm",
-    "Sp_3": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/4_comm/samp_3ou.htm",
-    "Sp_4": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/4_comm/samp_4ou.htm",
-    "Sp_5": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/4_comm/samp_5ou.htm",
-    "Sp_6": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/4_comm/samp_6ou.htm",
-    "Sp_7": "http://gretil.sub.uni-goettingen.de/gretil/2_pali/4_comm/samp_7ou.htm",
+    "Vin_I": "2_pali/1_tipit/1_vin/vin1maou.htm",
+    "Vin_II": "2_pali/1_tipit/1_vin/vin2cuou.htm",
+    "Vin_III": "2_pali/1_tipit/1_vin/vin3s1ou.htm",
+    "Vin_IV": "2_pali/1_tipit/1_vin/vin4s2ou.htm",
+    "Vin_V": "2_pali/1_tipit/1_vin/vin5paou.htm",
+    "DN_I": "2_pali/1_tipit/2_sut/1_digh/dighn1ou.htm",
+    "DN_II": "2_pali/1_tipit/2_sut/1_digh/dighn2ou.htm",
+    "DN_III": "2_pali/1_tipit/2_sut/1_digh/dighn3ou.htm",
+    "MN_I": "2_pali/1_tipit/2_sut/2_majjh/majjn1ou.htm",
+    "MN_II": "2_pali/1_tipit/2_sut/2_majjh/majjn2ou.htm",
+    "MN_III": "2_pali/1_tipit/2_sut/2_majjh/majjn3ou.htm",
+    "AN_I": "2_pali/1_tipit/2_sut/4_angu/angut1ou.htm",
+    "AN_II": "2_pali/1_tipit/2_sut/4_angu/angut2ou.htm",
+    "AN_III": "2_pali/1_tipit/2_sut/4_angu/angut3ou.htm",
+    "AN_IV": "2_pali/1_tipit/2_sut/4_angu/angut4ou.htm",
+    "AN_V": "2_pali/1_tipit/2_sut/4_angu/angut5ou.htm",
+    "SN_I": "2_pali/1_tipit/2_sut/3_samyu/samyu1ou.htm",
+    "SN_II": "2_pali/1_tipit/2_sut/3_samyu/samyu2ou.htm",
+    "SN_III": "2_pali/1_tipit/2_sut/3_samyu/samyu3ou.htm",
+    "SN_IV": "2_pali/1_tipit/2_sut/3_samyu/samyu4ou.htm",
+    "SN_V": "2_pali/1_tipit/2_sut/3_samyu/samyu5ou.htm",
+    "Ap": "2_pali/1_tipit/2_sut/5_khudd/apadanou.htm",
+    "Khp": "2_pali/1_tipit/2_sut/5_khudd/khudp_ou.htm",
+    "Dhp": "2_pali/1_tipit/2_sut/5_khudd/dhampdou.htm",
+    "Sn": "2_pali/1_tipit/2_sut/5_khudd/sutnipou.htm",
+    "Ud": "2_pali/1_tipit/2_sut/5_khudd/udana_ou.htm",
+    "It": "2_pali/1_tipit/2_sut/5_khudd/itivutou.htm",
+    "Vm": "2_pali/1_tipit/2_sut/5_khudd/vimvatou.htm",
+    "Pv": "2_pali/1_tipit/2_sut/5_khudd/petvatou.htm",
+    "Th": "2_pali/1_tipit/2_sut/5_khudd/theragou.htm",
+    "Thi": "2_pali/1_tipit/2_sut/5_khudd/therigou.htm",
+    "Nidd_I": "2_pali/1_tipit/2_sut/5_khudd/nidde1ou.htm",
+    "Nidd_II": "2_pali/1_tipit/2_sut/5_khudd/nidde2ou.htm",
+    "Bv": "2_pali/1_tipit/2_sut/5_khudd/budvmsou.htm",
+    "Cp": "2_pali/1_tipit/2_sut/5_khudd/carpitou.htm",
+    "Ja_1": "2_pali/1_tipit/2_sut/5_khudd/jatak1ou.htm",
+    "Ja_2": "2_pali/1_tipit/2_sut/5_khudd/jatak2ou.htm",
+    "Ja_3": "2_pali/1_tipit/2_sut/5_khudd/jatak3ou.htm",
+    "Ja_4": "2_pali/1_tipit/2_sut/5_khudd/jatak4ou.htm",
+    "Ja_5": "2_pali/1_tipit/2_sut/5_khudd/jatak5ou.htm",
+    "Ja_6": "2_pali/1_tipit/2_sut/5_khudd/jatak6ou.htm",
+    "Dhātuk": "2_pali/1_tipit/3_abh/dhatukou.htm",
+    "Yam_I": "2_pali/1_tipit/3_abh/yamak_1ou.htm",
+    "Yam_II": "2_pali/1_tipit/3_abh/yamak_2ou.htm",
+    "Kv": "2_pali/1_tipit/3_abh/kathavou.htm",
+    "Pugg": "2_pali/1_tipit/3_abh/pugpan_ou.htm",
+    "Paṭis_I": "2_pali/1_tipit/2_sut/5_khudd/patis1ou.htm",
+    "Paṭis_II": "2_pali/1_tipit/2_sut/5_khudd/patis2ou.htm",
+    "Vibh": "2_pali/1_tipit/3_abh/vibhanou.htm",
+    "Dhs": "2_pali/1_tipit/3_abh/dhamsgou.htm",
+    "Mil": "2_pali/2_parcan/milindou.htm",
+    "Vism": "2_pali/4_comm/buvismou.htm",
+    "Sp_1": "2_pali/4_comm/samp_1ou.htm",
+    "Sp_2": "2_pali/4_comm/samp_2ou.htm",
+    "Sp_3": "2_pali/4_comm/samp_3ou.htm",
+    "Sp_4": "2_pali/4_comm/samp_4ou.htm",
+    "Sp_5": "2_pali/4_comm/samp_5ou.htm",
+    "Sp_6": "2_pali/4_comm/samp_6ou.htm",
+    "Sp_7": "2_pali/4_comm/samp_7ou.htm",
 }
 
 
@@ -104,9 +104,10 @@ def static_file_path(file_name):
 # ダウンロードしたHTMLの改行コードは CRLF
 # $ file html_cache/vin1maou.htm
 # html_cache/vin1maou.htm: HTML document text, Unicode text, UTF-8 text, with very long lines (333), with CRLF line terminators
-def download(url):
-    parsed_url = urlparse(url)
-    file_name = os.path.basename(parsed_url.path)
+def download(path):
+    base = "https://gretil.sub.uni-goettingen.de/gretil/"
+    url = urljoin(base, path)
+    file_name = os.path.basename(path)
     path = os.path.join(html_cache_path, file_name)
 
     if os.path.exists(path):
@@ -114,6 +115,7 @@ def download(url):
         with open(path, "r", encoding="utf-8", newline="") as f:
             result = f.read()
     else:
+        print(f"Downloading {url}...")
         response = requests.get(url)
         response.encoding = "utf-8"
         result = response.text

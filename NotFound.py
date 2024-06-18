@@ -143,18 +143,26 @@ def write_bin_file(file_name, data):
         data.tofile(f)
 
 
-def mainpart():
-    print(static_path)
-    print("### Start ###")
-    print(" ")
-    with futures.ThreadPoolExecutor() as executor:
-        res = executor.map(text_requests, text_dict.items())
-        list(res)
-    print("\n\n#### All texts were installed" + ": Process 100 %"+  "*" * (100 // 5))#八百長
+def mainpart(text_name=None):
+    print(f"Static file directory: {static_path}")
+    if text_name is not None:
+        print(f"Processing '{text_name}'...")
+        url = text_dict[text_name]
+        print(f"URL: {url}")
+        text_create(text_name, url)
+        print(f"Done with '{text_name}'")
+    else:
+        print("### Start ###")
+        print(" ")
+        with futures.ThreadPoolExecutor() as executor:
+            res = executor.map(text_requests, text_dict.items())
+            list(res)
+        print("\n\n#### All texts were installed" + ": Process 100 %"+  "*" * (100 // 5))#八百長
 
 
 Sp_flag = 0
 def text_requests(text_dict_item):
+    print(text_dict_item)
     global Sp_flag
     name, url = text_dict_item
     if name == "Th":
@@ -845,4 +853,8 @@ def text_create(text_name, url):
 
 
 if __name__ == "__main__":
-    mainpart()
+    if len(sys.argv) == 2:
+        text_name = sys.argv[1]
+    else:
+        text_name = None
+    mainpart(text_name)

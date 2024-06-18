@@ -262,6 +262,8 @@ def generate_text_for_count(content, text):
     elif "&nbsp;" in text[:1000] or text in {"Yam_I", "Yam_II", "Pugg", "Paṭis_I"}:
         res = re.sub(r"(?<=page 001\])(.|\s)*?(?=\n(\w|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\w))", "", res)
     else:
+        # 基本的な処理: page 001 から実際の本文が始まるまでの部分を削除する
+        # 改行直後に空文字5文字の後に行数をカウントするための本文が始まる
         res = re.sub(r"(?<=page 001\])(.|\s)*?(?=\n     \S)", "", res)
 
     res = re.sub(r"\[page(.|\s)*?\]", "%", res)

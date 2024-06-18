@@ -149,7 +149,7 @@ def main_proc(text_name=None):
         print(f"Processing '{text_name}'...")
         url = text_dict[text_name]
         print(f"URL: {url}")
-        text_create(text_name, url)
+        create_data_files(text_name, url)
         print(f"Done with '{text_name}'")
     else:
         print("### Start ###")
@@ -184,7 +184,7 @@ def text_requests(text_dict_item):
             Sp_flag = 1
             Sp_create()
     else:
-        text_create(name, url)
+        create_data_files(name, url)
 
 
 # デコレータを一旦無効にする
@@ -218,12 +218,12 @@ def text_requests(text_dict_item):
 #     return printer
 
 
-def save_txt_file(name, text_for_count):
+def create_txt_file(name, text_for_count):
     file_name = name + "_.txt"
     content = generate_text_for_search(text_for_count)
     write_text_file(file_name, content)
 
-def htm_make_base(text_name, html, pattern, replace):
+def create_htm_file_base(text_name, html, pattern, replace):
     file_name = text_name + "_.htm"
     new_html = copy.deepcopy(html)
     contents = re.sub(pattern, replace, new_html)
@@ -234,12 +234,12 @@ def htm_make_base(text_name, html, pattern, replace):
 #   static/Vin_I_.htm
 # ページ表記に section タグを追加する
 # <section id ='223'>[page 223]</section>
-def htm_make(text_name, html):
+def create_htm_file(text_name, html):
     pattern = r"(\[page )(\d{1,4})(\])"
     replace = """<section id ='""" + r"\2" + """'>""" + r"\1" + r"\2" + r"\3" + """</section>"""
-    htm_make_base(text_name, html, pattern, replace)
+    create_htm_file_base(text_name, html, pattern, replace)
 
-def generate_text_for_count(content, text):
+def preprocess_html(content, text):
     res = copy.deepcopy(content)
     # `[page` の直前までを削除する `[page` という文字列自体はマッチしない (先読み)
     res = re.sub(r"<!DOCTYPE html>(.|\s)*?(?=\[page)", "", res)
@@ -312,7 +312,7 @@ def generate_text_for_search(text_for_count):
 #   static/Vin_I_index_.bin
 #   static/Vin_I_line_.bin
 #   static/Vin_I_page_.bin
-def bin_maker(text_for_count, text_name):
+def create_bin_files(text_for_count, text_name):
     line = 0
     page = 0
     j = 0
@@ -356,32 +356,32 @@ def Sp_make(text = "Sp"):
         vin_ = re.sub(r"<!DOCTYPE html>(.|\s)*?(?=\[page)", "", vin_)
         vin_ = re.sub(r"\r\n", "\n", vin_)
         if i == 1:
-            htm_make("Sp_1", vin_)
+            create_htm_file("Sp_1", vin_)
             vin_ = re.sub(r"(?<=page 001\])(.|\s)*?sammāsambuddhassa\.<br>", "", vin_)
         elif i == 2:
-            htm_make("Sp_2", vin_)
+            create_htm_file("Sp_2", vin_)
             start, end = re.search(r"(?<=\d\])(.|\s)*?II<br>", vin_).span()
             vin_ = vin_[:start] + vin_[end:]
 #            vin_ = re.sub(r"(?<=\d\])(.|\s)*?II<br>", "", vin_)
         elif i == 3:
-            htm_make("Sp_3", vin_)
+            create_htm_file("Sp_3", vin_)
             start, end = re.search(r"(?<=\d\])(.|\s)*?SAṄGHĀDISESA I-XIII<br>", vin_).span()
             vin_ = vin_[:start] + vin_[end:]
         elif i == 4:
-            htm_make("Sp_4", vin_)
+            create_htm_file("Sp_4", vin_)
             start, end = re.search(r"""(?<=\d\])(.|\s)*?SAMBUDDHASSA\.<span class="red"><sup>1</sup></span><br>""", vin_).span()
             vin_ = vin_[:start] + vin_[end:]
             vin_ += "%"#For page 950 is not exist.
         elif i == 5:
-            htm_make("Sp_5", vin_)
+            create_htm_file("Sp_5", vin_)
             start, end = re.search(r"(?<=\d\])(.|\s)*?SAMANTAPĀSĀDIKĀ<br>", vin_).span()
             vin_ = vin_[:start] + vin_[end:]
         elif i == 6:
-            htm_make("Sp_6", vin_)
+            create_htm_file("Sp_6", vin_)
             start, end = re.search(r"(?<=\d\])(.|\s)*?KAMMAKKHANDHAKA-VAṆṆANĀ<br>", vin_).span()
             vin_ = vin_[:start] + vin_[end:]
         elif i == 7:
-            htm_make("Sp_7", vin_)
+            create_htm_file("Sp_7", vin_)
             start, end = re.search(r"(?<=\d\])(.|\s)*?I<br>", vin_).span()
             vin_ = vin_[:start] + vin_[end:]
         Sp_raw += vin_
@@ -439,7 +439,7 @@ def Jataka(text_for_search, text_number):
 
 def Sn_text_make(text = "Sn"):
     vin_ = download(text_dict["Sn"])
-    htm_make(text, vin_)
+    create_htm_file(text, vin_)
     vin_ = re.sub(r"<!DOCTYPE html>(.|\s)*?(?=\[page)", "", vin_)
     vin_ = re.sub(r"\r\n", "\n", vin_)#これが大事な一行になる
     vin_ = re.sub(r"(?<=\[page 001\])(.|\s)*?Uragasutta\.", "", vin_)
@@ -497,7 +497,7 @@ def Ap_make():
     text_name = "Ap"
     url = text_dict[text_name]
     vin_ = download(url)
-    htm_make(text_name, vin_)
+    create_htm_file(text_name, vin_)
     vin_ = re.sub(r"<!DOCTYPE html>(.|\s)*?(?=\[page)", "", vin_)
     vin_ = re.sub(r"\r\n", "\n", vin_)#これが大事な一行になる
     vin_ = re.sub(r"\[page(.|\s)*?\]", "%", vin_)
@@ -536,8 +536,8 @@ def Ap_make():
 def Theri_make(url):
     text_name = "Thi"
     vin_ = download(url)
-    htm_make_base(text_name, vin_, r"(\|\| Thī_)(.*?)( \|\|)",
-                  "<section id ='Thī_" + r"\2" + "'>" + r"\1"+r"\2"+r"\3" + "</section>")
+    create_htm_file_base(text_name, vin_, r"(\|\| Thī_)(.*?)( \|\|)",
+                  "<section id ='Thī_" + r"\2" + "'>" + r"\1" +r"\2" +r"\3" + "</section>")
 
     vin_ = re.sub(r"<!DOCTYPE html>(.|\s)*?(?=\[page)", "", vin_)
     vin_ = re.sub(r"\r\n", "\n", vin_)#これが大事な一行になる
@@ -572,8 +572,8 @@ def Thera_make(url):
     vin_ = download(url)
     vin_ = re.sub(r"\|\| 939 \|\|", "|| Th_939 ||", vin_)
 
-    htm_make_base(text_name, vin_, r"(\|\| Th_)(.*?)( \|\|)",
-                  "<section id ='Th_" + r"\2" + "'>" + r"\1"+r"\2"+r"\3" + "</section>")
+    create_htm_file_base(text_name, vin_, r"(\|\| Th_)(.*?)( \|\|)",
+                  "<section id ='Th_" + r"\2" + "'>" + r"\1" +r"\2" +r"\3" + "</section>")
 
     vin_ = re.sub(r"<!DOCTYPE html>(.|\s)*?(?=\[page)", "", vin_)
     vin_ = re.sub(r"\r\n", "\n", vin_)#これが大事な一行になる
@@ -616,8 +616,8 @@ def Cp_make():
     url = text_dict[text_name]
     text = download(url)
 
-    htm_make_base(text_name, text, r"(<b>)(Cp_.*?)(\.)(.*?)(</b>)",
-                  "<section id ='" + r"\2" + "_" + r"\4" + "'>" + r"\1"+r"\2"+r"\3"+r"\4"+r"\5" + "</section>")
+    create_htm_file_base(text_name, text, r"(<b>)(Cp_.*?)(\.)(.*?)(</b>)",
+                  "<section id ='" + r"\2" + "_" + r"\4" + "'>" + r"\1" +r"\2" +r"\3" +r"\4" +r"\5" + "</section>")
 
     Cp = re.finditer(Cp_number, text)
     Cp_list = [
@@ -649,9 +649,9 @@ def Vm_make():
     url = text_dict[text_name]
     text = download(url)
 
-    htm_make_base(text_name, text,
+    create_htm_file_base(text_name, text,
                   r"(<b>)(Vv_.*?)(\d*?)(\[.*?\])(\.)(\d*?)(</b>)",
-                  "<section id='" + r"\2" + r"\3" + r"\4" + "_" + r"\6" + "'>".replace(".", "_") + r"\1"+r"\2"+r"\3"+r"\4"+r"\5"+r"\6"+r"\7" + "</section>")
+                  "<section id='" + r"\2" + r"\3" + r"\4" + "_" + r"\6" + "'>".replace(".", "_") + r"\1" +r"\2" +r"\3" +r"\4" +r"\5" +r"\6" +r"\7" + "</section>")
 
     text = re.sub(r"\r\n", "\n", text)
     text = re.sub(r"\[page.*?\].*?<BR>\n", "", text)
@@ -692,9 +692,9 @@ def Pv_make():
     text = re.sub(r"\r\n", "\n", text)
     text = re.sub(r"(?<=48 Akkharukkhapetavatthu</b><BR>\r\n) ", "<b>Vv_IV,13[=48].1</b>", text)
 
-    htm_make_base(text_name, text,
+    create_htm_file_base(text_name, text,
                   r"(<b>)(Vv_.*?)(\d*?)(\[.*?\])(\.)(\d*?)(</b>)",
-                  "<section id='" + r"\2" + r"\3" + r"\4" + "_" + r"\6" + "'>" + r"\1"+r"\2"+r"\3"+r"\4"+r"\5"+r"\6"+r"\7" + "</section>")
+                  "<section id='" + r"\2" + r"\3" + r"\4" + "_" + r"\6" + "'>" + r"\1" +r"\2" +r"\3" +r"\4" +r"\5" +r"\6" +r"\7" + "</section>")
 
     text = re.sub(r"\[page.*?\].*?<BR>\n", "", text)
     text = re.sub(r"(?<=\n)\s*?<b>\d.*?<BR>\n", "", text)
@@ -731,7 +731,7 @@ def Dhp_make(targetter = r"\/\/ Dhp_.* \/\/<BR>"):
     url = text_dict[text_name]
     text = download(url)
 
-    htm_make_base(text_name, text, r"(\/\/ )(Dhp_.*)( \/\/)",
+    create_htm_file_base(text_name, text, r"(\/\/ )(Dhp_.*)( \/\/)",
                   "<section id='" + r"\2" + "'>" + r"\1" + r"\2" + r"\3" + "</section>")
 
     text = re.sub(r"<!DOCTYPE html>(.|\s)*?(?=\[page)", "", text)
@@ -768,8 +768,8 @@ def Bv_make(targetter = r"\/\/ Bv_.* \/\/<BR>"):
     url = text_dict[text_name]
     text = download(url)
 
-    htm_make_base(text_name, text, r"(\/\/ )(Bv_)(\d*?)(\.)(\d*?)( \/\/)",
-                  "<section id='" + r"\2" + r"\3" + "_" + r"\5" + "'>" + r"\1"+r"\2"+r"\3"+r"\4"+r"\5"+r"\6" + "</section>")
+    create_htm_file_base(text_name, text, r"(\/\/ )(Bv_)(\d*?)(\.)(\d*?)( \/\/)",
+                  "<section id='" + r"\2" + r"\3" + "_" + r"\5" + "'>" + r"\1" +r"\2" +r"\3" +r"\4" +r"\5" +r"\6" + "</section>")
 
     text = re.sub(r"<!DOCTYPE html>(.|\s)*?(?=\[page)", "", text)
     main = re.sub(r"\r\n", "\n", text)
@@ -802,7 +802,7 @@ def Bv_make(targetter = r"\/\/ Bv_.* \/\/<BR>"):
 #@process_print
 def Sp_create(text = "Sp"):
     text_for_count, text_for_search = Sp_make(text)
-    bin_maker(text_for_count, text_name = "Sp")
+    create_bin_files(text_for_count, text_name ="Sp")
     new_text = "Sp_.txt"
     write_text_file(new_text, text_for_search)
 
@@ -810,7 +810,7 @@ def Sp_create(text = "Sp"):
 #@process_print
 def Ap_create():
     text_for_count, text_for_search = Ap_make()
-    bin_maker(text_for_count, "Ap")
+    create_bin_files(text_for_count, "Ap")
     write_text_file("Ap_.txt", text_for_search)
 
 
@@ -818,17 +818,17 @@ def Ap_create():
 def Sn_create(text = "Sn", text_name = "Sn"):
     text_for_count, text_for_search = Sn_text_make(text)
     Sn(text_for_search)
-    bin_maker(text_for_count, text_name)
+    create_bin_files(text_for_count, text_name)
 
 
 #@process_print
 def J_create(text_name, url):
     text_number = text_name[-1]
     html = download(url)
-    htm_make(text_name, html)
-    text_for_count = generate_text_for_count(html, text_name)
+    create_htm_file(text_name, html)
+    text_for_count = preprocess_html(html, text_name)
     Jataka(generate_text_for_search(text_for_count), text_number)
-    bin_maker(text_for_count, text_name)
+    create_bin_files(text_for_count, text_name)
 
 # 対象PTSテキスト:
 # Vin_I, Vin_II, Vin_III, Vin_IV, Vin_V, DN_II, DN_III, DN_I,
@@ -844,12 +844,12 @@ def J_create(text_name, url):
 #   static/Vin_I_line_.bin
 #   static/Vin_I_page_.bin
 #@process_print
-def text_create(text_name, url):
+def create_data_files(text_name, url):
     html = download(url)
-    htm_make(text_name, html)
-    text_for_count = generate_text_for_count(html, text_name)
-    bin_maker(text_for_count, text_name)
-    save_txt_file(text_name, text_for_count)
+    create_htm_file(text_name, html)
+    text_for_count = preprocess_html(html, text_name)
+    create_bin_files(text_for_count, text_name)
+    create_txt_file(text_name, text_for_count)
 
 
 if __name__ == "__main__":

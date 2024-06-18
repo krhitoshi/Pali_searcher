@@ -814,7 +814,12 @@ def J_create(text_name, url):
     Jataka(generate_text_for_search(text_for_count), text_number)
     bin_maker(text_for_count, text_name)
 
-
+# 対象PTSテキスト:
+# Vin_I, Vin_II, Vin_III, Vin_IV, Vin_V, DN_II, DN_III, DN_I,
+# MN_I, MN_II, MN_III, AN_I, AN_II, AN_III, AN_IV, AN_V,
+# SN_I, SN_II, SN_III, SN_IV, SN_V, Khp, Ud, It,
+# Nidd_I, Nidd_II, Dhātuk, Yam_I, Yam_II, Kv, Pugg, Paṭis_I, Paṭis_II, Vibh,
+# Dhs, Mil, Vism
 # 例: text_name: "Vin_I"
 # 生成されるファイル:
 #   static/Vin_I_.htm

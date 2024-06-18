@@ -23,15 +23,6 @@ def resource_path(relative_path):
     return os.path.join(os.path.abspath("."), relative_path)
 
 
-text_list = ["Vin_I.txt", "Vin_II.txt", "Vin_III.txt", "Vin_IV.txt", "Vin_V.txt",
-             "DN_I.txt", "DN_II.txt", "DN_III.txt",
-             "MN_I.txt", "MN_II.txt", "MN_III.txt",
-             "AN_I.txt", "AN_II.txt", "AN_III.txt", "AN_IV.txt", "AN_V.txt",
-             "SN_I.txt", "SN_II.txt", "SN_III.txt", "SN_IV.txt", "SN_V.txt",
-             "Khp.txt", "Ud.txt", "It.txt", "Nidd_I.txt", "Nidd_II.txt", "Khp.txt",
-             "Dhātuk.txt", "Yam_I.txt", "Yam_II.txt", "Kv.txt", "Pugg.txt", "Paṭis_I.txt", "Paṭis_II.txt",
-             "Vibh.txt", "Dhs.txt", "Mil.txt", "Vism.txt"]
-
 text_dict = {
     "Vin_I": "2_pali/1_tipit/1_vin/vin1maou.htm",
     "Vin_II": "2_pali/1_tipit/1_vin/vin2cuou.htm",

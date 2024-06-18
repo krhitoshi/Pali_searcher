@@ -143,7 +143,7 @@ def write_bin_file(file_name, data):
         data.tofile(f)
 
 
-def mainpart(text_name=None):
+def main_proc(text_name=None):
     print(f"Static file directory: {static_path}")
     if text_name is not None:
         print(f"Processing '{text_name}'...")
@@ -857,4 +857,4 @@ if __name__ == "__main__":
         text_name = sys.argv[1]
     else:
         text_name = None
-    mainpart(text_name)
+    main_proc(text_name)

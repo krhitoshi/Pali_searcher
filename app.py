@@ -121,7 +121,7 @@ if __name__ == "__main__":
     else:
         print("Now we are making text for search at first. Please make sure you have internet accusses. It will be done in 10 minutes")
         import NotFound
-        NotFound.mainpart()
+        NotFound.main_proc()
         input("### Please input Enter key and close this window. When you execute this application again, you can get Pali_searcher on your blowser ###")
         exit()
     # To make the package: $ pyinstaller Pali_searcher.py -F --add-data "./templates/*:templates" --add-data "./static/*:static"

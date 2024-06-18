@@ -179,34 +179,35 @@ def text_requests(text_dict_item):
         text_create(name, url)
 
 
-def process_print(func):
-    @functools.wraps(func)
-    def printer(*args, **kwargs):
-        proc_per = ( len(os.listdir(static_path)) * 100 // 268 )
-        if args:
-            text_name = args[0].split(".")[0]
-            txt_path = static_file_path(text_name + "_.txt")
-            htm_path = static_file_path(text_name + "_.htm")
-            if not(os.path.exists(txt_path)) and not(os.path.exists(htm_path)):
-                print("\r#### Preparing {:14}: ".format(text_name) + "Process {:3} %".format(proc_per) + "*" * (proc_per // 5) + "_" * (20 - (proc_per // 5)), end = "")
-                result = func(*args, **kwargs)               
-                print("\r#### Done with {:14}: ".format(text_name) + "Process {:3} %".format(proc_per) + "*" * (proc_per // 5) + "_" * (20 - (proc_per // 5)), end="")
-                return result
-            else:
-                print("\r#### Pass {:19}: ".format(text_name) + "Process {:3} %".format(proc_per) + "*" * (proc_per // 5) + "_" * (20 - (proc_per // 5)), end = "")
-        else:
-            file_name = func.__name__.split("_")[0]
-            txt_path = static_file_path(file_name + "_.txt")
-            csv_path = static_file_path(file_name + "_.csv")
-            htm_path = static_file_path(file_name + "_.htm")
-            if not(os.path.exists(txt_path)) and not(os.path.exists(csv_path)) and not(os.path.exists(htm_path)):
-                print("\r#### Preparing {:14}: ".format(file_name) + "Process {:3} %".format(proc_per) + "*" * (proc_per // 5) + "_" * (20 - (proc_per // 5)), end="")
-                result = func(*args, **kwargs)
-                print("\r#### Done with {:14}: ".format(file_name) + "Process {:3} %".format(proc_per) + "*" * (proc_per // 5) + "_" * (20 - (proc_per // 5)), end="")
-                return result
-            else:
-                print("\r#### Pass {:19}: ".format(file_name) + "Process {:3} %".format(proc_per) + "*" * (proc_per // 5) + "_" * (20 - (proc_per // 5)), end="")
-    return printer
+# デコレータを一旦無効にする
+# def process_print(func):
+#     @functools.wraps(func)
+#     def printer(*args, **kwargs):
+#         proc_per = ( len(os.listdir(static_path)) * 100 // 268 )
+#         if args:
+#             text_name = args[0].split(".")[0]
+#             txt_path = static_file_path(text_name + "_.txt")
+#             htm_path = static_file_path(text_name + "_.htm")
+#             if not(os.path.exists(txt_path)) and not(os.path.exists(htm_path)):
+#                 print("\r#### Preparing {:14}: ".format(text_name) + "Process {:3} %".format(proc_per) + "*" * (proc_per // 5) + "_" * (20 - (proc_per // 5)), end = "")
+#                 result = func(*args, **kwargs)
+#                 print("\r#### Done with {:14}: ".format(text_name) + "Process {:3} %".format(proc_per) + "*" * (proc_per // 5) + "_" * (20 - (proc_per // 5)), end="")
+#                 return result
+#             else:
+#                 print("\r#### Pass {:19}: ".format(text_name) + "Process {:3} %".format(proc_per) + "*" * (proc_per // 5) + "_" * (20 - (proc_per // 5)), end = "")
+#         else:
+#             file_name = func.__name__.split("_")[0]
+#             txt_path = static_file_path(file_name + "_.txt")
+#             csv_path = static_file_path(file_name + "_.csv")
+#             htm_path = static_file_path(file_name + "_.htm")
+#             if not(os.path.exists(txt_path)) and not(os.path.exists(csv_path)) and not(os.path.exists(htm_path)):
+#                 print("\r#### Preparing {:14}: ".format(file_name) + "Process {:3} %".format(proc_per) + "*" * (proc_per // 5) + "_" * (20 - (proc_per // 5)), end="")
+#                 result = func(*args, **kwargs)
+#                 print("\r#### Done with {:14}: ".format(file_name) + "Process {:3} %".format(proc_per) + "*" * (proc_per // 5) + "_" * (20 - (proc_per // 5)), end="")
+#                 return result
+#             else:
+#                 print("\r#### Pass {:19}: ".format(file_name) + "Process {:3} %".format(proc_per) + "*" * (proc_per // 5) + "_" * (20 - (proc_per // 5)), end="")
+#     return printer
 
 
 def save_txt_file(name, text_for_count):
@@ -523,7 +524,7 @@ def Ap_make():
     return text_for_count, text_for_search
 
 
-@process_print
+#@process_print
 def Theri_make(url):
     text_name = "Thi"
     vin_ = download(url)
@@ -557,7 +558,7 @@ def Theri_make(url):
     write_csv_file("Theri_.csv", verse_set, oneline=True)
 
 
-@process_print
+#@process_print
 def Thera_make(url):
     text_name = "Th"
     vin_ = download(url)
@@ -599,7 +600,7 @@ def Thera_make(url):
     write_csv_file("Thera_.csv", verse_set, oneline=True)
 
 
-@process_print
+#@process_print
 def Cp_make():
     text_name = "Cp"
     Cp_number = r"<b>Cp_.*</b>"
@@ -634,7 +635,7 @@ def Cp_make():
     write_csv_file("Cp_.csv", final_result)
 
 
-@process_print
+#@process_print
 def Vm_make():
     text_name = "Vm"
     url = text_dict[text_name]
@@ -675,7 +676,7 @@ def Vm_make():
     write_csv_file("Vm_.csv", result)
 
 
-@process_print
+#@process_print
 def Pv_make():
     text_name = "Pv"
     url = text_dict[text_name]
@@ -716,7 +717,7 @@ def Pv_make():
     write_csv_file("Pv_.csv", result)
 
 
-@process_print
+#@process_print
 def Dhp_make(targetter = r"\/\/ Dhp_.* \/\/<BR>"):
     text_name = "Dhp"
     url = text_dict[text_name]
@@ -753,7 +754,7 @@ def Dhp_make(targetter = r"\/\/ Dhp_.* \/\/<BR>"):
     write_csv_file("Dhp_.csv", print_out)
 
 
-@process_print
+#@process_print
 def Bv_make(targetter = r"\/\/ Bv_.* \/\/<BR>"):
     text_name = "Bv"
     url = text_dict[text_name]
@@ -790,7 +791,7 @@ def Bv_make(targetter = r"\/\/ Bv_.* \/\/<BR>"):
     write_csv_file("Bv_.csv", print_out)
 
 
-@process_print
+#@process_print
 def Sp_create(text = "Sp"):
     text_for_count, text_for_search = Sp_make(text)
     bin_maker(text_for_count, text_name = "Sp")
@@ -798,21 +799,21 @@ def Sp_create(text = "Sp"):
     write_text_file(new_text, text_for_search)
 
 
-@process_print
+#@process_print
 def Ap_create():
     text_for_count, text_for_search = Ap_make()
     bin_maker(text_for_count, "Ap")
     write_text_file("Ap_.txt", text_for_search)
 
 
-@process_print
+#@process_print
 def Sn_create(text = "Sn", text_name = "Sn"):
     text_for_count, text_for_search = Sn_text_make(text)
     Sn(text_for_search)
     bin_maker(text_for_count, text_name)
 
 
-@process_print
+#@process_print
 def J_create(text_name, url):
     text_number = text_name[-1]
     html = download(url)
@@ -834,7 +835,7 @@ def J_create(text_name, url):
 #   static/Vin_I_index_.bin
 #   static/Vin_I_line_.bin
 #   static/Vin_I_page_.bin
-@process_print
+#@process_print
 def text_create(text_name, url):
     html = download(url)
     htm_make(text_name, html)

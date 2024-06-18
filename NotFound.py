@@ -232,8 +232,11 @@ def htm_make(text_name, html):
 
 def generate_text_for_count(content, text):
     res = copy.deepcopy(content)
+    # `[page` の直前までを削除する `[page` という文字列自体はマッチしない (先読み)
     res = re.sub(r"<!DOCTYPE html>(.|\s)*?(?=\[page)", "", res)
+    # 改行コードをCRLFからLFに変換する
     res = re.sub(r"\r\n", "\n", res)#これが大事な一行になる
+
     if text in {"SN_II", "SN_III", "SN_IV", "SN_V"}:
         res = re.sub(r"(?<=page 001\])(.|\s)*?(?=CHAPTER)", "", res)
     elif text == "SN_I":
@@ -260,8 +263,10 @@ def generate_text_for_count(content, text):
         res = re.sub(r"(?<=page 001\])(.|\s)*?(?=\n(\w|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\w))", "", res)
     else:
         res = re.sub(r"(?<=page 001\])(.|\s)*?(?=\n     \S)", "", res)
+
     res = re.sub(r"\[page(.|\s)*?\]", "%", res)
     res = re.sub(r"(?<=page 001])(.|\s)*?(?=\n\     \S)", "", res)
+
     res = re.sub(r"<span class=\"red\">\d*?</span>", "", res)
     res = re.sub(r"\((.|\s).*?\d\)", "", res)
     res = re.sub(r"\[\d.*?\]", "", res)#カッコで括られたセクションの名前のようなところを削除したい

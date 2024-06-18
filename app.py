@@ -114,6 +114,8 @@ def result_view():
 if __name__ == "__main__":
     num_files = len(os.listdir(static_path))
     # テキストのダウンロードを行うかどうかはファイルの数で判定している
+    # ls static | wc -l
+    # 267 (.js: 2ファイル, .css: 1ファイル 含む, 2024/06/18)
     if num_files >= 259:
         url = "http://127.0.0.1:1125"
         threading.Timer(1.25, lambda: webbrowser.open(url)).start()

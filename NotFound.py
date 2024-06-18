@@ -300,6 +300,7 @@ def preprocess_html(content, text):
     res = re.sub(r"(\w)\-\n", r"\1"+"#", res)# -改行 は # でとりあえず置き換えておく)
     res = re.sub(r"\n", " \n", res)
     res = re.sub(r"--", "@", res)#--pa--, --la-- が検索のときに入らないようにするだけ
+    # TODO: ページ末のHTMLタグを削除する `</body></html>`
     return re.sub(r"%", " %", res)
 
 

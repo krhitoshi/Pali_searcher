@@ -142,7 +142,7 @@ def main_proc(text_name=None):
         print(f"Processing '{text_name}'...")
         url = text_dict[text_name]
         print(f"URL: {url}")
-        create_data_files(text_name, url)
+        text_requests((text_name, url))
         print(f"Done with '{text_name}'")
     else:
         print("### Start ###")

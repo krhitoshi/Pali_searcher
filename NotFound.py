@@ -266,6 +266,7 @@ def generate_text_for_count(content, text):
         # 改行直後に空文字5文字の後に行数をカウントするための本文が始まる
         res = re.sub(r"(?<=page 001\])(.|\s)*?(?=\n     \S)", "", res)
 
+    # ページ表記 `[page ddd]` を `%` に置換する
     res = re.sub(r"\[page(.|\s)*?\]", "%", res)
 
     res = re.sub(r"<span class=\"red\">\d*?</span>", "", res)

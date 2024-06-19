@@ -15,6 +15,7 @@ from urllib.parse import urljoin
 app_dir = os.path.abspath(os.path.dirname(__file__))
 static_path = os.path.join(app_dir, "static")
 html_cache_path = os.path.join(app_dir, "html_cache")
+tmp_path = os.path.join(app_dir, "tmp")
 
 
 def resource_path(relative_path):
@@ -115,12 +116,12 @@ def download(path):
             f.write(result)
     return result
 
-
+# plain text のファイルを保存する
 def write_text_file(file_name, content, newline=None):
     with open(static_file_path(file_name), "w", encoding="utf-8", newline=newline) as f:
         f.write(content)
 
-
+# CSV ファイルを保存する
 def write_csv_file(file_name, data, oneline=False):
     with open(static_file_path(file_name), "w", encoding="utf-8", newline="") as f:
         writer = csv.writer(f)
@@ -130,7 +131,7 @@ def write_csv_file(file_name, data, oneline=False):
         else:
             writer.writerows(data)
 
-
+# バイナリファイルを保存する
 def write_bin_file(file_name, data):
     with open(static_file_path(file_name), "wb") as f:
         data.tofile(f)
@@ -293,8 +294,14 @@ def preprocess_html(content, text):
     res = re.sub(r"(\w)\-\n", r"\1"+"#", res)# -改行 は # でとりあえず置き換えておく)
     res = re.sub(r"\n", " \n", res)
     res = re.sub(r"--", "@", res)#--pa--, --la-- が検索のときに入らないようにするだけ
+    res = re.sub(r"%", " %", res)
     # TODO: ページ末のHTMLタグを削除する `</body></html>`
-    return re.sub(r"%", " %", res)
+
+    # 確認用に中間生成物を tmp ディレクトリに保存する
+    path = os.path.join(tmp_path, text + "_.pre")
+    write_text_file(path, res)
+
+    return res
 
 
 def generate_text_for_search(text_for_count):

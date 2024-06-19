@@ -6,3 +6,4 @@ static/*.bin
 static/*.txt
 static/*.csv
 html_cache/*.htm
+tmp/*.pre

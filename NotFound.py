@@ -250,7 +250,7 @@ def preprocess_html(content, text_name):
         res = re.sub(r"""(?<=page 001\])(.|\s)*?Part I""", "", res)
     elif text_name == "Nidd_II":
         res = re.sub(r"""(?<=page 001\])(.|\s)*?Vatthugāthā\.""", "", res)
-    elif text_name == "J_1":
+    elif text_name == "Ja_1":
         # Ja_1, Ja_2 などなのでここは実際に実行されることはない
         res = re.sub(r"(?<=page 001\])(.|\s)*?(?=JaNi)", "", res)
     elif text_name == "Paṭis_II":
@@ -263,7 +263,7 @@ def preprocess_html(content, text_name):
         res = re.sub(r"(?<=page 001\])(.|\s)*?TASSA BHAGAVATO ARAHATO SAMMĀSAMBUDDHASSA\.<BR>", "", res)
     elif text_name == "Vism":
         res = re.sub(r"(?<=page 001\])(.|\s)*?NIDĀNĀDIKATHĀ<BR>", "", res)
-    elif "&nbsp;" in text_name[:1000] or text_name in {"Yam_I", "Yam_II", "Pugg", "Paṭis_I"}:
+    elif "&nbsp;" in res[:1000] or text_name in {"Yam_I", "Yam_II", "Pugg", "Paṭis_I"}:
         # Yam_I, Yam_II, Pugg, Paṭis_I 以外は実際には実行されることはない
         res = re.sub(r"(?<=page 001\])(.|\s)*?(?=\n(\w|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\w))", "", res)
     else:

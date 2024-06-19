@@ -214,7 +214,7 @@ def text_requests(text_dict_item):
 
 def create_txt_file(name, text_for_count):
     file_name = name + "_.txt"
-    content = generate_text_for_search(text_for_count)
+    content = generate_txt_file_content(text_for_count)
     write_text_file(file_name, content)
 
 def create_htm_file_base(text_name, html, pattern, replace):
@@ -233,37 +233,37 @@ def create_htm_file(text_name, html):
     replace = """<section id ='""" + r"\2" + """'>""" + r"\1" + r"\2" + r"\3" + """</section>"""
     create_htm_file_base(text_name, html, pattern, replace)
 
-def preprocess_html(content, text):
+def preprocess_html(content, text_name):
     res = copy.deepcopy(content)
     # `[page` の直前までを削除する `[page` という文字列自体はマッチしない (先読み)
     res = re.sub(r"<!DOCTYPE html>(.|\s)*?(?=\[page)", "", res)
     # 改行コードをCRLFからLFに変換する
     res = re.sub(r"\r\n", "\n", res)#これが大事な一行になる
 
-    if text in {"SN_II", "SN_III", "SN_IV", "SN_V"}:
+    if text_name in {"SN_II", "SN_III", "SN_IV", "SN_V"}:
         res = re.sub(r"(?<=page 001\])(.|\s)*?(?=CHAPTER)", "", res)
-    elif text == "SN_I":
+    elif text_name == "SN_I":
         res = re.sub(r"(?<=page 001\])(.|\s)*?(?=<b>SN_1)", "", res)
-    elif text == "Khp":
+    elif text_name == "Khp":
         res = re.sub(r"(?<=page 001\])(.|\s)*?(?=Buddhaṃ)", "", res)
-    elif text == "Nidd_I":
+    elif text_name == "Nidd_I":
         res = re.sub(r"""(?<=page 001\])(.|\s)*?Part I""", "", res)
-    elif text == "Nidd_II":
+    elif text_name == "Nidd_II":
         res = re.sub(r"""(?<=page 001\])(.|\s)*?Vatthugāthā\.""", "", res)
-    elif text == "J_1":
+    elif text_name == "J_1":
         # Ja_1, Ja_2 などなのでここは実際に実行されることはない
         res = re.sub(r"(?<=page 001\])(.|\s)*?(?=JaNi)", "", res)
-    elif text == "Paṭis_II":
+    elif text_name == "Paṭis_II":
         res = re.sub(r"""(?<=page 001\])(.|\s)*?INDRIYAKATHĀ</span><BR>""", "", res)
-    elif text == "Dhs":
+    elif text_name == "Dhs":
         res = re.sub(r"(?<=page 001\])(.|\s)*?{MĀTIKĀ\.}<br>", "", res)
-    elif text == "Dhātuk":
+    elif text_name == "Dhātuk":
         res = re.sub(r"(?<=page 001\])(.|\s)*?BUDDHASSA<BR>", "", res)
-    elif text == "Mil":
+    elif text_name == "Mil":
         res = re.sub(r"(?<=page 001\])(.|\s)*?TASSA BHAGAVATO ARAHATO SAMMĀSAMBUDDHASSA\.<BR>", "", res)
-    elif text == "Vism":
+    elif text_name == "Vism":
         res = re.sub(r"(?<=page 001\])(.|\s)*?NIDĀNĀDIKATHĀ<BR>", "", res)
-    elif "&nbsp;" in text[:1000] or text in {"Yam_I", "Yam_II", "Pugg", "Paṭis_I"}:
+    elif "&nbsp;" in text_name[:1000] or text_name in {"Yam_I", "Yam_II", "Pugg", "Paṭis_I"}:
         res = re.sub(r"(?<=page 001\])(.|\s)*?(?=\n(\w|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\w))", "", res)
     else:
         # 基本的な処理: page 001 から実際の本文が始まるまでの部分を削除する
@@ -299,13 +299,13 @@ def preprocess_html(content, text):
     # TODO: ページ末のHTMLタグを削除する `</body></html>`
 
     # 確認用に中間生成物を tmp ディレクトリに保存する
-    path = os.path.join(tmp_path, text + "_.pre")
+    path = os.path.join(tmp_path, text_name + "_.pre")
     write_text_file(path, res)
 
     return res
 
 
-def generate_text_for_search(text_for_count):
+def generate_txt_file_content(text_for_count):
     return re.sub(r"[%&#\n]", "", text_for_count)
 
 
@@ -417,21 +417,21 @@ def Sp_make(text = "Sp"):
     return text_for_count, text_for_search
 
 
-def Jataka(text_for_search, text_number):
-    pre_long = len(text_for_search)
+def create_jataka_files(txt_file_content, text_number):
+    pre_long = len(txt_file_content)
     verse = []
     J_verse_start = array("I")
     J_verse_end = []
     Jataka = r"Ja\_(.|\s)*?\da?b? \|\|"
-    A = re.finditer(Jataka, text_for_search)
+    A = re.finditer(Jataka, txt_file_content)
     for text in A:
         J_verse_start.append(text.start())#keep startpoints of verses
         J_verse_end.append(text.end())
         verse.append([text.group(0)])
-        verse_long = len(text_for_search[text.start(): text.end()])
-        text_for_search = text_for_search[0: text.start()] + "."*verse_long + text_for_search[text.end():]
+        verse_long = len(txt_file_content[text.start(): text.end()])
+        txt_file_content = txt_file_content[0: text.start()] + "." * verse_long + txt_file_content[text.end():]
     new_Ja = "Ja_" + str(text_number) + "_.txt"
-    write_text_file(new_Ja, text_for_search)
+    write_text_file(new_Ja, txt_file_content)
 
     new_bin = "J_" + str(text_number) + "_start_point_.bin"
     write_bin_file(new_bin, J_verse_start)
@@ -829,7 +829,8 @@ def J_create(text_name, url):
     html = download(url)
     create_htm_file(text_name, html)
     text_for_count = preprocess_html(html, text_name)
-    Jataka(generate_text_for_search(text_for_count), text_number)
+    txt_file_content = generate_txt_file_content(text_for_count)
+    create_jataka_files(txt_file_content, text_number)
     create_bin_files(text_for_count, text_name)
 
 # 対象PTSテキスト:

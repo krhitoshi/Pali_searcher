@@ -251,6 +251,7 @@ def preprocess_html(content, text):
     elif text == "Nidd_II":
         res = re.sub(r"""(?<=page 001\])(.|\s)*?Vatthugāthā\.""", "", res)
     elif text == "J_1":
+        # Ja_1, Ja_2 などなのでここは実際に実行されることはない
         res = re.sub(r"(?<=page 001\])(.|\s)*?(?=JaNi)", "", res)
     elif text == "Paṭis_II":
         res = re.sub(r"""(?<=page 001\])(.|\s)*?INDRIYAKATHĀ</span><BR>""", "", res)

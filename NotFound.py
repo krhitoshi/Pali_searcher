@@ -264,6 +264,7 @@ def preprocess_html(content, text_name):
     elif text_name == "Vism":
         res = re.sub(r"(?<=page 001\])(.|\s)*?NIDĀNĀDIKATHĀ<BR>", "", res)
     elif "&nbsp;" in text_name[:1000] or text_name in {"Yam_I", "Yam_II", "Pugg", "Paṭis_I"}:
+        # Yam_I, Yam_II, Pugg, Paṭis_I 以外は実際には実行されることはない
         res = re.sub(r"(?<=page 001\])(.|\s)*?(?=\n(\w|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\w))", "", res)
     else:
         # 基本的な処理: page 001 から実際の本文が始まるまでの部分を削除する

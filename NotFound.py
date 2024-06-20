@@ -469,6 +469,11 @@ def Sn_text_make(text = "Sn"):
     vin_ = re.sub(r"\n", " \n", vin_)
     text_for_count = re.sub(r"%", " %", vin_)
     text_for_search = re.sub(r"[%&#\n]", "", text_for_count)
+
+    # 確認用に中間生成物を tmp ディレクトリに保存する
+    path = os.path.join(tmp_path, "Sn_.pre")
+    write_text_file(path, text_for_count)
+
     return text_for_count, text_for_search
 
 

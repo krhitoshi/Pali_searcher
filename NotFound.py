@@ -728,6 +728,11 @@ def Pv_make():
     text = re.sub(r"(?<=\n)\s*?<b>\d.*?<BR>\n", "", text)
 #    text = re.sub(r"<b>.*?</b>", "", text)
     text = re.sub(r"<i>.*?</i>", "", text)
+
+    # 確認用に中間生成物を tmp ディレクトリに保存する
+    path = os.path.join(tmp_path, "Pv_.pre")
+    write_text_file(path, text)
+
     start_point = re.finditer(r"<b>Vv.*?</b>", text)
     end_point = re.finditer(r"\d \|\|</b>.?<BR>", text)
     start_points = [(n.start(), n.end()) for n in start_point]

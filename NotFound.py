@@ -141,9 +141,12 @@ def main_proc(text_name=None):
     print(f"Static file directory: {static_path}")
     if text_name is not None:
         print(f"Processing '{text_name}'...")
-        url = text_dict[text_name]
-        print(f"URL: {url}")
-        text_requests((text_name, url))
+        if text_name == "Sp":
+            Sp_create()
+        else:
+            url = text_dict[text_name]
+            print(f"URL: {url}")
+            text_requests((text_name, url))
         print(f"Done with '{text_name}'")
     else:
         print("### Start ###")
@@ -414,6 +417,11 @@ def Sp_make(text = "Sp"):
     vin_ = re.sub(r"\n", " \n", vin_)
     vin_ = re.sub(r"--", "@", vin_)#--pa--, --la-- が検索のときに入らないようにするだけ
     text_for_count = re.sub(r"%", " %", vin_)
+
+    # 確認用に中間生成物を tmp ディレクトリに保存する
+    path = os.path.join(tmp_path, "Sp_.pre")
+    write_text_file(path, text_for_count)
+
     text_for_search = re.sub(r"[%&#\n]", "", text_for_count)
     return text_for_count, text_for_search
 

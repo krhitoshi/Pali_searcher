@@ -536,6 +536,11 @@ def Ap_make():
     vin_ = re.sub(r"\n", " \n", vin_)
     vin_ = re.sub(r"--", "@", vin_)#--pa--, --la-- が検索のときに入らないようにするだけ
     text_for_count = re.sub(r"%", " %", vin_)
+
+    # 確認用に中間生成物を tmp ディレクトリに保存する
+    path = os.path.join(tmp_path, "Ap_.pre")
+    write_text_file(path, text_for_count)
+
     text_for_search = re.sub(r"[%&#\n]", "", text_for_count)
     return text_for_count, text_for_search
 

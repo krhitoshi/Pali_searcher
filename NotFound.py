@@ -821,6 +821,12 @@ def Bv_make(targetter = r"\/\/ Bv_.* \/\/<BR>"):
     main = re.sub(r"(<sup>)(\d*)(</sup>)", "*"r"\2", main)
     main = re.sub(r"(<i>(.|\s)*?</i>|<span class=\"red\">|</span>|<b>|</b>|&nbsp;|&#8216;|<BR>|\[page 001\])", "", main)
     main = re.sub(r"^ ?.*?$", "", main)
+
+    # 確認用に中間生成物を tmp ディレクトリに保存する
+    path = os.path.join(tmp_path, "Bv_.pre")
+    write_text_file(path, main)
+
+
     lines = main.split("\n")
     result_lines = [line for line in lines if line != "" and line[0] != " "]
     final_result = []

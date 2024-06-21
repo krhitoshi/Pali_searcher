@@ -639,6 +639,10 @@ def Cp_make():
     url = text_dict[text_name]
     text = download(url)
 
+    # 確認用に加工前のデータを tmp ディレクトリに保存する
+    path = os.path.join(tmp_path, "Cp_.pre")
+    write_text_file(path, text)
+
     create_htm_file_base(text_name, text, r"(<b>)(Cp_.*?)(\.)(.*?)(</b>)",
                   "<section id ='" + r"\2" + "_" + r"\4" + "'>" + r"\1" +r"\2" +r"\3" +r"\4" +r"\5" + "</section>")
 
@@ -825,7 +829,6 @@ def Bv_make(targetter = r"\/\/ Bv_.* \/\/<BR>"):
     # 確認用に中間生成物を tmp ディレクトリに保存する
     path = os.path.join(tmp_path, "Bv_.pre")
     write_text_file(path, main)
-
 
     lines = main.split("\n")
     result_lines = [line for line in lines if line != "" and line[0] != " "]

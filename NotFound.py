@@ -564,6 +564,11 @@ def Theri_make(url):
     vin_ = re.sub(r"\n\s{1,}\|\| Th", " || Th", vin_)
     vin_ = re.sub(r"(?<=\n)\s{2,}.*?\n", "", vin_)
     vin_ = re.sub(r"(?<=\n)gāthaṃ abhāsitthā ti\. \|\|\n", "", vin_)#Theriのみ使用
+
+    # 確認用に中間生成物を tmp ディレクトリに保存する
+    path = os.path.join(tmp_path, "Thi_.pre")
+    write_text_file(path, vin_)
+
     vs = re.finditer(r"(\s|.)*? Thī_.*? \|\|", vin_)
     verse_set = []
     for v in vs:
@@ -600,6 +605,11 @@ def Thera_make(url):
     vin_ = re.sub(r"(?<=\n)\s{2,}.*?\n", "", vin_)
     vin_ = re.sub(r"(<BR>\n){2,}", "<BR>\n", vin_)# This code is needed for the typo of e-text itself
     vin_ = vin_[:-5] + " || Th_end ||"# To deal with the last verse
+
+    # 確認用に中間生成物を tmp ディレクトリに保存する
+    path = os.path.join(tmp_path, "Th_.pre")
+    write_text_file(path, vin_)
+
     vs = re.finditer(r"(\s|.)*? Th_.*? \|\|", vin_)
     verse_set = []
     for v in vs:

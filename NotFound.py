@@ -732,12 +732,10 @@ def Pv_make():
     text_name = "Pv"
     url = text_dict[text_name]
     text = download(url)
+    text = re.sub(r"(?<=48 Akkharukkhapetavatthu</b><BR>\r\n) ", "<b>Vv_IV,13[=48].1</b>", text)
     html = copy.deepcopy(text)
     text = re.sub(r"\r\n", "\n", text)
-    # TODO: おそらくこの置換は実際には行われていない
-    text = re.sub(r"(?<=48 Akkharukkhapetavatthu</b><BR>\r\n) ", "<b>Vv_IV,13[=48].1</b>", text)
 
-    # html = re.sub(r"(?<=48 Akkharukkhapetavatthu</b><BR>\r\n) ", "<b>Vv_IV,13[=48].1</b>", html)
     create_htm_file_base(text_name, html,
                   r"(<b>)(Vv_.*?)(\d*?)(\[.*?\])(\.)(\d*?)(</b>)",
                   "<section id='" + r"\2" + r"\3" + r"\4" + "_" + r"\6" + "'>" + r"\1" +r"\2" +r"\3" +r"\4" +r"\5" +r"\6" +r"\7" + "</section>")

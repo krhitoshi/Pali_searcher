@@ -364,8 +364,6 @@ def Sp_make(text = "Sp"):
         vin_ = re.sub(r"<!DOCTYPE html>(.|\s)*?(?=\[page)", "", vin_)
         vin_ = re.sub(r"\r\n", "\n", vin_)
 
-        html = re.sub(r"<!DOCTYPE html>(.|\s)*?(?=\[page)", "", html)
-
         if i == 1:
             create_htm_file("Sp_1", html)
             vin_ = re.sub(r"(?<=page 001\])(.|\s)*?sammāsambuddhassa\.<br>", "", vin_)

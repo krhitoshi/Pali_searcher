@@ -676,7 +676,7 @@ def Cp_make():
         main = re.sub(r"(<sup>)(\d*)(</sup>)", "*"r"\2", main)
         main = re.sub(r"(<i>(.|\s)*?</i>|<span class=\"red\">|</span>|<b>|</b>|&nbsp;|&#8216;|<BR>)", "", main)
         main = re.sub(r"\n", "<BR>", main)
-        main.lstrip().rstrip()
+        main = main.lstrip().rstrip()
         final_result.append([number, main])
     write_csv_file("Cp_.csv", final_result)
 

@@ -230,10 +230,10 @@ def create_htm_file_base(text_name, html, pattern, replace):
 # 生成されるファイル:
 #   static/Vin_I_.htm
 # ページ表記に section タグを追加する
-# <section id ='223'>[page 223]</section>
+# <section id='223'>[page 223]</section>
 def create_htm_file(text_name, html):
     pattern = r"(\[page )(\d{1,4})(\])"
-    replace = """<section id ='""" + r"\2" + """'>""" + r"\1" + r"\2" + r"\3" + """</section>"""
+    replace = """<section id='""" + r"\2" + """'>""" + r"\1" + r"\2" + r"\3" + """</section>"""
     create_htm_file_base(text_name, html, pattern, replace)
 
 def preprocess_html(content, text_name):
@@ -563,7 +563,7 @@ def Theri_make(url):
     text_name = "Thi"
     vin_ = download(url)
     create_htm_file_base(text_name, vin_, r"(\|\| Thī_)(.*?)( \|\|)",
-                  "<section id ='Thī_" + r"\2" + "'>" + r"\1" +r"\2" +r"\3" + "</section>")
+                  "<section id='Thī_" + r"\2" + "'>" + r"\1" +r"\2" +r"\3" + "</section>")
 
     vin_ = re.sub(r"<!DOCTYPE html>(.|\s)*?(?=\[page)", "", vin_)
     vin_ = re.sub(r"\r\n", "\n", vin_)#これが大事な一行になる
@@ -604,7 +604,7 @@ def Thera_make(url):
     vin_ = re.sub(r"\|\| 939 \|\|", "|| Th_939 ||", vin_)
 
     create_htm_file_base(text_name, vin_, r"(\|\| Th_)(.*?)( \|\|)",
-                  "<section id ='Th_" + r"\2" + "'>" + r"\1" +r"\2" +r"\3" + "</section>")
+                  "<section id='Th_" + r"\2" + "'>" + r"\1" +r"\2" +r"\3" + "</section>")
 
     vin_ = re.sub(r"<!DOCTYPE html>(.|\s)*?(?=\[page)", "", vin_)
     vin_ = re.sub(r"\r\n", "\n", vin_)#これが大事な一行になる
@@ -657,7 +657,7 @@ def Cp_make():
     write_text_file(path, text)
 
     create_htm_file_base(text_name, text, r"(<b>)(Cp_.*?)(\.)(.*?)(</b>)",
-                  "<section id ='" + r"\2" + "_" + r"\4" + "'>" + r"\1" +r"\2" +r"\3" +r"\4" +r"\5" + "</section>")
+                  "<section id='" + r"\2" + "_" + r"\4" + "'>" + r"\1" +r"\2" +r"\3" +r"\4" +r"\5" + "</section>")
 
     Cp = re.finditer(Cp_number, text)
     Cp_list = [

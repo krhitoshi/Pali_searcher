@@ -359,35 +359,40 @@ def Sp_make(text = "Sp"):
     Sp_raw = ""
     for i in range(1, 8):
         vin_ = download(text_dict["Sp_{}".format(i)])
+        html = copy.deepcopy(vin_)
+
         vin_ = re.sub(r"<!DOCTYPE html>(.|\s)*?(?=\[page)", "", vin_)
         vin_ = re.sub(r"\r\n", "\n", vin_)
+
+        html = re.sub(r"<!DOCTYPE html>(.|\s)*?(?=\[page)", "", html)
+
         if i == 1:
-            create_htm_file("Sp_1", vin_)
+            create_htm_file("Sp_1", html)
             vin_ = re.sub(r"(?<=page 001\])(.|\s)*?sammāsambuddhassa\.<br>", "", vin_)
         elif i == 2:
-            create_htm_file("Sp_2", vin_)
+            create_htm_file("Sp_2", html)
             start, end = re.search(r"(?<=\d\])(.|\s)*?II<br>", vin_).span()
             vin_ = vin_[:start] + vin_[end:]
 #            vin_ = re.sub(r"(?<=\d\])(.|\s)*?II<br>", "", vin_)
         elif i == 3:
-            create_htm_file("Sp_3", vin_)
+            create_htm_file("Sp_3", html)
             start, end = re.search(r"(?<=\d\])(.|\s)*?SAṄGHĀDISESA I-XIII<br>", vin_).span()
             vin_ = vin_[:start] + vin_[end:]
         elif i == 4:
-            create_htm_file("Sp_4", vin_)
+            create_htm_file("Sp_4", html)
             start, end = re.search(r"""(?<=\d\])(.|\s)*?SAMBUDDHASSA\.<span class="red"><sup>1</sup></span><br>""", vin_).span()
             vin_ = vin_[:start] + vin_[end:]
             vin_ += "%"#For page 950 is not exist.
         elif i == 5:
-            create_htm_file("Sp_5", vin_)
+            create_htm_file("Sp_5", html)
             start, end = re.search(r"(?<=\d\])(.|\s)*?SAMANTAPĀSĀDIKĀ<br>", vin_).span()
             vin_ = vin_[:start] + vin_[end:]
         elif i == 6:
-            create_htm_file("Sp_6", vin_)
+            create_htm_file("Sp_6", html)
             start, end = re.search(r"(?<=\d\])(.|\s)*?KAMMAKKHANDHAKA-VAṆṆANĀ<br>", vin_).span()
             vin_ = vin_[:start] + vin_[end:]
         elif i == 7:
-            create_htm_file("Sp_7", vin_)
+            create_htm_file("Sp_7", html)
             start, end = re.search(r"(?<=\d\])(.|\s)*?I<br>", vin_).span()
             vin_ = vin_[:start] + vin_[end:]
         Sp_raw += vin_
@@ -729,10 +734,13 @@ def Pv_make():
     text_name = "Pv"
     url = text_dict[text_name]
     text = download(url)
+    html = copy.deepcopy(text)
     text = re.sub(r"\r\n", "\n", text)
+    # TODO: おそらくこの置換は実際には行われていない
     text = re.sub(r"(?<=48 Akkharukkhapetavatthu</b><BR>\r\n) ", "<b>Vv_IV,13[=48].1</b>", text)
 
-    create_htm_file_base(text_name, text,
+    # html = re.sub(r"(?<=48 Akkharukkhapetavatthu</b><BR>\r\n) ", "<b>Vv_IV,13[=48].1</b>", html)
+    create_htm_file_base(text_name, html,
                   r"(<b>)(Vv_.*?)(\d*?)(\[.*?\])(\.)(\d*?)(</b>)",
                   "<section id='" + r"\2" + r"\3" + r"\4" + "_" + r"\6" + "'>" + r"\1" +r"\2" +r"\3" +r"\4" +r"\5" +r"\6" +r"\7" + "</section>")
 

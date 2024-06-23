@@ -445,7 +445,7 @@ def create_jataka_files(txt_file_content, text_number):
     new_Ja = "Ja_" + str(text_number) + ".txt"
     write_text_file(new_Ja, txt_file_content)
 
-    new_bin = "J_" + str(text_number) + "_start_point.bin"
+    new_bin = "J_" + str(text_number) + "_verse.bin"
     write_bin_file(new_bin, J_verse_start)
 
     new_verse = "J_" + str(text_number) + ".csv"
@@ -505,10 +505,10 @@ def Sn(text_for_search):
     new_Ja = "Sn.txt"
     write_text_file(new_Ja, text_for_search)
 
-    new_bin = "Sn_verse_start_point.bin"
+    new_bin = "Sn_verse.bin"
     write_bin_file(new_bin, J_verse_start)
 
-    new_verse = "Sn_verse.csv"
+    new_verse = "Sn.csv"
     write_csv_file(new_verse, verse)
 
 

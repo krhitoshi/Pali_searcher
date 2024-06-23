@@ -105,7 +105,7 @@ class PaliSearcher:
                                             verse_start_point)
         return results
 
-    # Sn (散文), Sn_verse.csv (韻文)
+    # Sn (散文), Sn.csv (韻文)
     def search_suttanipata(self, keyword, br_flag):
         line_start = array("I")
         index = array("I")
@@ -115,7 +115,7 @@ class PaliSearcher:
         self.load_suttanipata_bin_files(index, line_start, page,
                                         verse_start_point)
 
-        results = self.search_csv_base("Sn", "Sn_verse.csv", keyword, br_flag,
+        results = self.search_csv_base("Sn", "Sn.csv", keyword, br_flag,
                                        index, line_start, page,
                                        verse_start_point)
         # ここから散文の方の検索；最後に全体をまとめてソートし、完成
@@ -169,14 +169,14 @@ class PaliSearcher:
         self.__load_bin(name + "_index.bin", index)
         self.__load_bin(name + "_line.bin", line)
         self.__load_bin(name + "_page.bin", page)
-        self.__load_bin("J_" + str(number) + "_start_point.bin", start_point)
+        self.__load_bin("J_" + str(number) + "_verse.bin", start_point)
         # I made mistake when I named these bin files; I try to re-name here.
 
     def load_suttanipata_bin_files(self, index, line, page, start_point):
         self.__load_bin("Sn_index.bin", index)
         self.__load_bin("Sn_line.bin", line)
         self.__load_bin("Sn_page.bin", page)
-        self.__load_bin("Sn_verse_start_point.bin", start_point)
+        self.__load_bin("Sn_verse.bin", start_point)
 
     def target_text_vols(self, target_text_groups):
         result = []

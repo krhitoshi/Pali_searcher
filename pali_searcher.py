@@ -320,12 +320,12 @@ class PaliSearcher:
         csvfile.close()
         return result
 
-    # Thera.csv, Theri.csv
+    # Th.csv, Thi.csv
     def th_searcher(self, text, keyword):
         if text == "Th":
-            path = self.__static_dir_file_path("Thera.csv")
+            path = self.__static_dir_file_path("Th.csv")
         else:
-            path = self.__static_dir_file_path("Theri.csv")
+            path = self.__static_dir_file_path("Thi.csv")
 
         csvfile = open(path, "r", encoding="utf-8", newline="\n")
         reader = csv.reader(csvfile)

@@ -592,7 +592,7 @@ def Theri_make(url):
         verse = re.sub(r" \|\n", "|<BR>", verse)
         verse = re.sub(r"\n", "", verse)
         verse_set.append(verse)
-    write_csv_file("Theri.csv", verse_set, oneline=True)
+    write_csv_file("Thi.csv", verse_set, oneline=True)
 
 
 #@process_print
@@ -639,7 +639,7 @@ def Thera_make(url):
                 changed_verse = changed_verse[:-4] + line + " <BR>"
         changed_verse = changed_verse[:-4]
         verse_set.append(changed_verse)
-    write_csv_file("Thera.csv", verse_set, oneline=True)
+    write_csv_file("Th.csv", verse_set, oneline=True)
 
 
 #@process_print

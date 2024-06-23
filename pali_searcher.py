@@ -26,8 +26,8 @@ class PaliSearcher:
                  "MN_I", "MN_II", "MN_III",
                  "SN_I", "SN_II", "SN_III", "SN_IV", "SN_V",
                  "AN_I", "AN_II", "AN_III", "AN_IV", "AN_V",
-                 "Khp", "Dhp", "Ud", "It", "Sn", "Pv", "Vm", "Th", "Thi", "J", "Nidd_I", "Nidd_II", "Paṭis_I", "Paṭis_II", "Ap", "Bv", "Cp",
-                 "Dhs", "Vibh", "Dhātuk", "Pugg", "Kv", "Yam_I", "Yam_II", "Mil", "Vism", "Sp", "Ja_1", "Ja_2", "Ja_3", "Ja_4", "Ja_5", "Ja_6"]
+                 "Khp", "Dhp", "Ud", "It", "Sn", "Pv", "Vm", "Th", "Thi", "J", "Nidd_I", "Nidd_II", "Patis_I", "Patis_II", "Ap", "Bv", "Cp",
+                 "Dhs", "Vibh", "Dhatuk", "Pugg", "Kv", "Yam_I", "Yam_II", "Mil", "Vism", "Sp", "Ja_1", "Ja_2", "Ja_3", "Ja_4", "Ja_5", "Ja_6"]
 
     def __init__(self, static_dir_path, mode=PaliSearcherMode.Web):
         self.static_dir_path = static_dir_path
@@ -192,8 +192,8 @@ class PaliSearcher:
                 result += ["SN_I", "SN_II", "SN_III", "SN_IV", "SN_V"]
             elif text_group == "AN":
                 result += ["AN_I", "AN_II", "AN_III", "AN_IV", "AN_V"]
-            elif text_group == "Paṭis":
-                result += ["Paṭis_I", "Paṭis_II"]
+            elif text_group == "Patis":
+                result += ["Patis_I", "Patis_II"]
             elif text_group == "Yam":
                 result += ["Yam_I", "Yam_II"]
             elif text_group == "Ja":

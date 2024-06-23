@@ -10,8 +10,8 @@ keyword = sys.argv[1]
 
 target_text_groups = ["Vin", "DN", "MN", "SN", "AN",
                       "Khp", "Dhp", "Ud", "It", "Sn", "Pv", "Vm", "Th", "Thi", "J", "Nidd_I", "Nidd_II",
-                      "Paṭis", "Ap", "Bv", "Cp",
-                      "Dhs", "Vibh", "Dhātuk", "Pugg", "Kv", "Yam",
+                      "Patis", "Ap", "Bv", "Cp",
+                      "Dhs", "Vibh", "Dhatuk", "Pugg", "Kv", "Yam",
                       "Mil", "Vism", "Sp", "Ja"]
 
 app_dir = os.path.abspath(os.path.dirname(__file__))

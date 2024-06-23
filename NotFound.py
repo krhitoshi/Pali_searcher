@@ -66,13 +66,13 @@ text_dict = {
     "Ja_4": "2_pali/1_tipit/2_sut/5_khudd/jatak4ou.htm",
     "Ja_5": "2_pali/1_tipit/2_sut/5_khudd/jatak5ou.htm",
     "Ja_6": "2_pali/1_tipit/2_sut/5_khudd/jatak6ou.htm",
-    "Dhātuk": "2_pali/1_tipit/3_abh/dhatukou.htm",
+    "Dhatuk": "2_pali/1_tipit/3_abh/dhatukou.htm",
     "Yam_I": "2_pali/1_tipit/3_abh/yamak_1ou.htm",
     "Yam_II": "2_pali/1_tipit/3_abh/yamak_2ou.htm",
     "Kv": "2_pali/1_tipit/3_abh/kathavou.htm",
     "Pugg": "2_pali/1_tipit/3_abh/pugpan_ou.htm",
-    "Paṭis_I": "2_pali/1_tipit/2_sut/5_khudd/patis1ou.htm",
-    "Paṭis_II": "2_pali/1_tipit/2_sut/5_khudd/patis2ou.htm",
+    "Patis_I": "2_pali/1_tipit/2_sut/5_khudd/patis1ou.htm",
+    "Patis_II": "2_pali/1_tipit/2_sut/5_khudd/patis2ou.htm",
     "Vibh": "2_pali/1_tipit/3_abh/vibhanou.htm",
     "Dhs": "2_pali/1_tipit/3_abh/dhamsgou.htm",
     "Mil": "2_pali/2_parcan/milindou.htm",
@@ -256,18 +256,18 @@ def preprocess_html(content, text_name):
     elif text_name == "Ja_1":
         # Ja_1, Ja_2 などなのでここは実際に実行されることはない
         res = re.sub(r"(?<=page 001\])(.|\s)*?(?=JaNi)", "", res)
-    elif text_name == "Paṭis_II":
+    elif text_name == "Patis_II":
         res = re.sub(r"""(?<=page 001\])(.|\s)*?INDRIYAKATHĀ</span><BR>""", "", res)
     elif text_name == "Dhs":
         res = re.sub(r"(?<=page 001\])(.|\s)*?{MĀTIKĀ\.}<br>", "", res)
-    elif text_name == "Dhātuk":
+    elif text_name == "Dhatuk":
         res = re.sub(r"(?<=page 001\])(.|\s)*?BUDDHASSA<BR>", "", res)
     elif text_name == "Mil":
         res = re.sub(r"(?<=page 001\])(.|\s)*?TASSA BHAGAVATO ARAHATO SAMMĀSAMBUDDHASSA\.<BR>", "", res)
     elif text_name == "Vism":
         res = re.sub(r"(?<=page 001\])(.|\s)*?NIDĀNĀDIKATHĀ<BR>", "", res)
-    elif "&nbsp;" in res[:1000] or text_name in {"Yam_I", "Yam_II", "Pugg", "Paṭis_I"}:
-        # Yam_I, Yam_II, Pugg, Paṭis_I 以外は実際には実行されることはない
+    elif "&nbsp;" in res[:1000] or text_name in {"Yam_I", "Yam_II", "Pugg", "Patis_I"}:
+        # Yam_I, Yam_II, Pugg, Patis_I 以外は実際には実行されることはない
         res = re.sub(r"(?<=page 001\])(.|\s)*?(?=\n(\w|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\w))", "", res)
     else:
         # 基本的な処理: page 001 から実際の本文が始まるまでの部分を削除する
@@ -894,7 +894,7 @@ def J_create(text_name, url):
 # Vin_I, Vin_II, Vin_III, Vin_IV, Vin_V, DN_II, DN_III, DN_I,
 # MN_I, MN_II, MN_III, AN_I, AN_II, AN_III, AN_IV, AN_V,
 # SN_I, SN_II, SN_III, SN_IV, SN_V, Khp, Ud, It,
-# Nidd_I, Nidd_II, Dhātuk, Yam_I, Yam_II, Kv, Pugg, Paṭis_I, Paṭis_II, Vibh,
+# Nidd_I, Nidd_II, Dhatuk, Yam_I, Yam_II, Kv, Pugg, Patis_I, Patis_II, Vibh,
 # Dhs, Mil, Vism
 # 例: text_name: "Vin_I"
 # 生成されるファイル:

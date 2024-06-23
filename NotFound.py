@@ -191,8 +191,8 @@ def text_requests(text_dict_item):
 #         proc_per = ( len(os.listdir(static_path)) * 100 // 268 )
 #         if args:
 #             text_name = args[0].split(".")[0]
-#             txt_path = static_file_path(text_name + "_.txt")
-#             htm_path = static_file_path(text_name + "_.htm")
+#             txt_path = static_file_path(text_name + ".txt")
+#             htm_path = static_file_path(text_name + ".htm")
 #             if not(os.path.exists(txt_path)) and not(os.path.exists(htm_path)):
 #                 print("\r#### Preparing {:14}: ".format(text_name) + "Process {:3} %".format(proc_per) + "*" * (proc_per // 5) + "_" * (20 - (proc_per // 5)), end = "")
 #                 result = func(*args, **kwargs)
@@ -202,9 +202,9 @@ def text_requests(text_dict_item):
 #                 print("\r#### Pass {:19}: ".format(text_name) + "Process {:3} %".format(proc_per) + "*" * (proc_per // 5) + "_" * (20 - (proc_per // 5)), end = "")
 #         else:
 #             file_name = func.__name__.split("_")[0]
-#             txt_path = static_file_path(file_name + "_.txt")
-#             csv_path = static_file_path(file_name + "_.csv")
-#             htm_path = static_file_path(file_name + "_.htm")
+#             txt_path = static_file_path(file_name + ".txt")
+#             csv_path = static_file_path(file_name + ".csv")
+#             htm_path = static_file_path(file_name + ".htm")
 #             if not(os.path.exists(txt_path)) and not(os.path.exists(csv_path)) and not(os.path.exists(htm_path)):
 #                 print("\r#### Preparing {:14}: ".format(file_name) + "Process {:3} %".format(proc_per) + "*" * (proc_per // 5) + "_" * (20 - (proc_per // 5)), end="")
 #                 result = func(*args, **kwargs)
@@ -216,19 +216,19 @@ def text_requests(text_dict_item):
 
 
 def create_txt_file(name, text_for_count):
-    file_name = name + "_.txt"
+    file_name = name + ".txt"
     content = generate_txt_file_content(text_for_count)
     write_text_file(file_name, content)
 
 def create_htm_file_base(text_name, html, pattern, replace):
-    file_name = text_name + "_.htm"
+    file_name = text_name + ".htm"
     new_html = copy.deepcopy(html)
     contents = re.sub(pattern, replace, new_html)
     write_text_file(file_name, contents)
 
 # 例: text_name: "Vin_I"
 # 生成されるファイル:
-#   static/Vin_I_.htm
+#   static/Vin_I.htm
 # ページ表記に section タグを追加する
 # <section id='223'>[page 223]</section>
 def create_htm_file(text_name, html):
@@ -303,7 +303,7 @@ def preprocess_html(content, text_name):
     # TODO: ページ末のHTMLタグを削除する `</body></html>`
 
     # 確認用に中間生成物を tmp ディレクトリに保存する
-    path = os.path.join(tmp_path, text_name + "_.pre")
+    path = os.path.join(tmp_path, text_name + ".pre")
     write_text_file(path, res)
 
     return res
@@ -315,9 +315,9 @@ def generate_txt_file_content(text_for_count):
 
 # 例: text_name: "Vin_I"
 # 生成されるファイル:
-#   static/Vin_I_index_.bin
-#   static/Vin_I_line_.bin
-#   static/Vin_I_page_.bin
+#   static/Vin_I_index.bin
+#   static/Vin_I_line.bin
+#   static/Vin_I_page.bin
 def create_bin_files(text_for_count, text_name):
     line = 0
     page = 0
@@ -345,13 +345,13 @@ def create_bin_files(text_for_count, text_name):
             line_list.append(line)
             page_list.append(page)
             
-    index_bin = text_name + "_index_" + ".bin"
+    index_bin = text_name + "_index" + ".bin"
     write_bin_file(index_bin, text_index)
 
-    line_bin = text_name + "_line_" + ".bin"
+    line_bin = text_name + "_line" + ".bin"
     write_bin_file(line_bin, line_list)
 
-    page_bin = text_name + "_page_" + ".bin"
+    page_bin = text_name + "_page" + ".bin"
     write_bin_file(page_bin, page_list)
 
 
@@ -422,7 +422,7 @@ def Sp_make(text = "Sp"):
     text_for_count = re.sub(r"%", " %", vin_)
 
     # 確認用に中間生成物を tmp ディレクトリに保存する
-    path = os.path.join(tmp_path, "Sp_.pre")
+    path = os.path.join(tmp_path, "Sp.pre")
     write_text_file(path, text_for_count)
 
     text_for_search = re.sub(r"[%&#\n]", "", text_for_count)
@@ -442,10 +442,10 @@ def create_jataka_files(txt_file_content, text_number):
         verse.append([text.group(0)])
         verse_long = len(txt_file_content[text.start(): text.end()])
         txt_file_content = txt_file_content[0: text.start()] + "." * verse_long + txt_file_content[text.end():]
-    new_Ja = "Ja_" + str(text_number) + "_.txt"
+    new_Ja = "Ja_" + str(text_number) + ".txt"
     write_text_file(new_Ja, txt_file_content)
 
-    new_bin = "J_" + str(text_number) + "_start_point_.bin"
+    new_bin = "J_" + str(text_number) + "_start_point.bin"
     write_bin_file(new_bin, J_verse_start)
 
     new_verse = "J_" + str(text_number) + ".csv"
@@ -482,7 +482,7 @@ def Sn_text_make(text = "Sn"):
     text_for_search = re.sub(r"[%&#\n]", "", text_for_count)
 
     # 確認用に中間生成物を tmp ディレクトリに保存する
-    path = os.path.join(tmp_path, "Sn_.pre")
+    path = os.path.join(tmp_path, "Sn.pre")
     write_text_file(path, text_for_count)
 
     return text_for_count, text_for_search
@@ -502,7 +502,7 @@ def Sn(text_for_search):
             verse.append([text.group(0)])
         verse_long = len(text_for_search[text.start(): text.end()])
         text_for_search = text_for_search[0: text.start()] + "."*verse_long + text_for_search[text.end():]
-    new_Ja = "Sn_.txt"
+    new_Ja = "Sn.txt"
     write_text_file(new_Ja, text_for_search)
 
     new_bin = "Sn_verse_start_point.bin"
@@ -549,7 +549,7 @@ def Ap_make():
     text_for_count = re.sub(r"%", " %", vin_)
 
     # 確認用に中間生成物を tmp ディレクトリに保存する
-    path = os.path.join(tmp_path, "Ap_.pre")
+    path = os.path.join(tmp_path, "Ap.pre")
     write_text_file(path, text_for_count)
 
     text_for_search = re.sub(r"[%&#\n]", "", text_for_count)
@@ -582,7 +582,7 @@ def Theri_make(url):
     vin_ = re.sub(r"(?<=\n)gāthaṃ abhāsitthā ti\. \|\|\n", "", vin_)#Theriのみ使用
 
     # 確認用に中間生成物を tmp ディレクトリに保存する
-    path = os.path.join(tmp_path, "Thi_.pre")
+    path = os.path.join(tmp_path, "Thi.pre")
     write_text_file(path, vin_)
 
     vs = re.finditer(r"(\s|.)*? Thī_.*? \|\|", vin_)
@@ -592,7 +592,7 @@ def Theri_make(url):
         verse = re.sub(r" \|\n", "|<BR>", verse)
         verse = re.sub(r"\n", "", verse)
         verse_set.append(verse)
-    write_csv_file("Theri_.csv", verse_set, oneline=True)
+    write_csv_file("Theri.csv", verse_set, oneline=True)
 
 
 #@process_print
@@ -623,7 +623,7 @@ def Thera_make(url):
     vin_ = vin_[:-5] + " || Th_end ||"# To deal with the last verse
 
     # 確認用に中間生成物を tmp ディレクトリに保存する
-    path = os.path.join(tmp_path, "Th_.pre")
+    path = os.path.join(tmp_path, "Th.pre")
     write_text_file(path, vin_)
 
     vs = re.finditer(r"(\s|.)*? Th_.*? \|\|", vin_)
@@ -639,7 +639,7 @@ def Thera_make(url):
                 changed_verse = changed_verse[:-4] + line + " <BR>"
         changed_verse = changed_verse[:-4]
         verse_set.append(changed_verse)
-    write_csv_file("Thera_.csv", verse_set, oneline=True)
+    write_csv_file("Thera.csv", verse_set, oneline=True)
 
 
 #@process_print
@@ -651,7 +651,7 @@ def Cp_make():
     text = download(url)
 
     # 確認用に加工前のデータを tmp ディレクトリに保存する
-    path = os.path.join(tmp_path, "Cp_.pre")
+    path = os.path.join(tmp_path, "Cp.pre")
     write_text_file(path, text)
 
     create_htm_file_base(text_name, text, r"(<b>)(Cp_.*?)(\.)(.*?)(</b>)",
@@ -678,7 +678,7 @@ def Cp_make():
         main = re.sub(r"\n", "<BR>", main)
         main = main.lstrip().rstrip()
         final_result.append([number, main])
-    write_csv_file("Cp_.csv", final_result)
+    write_csv_file("Cp.csv", final_result)
 
 
 #@process_print
@@ -699,7 +699,7 @@ def Vm_make():
     text = re.sub(r"(<span class=\"red\">)(.|\s)*?(</span>)", "", text)
 
     # 確認用に中間生成物を tmp ディレクトリに保存する
-    path = os.path.join(tmp_path, "Vm_.pre")
+    path = os.path.join(tmp_path, "Vm.pre")
     write_text_file(path, text)
 
     start_point = re.finditer(r"<b>Vv.*?</b>", text)
@@ -724,7 +724,7 @@ def Vm_make():
         if main[-4:] == "<BR>":
             main = main[:-4]
         result.append([number + "(Vv)", main.strip()])#(Vv, Vm のテキスト名をここに入力しておく)
-    write_csv_file("Vm_.csv", result)
+    write_csv_file("Vm.csv", result)
 
 
 #@process_print
@@ -746,7 +746,7 @@ def Pv_make():
     text = re.sub(r"<i>.*?</i>", "", text)
 
     # 確認用に中間生成物を tmp ディレクトリに保存する
-    path = os.path.join(tmp_path, "Pv_.pre")
+    path = os.path.join(tmp_path, "Pv.pre")
     write_text_file(path, text)
 
     start_point = re.finditer(r"<b>Vv.*?</b>", text)
@@ -771,7 +771,7 @@ def Pv_make():
         if main[-4:] == "<BR>":
             main = main[:-4]
         result.append([number + "(Pv)", main.strip()])#(Vv, Vm のテキスト名をここに入力しておく)
-    write_csv_file("Pv_.csv", result)
+    write_csv_file("Pv.csv", result)
 
 
 #@process_print
@@ -797,7 +797,7 @@ def Dhp_make(targetter = r"\/\/ Dhp_.* \/\/<BR>"):
     main = re.sub(r"^ ?.*?$", "", main)
 
     # 確認用に中間生成物を tmp ディレクトリに保存する
-    path = os.path.join(tmp_path, "Dhp_.pre")
+    path = os.path.join(tmp_path, "Dhp.pre")
     write_text_file(path, main)
 
     lines = main.split("\n")
@@ -813,7 +813,7 @@ def Dhp_make(targetter = r"\/\/ Dhp_.* \/\/<BR>"):
             vers_heap += line + "<BR>"
     out = zip(vers_number, final_result)
     print_out = [list(i) for i in out]
-    write_csv_file("Dhp_.csv", print_out)
+    write_csv_file("Dhp.csv", print_out)
 
 
 #@process_print
@@ -839,7 +839,7 @@ def Bv_make(targetter = r"\/\/ Bv_.* \/\/<BR>"):
     main = re.sub(r"^ ?.*?$", "", main)
 
     # 確認用に中間生成物を tmp ディレクトリに保存する
-    path = os.path.join(tmp_path, "Bv_.pre")
+    path = os.path.join(tmp_path, "Bv.pre")
     write_text_file(path, main)
 
     lines = main.split("\n")
@@ -855,14 +855,14 @@ def Bv_make(targetter = r"\/\/ Bv_.* \/\/<BR>"):
             vers_heap += line + "<BR>"
     out = zip(vers_number, final_result)
     print_out = [list(i) for i in out]
-    write_csv_file("Bv_.csv", print_out)
+    write_csv_file("Bv.csv", print_out)
 
 
 #@process_print
 def Sp_create(text = "Sp"):
     text_for_count, text_for_search = Sp_make(text)
     create_bin_files(text_for_count, text_name ="Sp")
-    new_text = "Sp_.txt"
+    new_text = "Sp.txt"
     write_text_file(new_text, text_for_search)
 
 
@@ -870,7 +870,7 @@ def Sp_create(text = "Sp"):
 def Ap_create():
     text_for_count, text_for_search = Ap_make()
     create_bin_files(text_for_count, "Ap")
-    write_text_file("Ap_.txt", text_for_search)
+    write_text_file("Ap.txt", text_for_search)
 
 
 #@process_print
@@ -898,11 +898,11 @@ def J_create(text_name, url):
 # Dhs, Mil, Vism
 # 例: text_name: "Vin_I"
 # 生成されるファイル:
-#   static/Vin_I_.htm
-#   static/Vin_I_.txt
-#   static/Vin_I_index_.bin
-#   static/Vin_I_line_.bin
-#   static/Vin_I_page_.bin
+#   static/Vin_I.htm
+#   static/Vin_I.txt
+#   static/Vin_I_index.bin
+#   static/Vin_I_line.bin
+#   static/Vin_I_page.bin
 #@process_print
 def create_data_files(text_name, url):
     html = download(url)

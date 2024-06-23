@@ -166,16 +166,16 @@ class PaliSearcher:
 
     def load_jataka_bin_files(self, number, index, line, page, start_point):
         name = "Ja_{}".format(number)
-        self.__load_bin(name + "_index_.bin", index)
-        self.__load_bin(name + "_line_.bin", line)
-        self.__load_bin(name + "_page_.bin", page)
-        self.__load_bin("J_" + str(number) + "_start_point_.bin", start_point)
+        self.__load_bin(name + "_index.bin", index)
+        self.__load_bin(name + "_line.bin", line)
+        self.__load_bin(name + "_page.bin", page)
+        self.__load_bin("J_" + str(number) + "_start_point.bin", start_point)
         # I made mistake when I named these bin files; I try to re-name here.
 
     def load_suttanipata_bin_files(self, index, line, page, start_point):
-        self.__load_bin("Sn_index_.bin", index)
-        self.__load_bin("Sn_line_.bin", line)
-        self.__load_bin("Sn_page_.bin", page)
+        self.__load_bin("Sn_index.bin", index)
+        self.__load_bin("Sn_line.bin", line)
+        self.__load_bin("Sn_page.bin", page)
         self.__load_bin("Sn_verse_start_point.bin", start_point)
 
     def target_text_vols(self, target_text_groups):
@@ -306,7 +306,7 @@ class PaliSearcher:
 
     # Dhp, Cp, Bv, Vm, Pv
     def verse_text_searcher(self, text_name, keyword):
-        path = self.__static_dir_file_path(text_name + "_.csv")
+        path = self.__static_dir_file_path(text_name + ".csv")
         csvfile = open(path, "r", encoding="utf-8", newline="\n")
         lines = csv.reader(csvfile, delimiter=",", skipinitialspace=True)
         result = [
@@ -320,12 +320,12 @@ class PaliSearcher:
         csvfile.close()
         return result
 
-    # Thera_.csv, Theri_.csv
+    # Thera.csv, Theri.csv
     def th_searcher(self, text, keyword):
         if text == "Th":
-            path = self.__static_dir_file_path("Thera_.csv")
+            path = self.__static_dir_file_path("Thera.csv")
         else:
-            path = self.__static_dir_file_path("Theri_.csv")
+            path = self.__static_dir_file_path("Theri.csv")
 
         csvfile = open(path, "r", encoding="utf-8", newline="\n")
         reader = csv.reader(csvfile)
@@ -345,15 +345,15 @@ class PaliSearcher:
         return result
 
     def load_text_vol(self, text_vol):
-        file = self.__static_dir_file_path(text_vol + "_.txt")
+        file = self.__static_dir_file_path(text_vol + ".txt")
         f = open(file, "r", encoding="utf-8")
         return f.read()
 
     def load_bin_files(self, name, index, page, line):
         # この関数の前に、中身が空の page, line, index array を作る必要があり
-        self.__load_bin(name + "_index_.bin", index)
-        self.__load_bin(name + "_page_.bin", page)
-        self.__load_bin(name + "_line_.bin", line)
+        self.__load_bin(name + "_index.bin", index)
+        self.__load_bin(name + "_page.bin", page)
+        self.__load_bin(name + "_line.bin", line)
         # I made mistake when I named these bin files; I try to re-name here.
 
 
@@ -411,7 +411,7 @@ class SearchResult:
         else:
             href_name = self.name
 
-        return STATIC_URL + href_name + "_.htm#" + sharp
+        return STATIC_URL + href_name + ".htm#" + sharp
 
     def reference_info(self):
         if self.name[:2] == "Ja":
@@ -461,6 +461,6 @@ class PaliVerse:
             self.text_id = self.text_number[:-4]
         if self.text_id == "":
             self.text_id = self.text_number
-            href = STATIC_URL + self.text_name + "_.htm#" + self.text_id.replace(".", "_")
+            href = STATIC_URL + self.text_name + ".htm#" + self.text_id.replace(".", "_")
             base = '<a href = {} target="_blank">{}</a>: {}'
         return base.format(href, self.text_number, self.sentence)
